@@ -8,6 +8,7 @@ public enum NodeType {
     FUNCTION_DECLARATION("FunctionDeclaration"), //
     BLOCK_STATEMENT("BlockStatement"), //
     EMPTY_STATEMENT("EmptyStatement"), //
+    EXPRESSION_STATEMENT("ExpressionStatement"), //
 
     // Expressions
     FUNCTION_EXPRESSION("FunctionExpression"), //

@@ -12,6 +12,8 @@ import org.junit.jupiter.api.Test;
 import esprima4java.DeserializationException;
 import esprima4java.Esprima2Java;
 import esprima4java.ast.AstNode;
+import esprima4java.ast.EmptyStatement;
+import esprima4java.ast.ExpressionStatement;
 import esprima4java.ast.Identifier;
 import esprima4java.ast.Literal;
 import esprima4java.ast.NodeType;
@@ -77,4 +79,17 @@ class JsonToObjectTest {
 	test(json, NodeType.LITERAL, expected);
     }
 
+    @Test
+    void testEmptyStatementParsed() {
+	String json = "{ 'type': 'EmptyStatement' }";
+	EmptyStatement expected = EmptyStatement.create();
+	test(json, NodeType.EMPTY_STATEMENT, expected);
+    }
+
+    @Test
+    void testExpressionStatementParsed() {
+	String json = "{ 'type': 'ExpressionStatement', 'expression': { 'type': 'Identifier', 'name': 'a' } }";
+	ExpressionStatement expected = ExpressionStatement.create(Identifier.create("a"));
+	test(json, NodeType.EXPRESSION_STATEMENT, expected);
+    }
 }
