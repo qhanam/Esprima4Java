@@ -22,7 +22,7 @@ class JsonToObjectTest {
     AstNode test(String json, NodeType type, AstNode expected) {
 	try (Reader reader = new StringReader(json)) {
 	    AstNode actual = Esprima2Java.deserialize(reader);
-	    assertEquals(actual.getType(), type);
+	    assertEquals(actual.type(), type);
 	    assertEquals(actual, expected);
 	    return actual;
 	} catch (IOException e) {
@@ -38,43 +38,42 @@ class JsonToObjectTest {
     @Test
     void testIdentifierParsed() {
 	String json = "{ 'type': 'Identifier', 'name': 'foo' }";
-	Identifier expected = Identifier.builder().name("foo").build();
+	Identifier expected = Identifier.create("foo");
 	test(json, NodeType.IDENTIFIER, expected);
     }
 
     @Test
     void testNumberLiteralParsed() {
-	String json = "{ 'type': 'Literal', 'value': 0, 'raw': '0' }";
-	Literal expected = Literal.builder().number(0).raw("0").build();
+	String json = "{ 'type': 'Literal', 'value': 1, 'raw': '1' }";
+	Literal expected = Literal.createNumber(1, "1");
 	test(json, NodeType.LITERAL, expected);
     }
 
     @Test
     void testStringLiteralParsed() {
 	String json = "{ 'type': 'Literal', 'value': '0', 'raw': '\"0\"' }";
-	Literal expected = Literal.builder().string("0").raw("\"0\"").build();
+	Literal expected = Literal.createString("0", "\"0\"");
 	test(json, NodeType.LITERAL, expected);
     }
 
     @Test
     void testBoolLiteralParsed() {
 	String json = "{ 'type': 'Literal', 'value': true, 'raw': 'true' }";
-	Literal expected = Literal.builder().bool(true).raw("true").build();
+	Literal expected = Literal.createBoolean(true, "true");
 	test(json, NodeType.LITERAL, expected);
     }
 
     @Test
     void testRegExLiteralParsed() {
 	String json = "{ 'type': 'Literal', 'value': '/.*/g', 'raw': '/.*/g', 'regex': { 'pattern': '.*', 'flags': 'g' } }";
-	Literal expected = Literal.builder().regex(RegEx.builder().pattern(".*").flags("g").build())
-		.raw("/.*/g").build();
+	Literal expected = Literal.createRegEx(RegEx.create(".*", "g"), "/.*/g");
 	test(json, NodeType.LITERAL, expected);
     }
 
     @Test
-    void testThisLiteralParsed() {
+    void testNullLiteralParsed() {
 	String json = "{ 'type': 'Literal', 'value': null, 'raw': 'null' }";
-	Literal expected = Literal.builder().keyThis().raw("null").build();
+	Literal expected = Literal.createNull("null");
 	test(json, NodeType.LITERAL, expected);
     }
 

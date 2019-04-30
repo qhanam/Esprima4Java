@@ -7,6 +7,7 @@ public enum NodeType {
     // Statements
     FUNCTION_DECLARATION("FunctionDeclaration"), //
     BLOCK_STATEMENT("BlockStatement"), //
+    EMPTY_STATEMENT("EmptyStatement"), //
 
     // Expressions
     FUNCTION_EXPRESSION("FunctionExpression"), //
@@ -19,6 +20,11 @@ public enum NodeType {
 
     private NodeType(String esprimaName) {
 	this.esprimaName = esprimaName;
+    }
+
+    @Override
+    public String toString() {
+	return esprimaName;
     }
 
 }

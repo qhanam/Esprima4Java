@@ -1,30 +1,23 @@
 package esprima4java.ast;
 
+import com.google.auto.value.AutoValue;
 import com.google.gson.JsonObject;
 
 import esprima4java.DeserializationException;
 
-public class Identifier extends AstNode {
-
-    private String name;
-
-    private Identifier() {
-	super(NodeType.IDENTIFIER);
+@AutoValue
+public abstract class Identifier extends AstNode {
+    public static Identifier create(String name) {
+	return new AutoValue_Identifier(NodeType.IDENTIFIER, name);
     }
 
-    public String getName() {
-	return name;
-    }
-
-    public static Builder builder() {
-	return new Builder();
-    }
+    public abstract String name();
 
     public static Identifier deserialize(JsonObject json) throws DeserializationException {
-	if (!json.get("type").getAsString().equals("Identifier") || !json.has("name")) {
-	    throw new DeserializationException("Identifier type was not well formed.");
+	if (!json.get("type").getAsString().equals("Identifier")) {
+	    throw new DeserializationException("Node type must be `Identifier`.");
 	}
-	return Identifier.builder().name(json.get("name").getAsString()).build();
+	return Identifier.create(json.get("name").getAsString());
     }
 
     @Override
@@ -32,24 +25,7 @@ public class Identifier extends AstNode {
 	if (!(o instanceof Identifier))
 	    return false;
 	Identifier that = (Identifier) o;
-	return this.name.equals(that.name);
-    }
-
-    public static class Builder {
-
-	private String name;
-
-	public Identifier build() {
-	    Identifier identifier = new Identifier();
-	    identifier.name = name;
-	    return identifier;
-	}
-
-	public Builder name(String name) {
-	    this.name = name;
-	    return this;
-	}
-
+	return this.name().equals(that.name());
     }
 
 }
