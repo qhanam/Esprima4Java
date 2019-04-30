@@ -12,6 +12,7 @@ public enum NodeType {
     FUNCTION_EXPRESSION("FunctionExpression"), //
 
     // Other
+    LITERAL("Literal"), //
     IDENTIFIER("Identifier");
 
     private String esprimaName;

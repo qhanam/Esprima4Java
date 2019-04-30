@@ -1,5 +1,9 @@
 package esprima4java.ast;
 
+import com.google.gson.JsonObject;
+
+import esprima4java.DeserializationException;
+
 public class Identifier extends AstNode {
 
     private String name;
@@ -14,6 +18,13 @@ public class Identifier extends AstNode {
 
     public static Builder builder() {
 	return new Builder();
+    }
+
+    public static Identifier deserialize(JsonObject json) throws DeserializationException {
+	if (!json.get("type").getAsString().equals("Identifier") || !json.has("name")) {
+	    throw new DeserializationException("Identifier type was not well formed.");
+	}
+	return Identifier.builder().name(json.get("name").getAsString()).build();
     }
 
     @Override
