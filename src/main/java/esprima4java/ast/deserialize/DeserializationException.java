@@ -1,4 +1,4 @@
-package esprima4java;
+package esprima4java.ast.deserialize;
 
 /**
  * An exception thrown when JSON deserialization fails.

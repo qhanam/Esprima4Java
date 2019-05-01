@@ -6,24 +6,27 @@ import static org.junit.Assert.fail;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.Collections;
 
 import org.junit.jupiter.api.Test;
 
-import esprima4java.DeserializationException;
 import esprima4java.Esprima2Java;
-import esprima4java.ast.AstNode;
+import esprima4java.ast.BlockStatement;
 import esprima4java.ast.EmptyStatement;
 import esprima4java.ast.ExpressionStatement;
 import esprima4java.ast.Identifier;
 import esprima4java.ast.Literal;
+import esprima4java.ast.Node;
 import esprima4java.ast.NodeType;
-import esprima4java.ast.RegEx;
+import esprima4java.ast.Program;
+import esprima4java.ast.RegExpLiteral;
+import esprima4java.ast.deserialize.DeserializationException;
 
-class JsonToObjectTest {
+class DeserializerTest {
 
-    AstNode test(String json, NodeType type, AstNode expected) {
+    Node test(String json, NodeType type, Node expected) {
 	try (Reader reader = new StringReader(json)) {
-	    AstNode actual = Esprima2Java.deserialize(reader);
+	    Node actual = Esprima2Java.deserialize(reader);
 	    assertEquals(actual.type(), type);
 	    assertEquals(actual, expected);
 	    return actual;
@@ -68,7 +71,7 @@ class JsonToObjectTest {
     @Test
     void testRegExLiteralParsed() {
 	String json = "{ 'type': 'Literal', 'value': '/.*/g', 'raw': '/.*/g', 'regex': { 'pattern': '.*', 'flags': 'g' } }";
-	Literal expected = Literal.createRegEx(RegEx.create(".*", "g"), "/.*/g");
+	Literal expected = Literal.createRegEx(RegExpLiteral.create(".*", "g"), "/.*/g");
 	test(json, NodeType.LITERAL, expected);
     }
 
@@ -91,5 +94,20 @@ class JsonToObjectTest {
 	String json = "{ 'type': 'ExpressionStatement', 'expression': { 'type': 'Identifier', 'name': 'a' } }";
 	ExpressionStatement expected = ExpressionStatement.create(Identifier.create("a"));
 	test(json, NodeType.EXPRESSION_STATEMENT, expected);
+    }
+
+    @Test
+    void testBlockStatementParsed() {
+	String json = "{ 'type': 'BlockStatement', 'body': [ { 'type': 'EmptyStatement' } ] }";
+	BlockStatement expected = BlockStatement
+		.create(Collections.singletonList(EmptyStatement.create()));
+	test(json, NodeType.BLOCK_STATEMENT, expected);
+    }
+
+    @Test
+    void testProgramParsed() {
+	String json = "{ 'type': 'Program', 'body': [ { 'type': 'EmptyStatement' } ] }";
+	Program expected = Program.create(Collections.singletonList(EmptyStatement.create()));
+	test(json, NodeType.PROGRAM, expected);
     }
 }
