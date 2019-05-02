@@ -5,10 +5,11 @@ public enum NodeType {
     PROGRAM("Program"), //
 
     // Statements
-    FUNCTION_DECLARATION("FunctionDeclaration"), //
     BLOCK_STATEMENT("BlockStatement"), //
     EMPTY_STATEMENT("EmptyStatement"), //
     EXPRESSION_STATEMENT("ExpressionStatement"), //
+    FUNCTION_DECLARATION("FunctionDeclaration"), //
+    WITH_STATEMENT("WithStatement"), //
 
     // Expressions
     FUNCTION_EXPRESSION("FunctionExpression"), //

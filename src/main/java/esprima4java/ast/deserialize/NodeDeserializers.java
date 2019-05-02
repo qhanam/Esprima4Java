@@ -10,9 +10,12 @@ public class NodeDeserializers {
      */
     private static final NodeDeserializer[] deserializers = { //
 	    new ProgramDeserializer(), //
+	    new FunctionDeclarationDeserializer(), //
 	    new BlockStatementDeserializer(), //
 	    new EmptyStatementDeserializer(), //
 	    new ExpressionStatementDeserializer(), //
+	    new WithStatementDeserializer(), //
+	    new FunctionExpressionDeserializer(), //
 	    new IdentifierDeserializer(), //
 	    new LiteralDeserializer() //
     };

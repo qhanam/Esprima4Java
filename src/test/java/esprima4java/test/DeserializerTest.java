@@ -14,12 +14,14 @@ import esprima4java.Esprima2Java;
 import esprima4java.ast.BlockStatement;
 import esprima4java.ast.EmptyStatement;
 import esprima4java.ast.ExpressionStatement;
+import esprima4java.ast.FunctionExpression;
 import esprima4java.ast.Identifier;
 import esprima4java.ast.Literal;
 import esprima4java.ast.Node;
 import esprima4java.ast.NodeType;
 import esprima4java.ast.Program;
 import esprima4java.ast.RegExpLiteral;
+import esprima4java.ast.WithStatement;
 import esprima4java.ast.deserialize.DeserializationException;
 
 class DeserializerTest {
@@ -97,6 +99,14 @@ class DeserializerTest {
     }
 
     @Test
+    void testDirectiveParsed() {
+	String json = "{ 'type': 'ExpressionStatement', 'expression': { 'type': 'Literal', 'value': 'use strict', 'raw': '\"use strict\"' }, 'directive': 'use strict' }";
+	ExpressionStatement expected = ExpressionStatement
+		.create(Literal.createString("use strict", "\"use strict\""), "use strict");
+	test(json, NodeType.EXPRESSION_STATEMENT, expected);
+    }
+
+    @Test
     void testBlockStatementParsed() {
 	String json = "{ 'type': 'BlockStatement', 'body': [ { 'type': 'EmptyStatement' } ] }";
 	BlockStatement expected = BlockStatement
@@ -110,4 +120,31 @@ class DeserializerTest {
 	Program expected = Program.create(Collections.singletonList(EmptyStatement.create()));
 	test(json, NodeType.PROGRAM, expected);
     }
+
+    @Test
+    void testFunctionExpressionParsed() {
+	String json = "{ 'type': 'FunctionExpression', 'id': { 'type': 'Identifier', 'name': 'foo' }, params: [ { 'type': 'Identifier', 'name': 'a' } ], body: { 'type': 'BlockStatement', 'body': [ ] } }";
+	FunctionExpression expected = FunctionExpression.create(Identifier.create("foo"),
+		Collections.singletonList(Identifier.create("a")),
+		BlockStatement.create(Collections.emptyList()));
+	test(json, NodeType.FUNCTION_EXPRESSION, expected);
+    }
+
+    @Test
+    void testAnonFunctionExpressionParsed() {
+	String json = "{ 'type': 'FunctionExpression', params: [ { 'type': 'Identifier', 'name': 'a' } ], body: { 'type': 'BlockStatement', 'body': [ ] } }";
+	FunctionExpression expected = FunctionExpression.create(
+		Collections.singletonList(Identifier.create("a")),
+		BlockStatement.create(Collections.emptyList()));
+	test(json, NodeType.FUNCTION_EXPRESSION, expected);
+    }
+
+    @Test
+    void testWithStatementParsed() {
+	String json = "{ 'type': 'WithStatement', 'object': { 'type': 'Identifier', 'name': 'x' }, 'body': { 'type': 'EmptyStatement' } }";
+	WithStatement expected = WithStatement.create(Identifier.create("x"),
+		EmptyStatement.create());
+	test(json, NodeType.WITH_STATEMENT, expected);
+    }
+
 }
