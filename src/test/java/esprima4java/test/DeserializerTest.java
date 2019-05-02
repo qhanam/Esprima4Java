@@ -12,15 +12,19 @@ import org.junit.jupiter.api.Test;
 
 import esprima4java.Esprima2Java;
 import esprima4java.ast.BlockStatement;
+import esprima4java.ast.BreakStatement;
+import esprima4java.ast.ContinueStatement;
 import esprima4java.ast.EmptyStatement;
 import esprima4java.ast.ExpressionStatement;
 import esprima4java.ast.FunctionExpression;
 import esprima4java.ast.Identifier;
+import esprima4java.ast.LabeledStatement;
 import esprima4java.ast.Literal;
 import esprima4java.ast.Node;
 import esprima4java.ast.NodeType;
 import esprima4java.ast.Program;
 import esprima4java.ast.RegExpLiteral;
+import esprima4java.ast.ReturnStatement;
 import esprima4java.ast.WithStatement;
 import esprima4java.ast.deserialize.DeserializationException;
 
@@ -29,8 +33,8 @@ class DeserializerTest {
     Node test(String json, NodeType type, Node expected) {
 	try (Reader reader = new StringReader(json)) {
 	    Node actual = Esprima2Java.deserialize(reader);
-	    assertEquals(actual.type(), type);
-	    assertEquals(actual, expected);
+	    assertEquals(type, actual.type());
+	    assertEquals(expected, actual);
 	    return actual;
 	} catch (IOException e) {
 	    e.printStackTrace();
@@ -145,6 +149,56 @@ class DeserializerTest {
 	WithStatement expected = WithStatement.create(Identifier.create("x"),
 		EmptyStatement.create());
 	test(json, NodeType.WITH_STATEMENT, expected);
+    }
+
+    @Test
+    void testReturnStatementParsed() {
+	String json = "{ 'type': 'ReturnStatement' }";
+	ReturnStatement expected = ReturnStatement.create();
+	test(json, NodeType.RETURN_STATEMENT, expected);
+    }
+
+    @Test
+    void testReturnStatementWithArgumentParsed() {
+	String json = "{ 'type': 'ReturnStatement', 'argument': { 'type': 'Identifier', 'name': 'a' } }";
+	ReturnStatement expected = ReturnStatement.create(Identifier.create("a"));
+	test(json, NodeType.RETURN_STATEMENT, expected);
+    }
+
+    @Test
+    void testLabeledStatementParsed() {
+	String json = "{ 'type': 'LabeledStatement', 'label': { 'type': 'Identifier', 'name': 'a' }, 'body': { 'type': 'EmptyStatement' } }";
+	LabeledStatement expected = LabeledStatement.create(Identifier.create("a"),
+		EmptyStatement.create());
+	test(json, NodeType.LABELED_STATEMENT, expected);
+    }
+
+    @Test
+    void testBreakStatementParsed() {
+	String json = "{ 'type': 'BreakStatement' }";
+	BreakStatement expected = BreakStatement.create();
+	test(json, NodeType.BREAK_STATEMENT, expected);
+    }
+
+    @Test
+    void testBreakStatementWithLabelParsed() {
+	String json = "{ 'type': 'BreakStatement', 'label': { 'type': 'Identifier', 'name': 'a' } }";
+	BreakStatement expected = BreakStatement.create(Identifier.create("a"));
+	test(json, NodeType.BREAK_STATEMENT, expected);
+    }
+
+    @Test
+    void testContinueStatementParsed() {
+	String json = "{ 'type': 'ContinueStatement' }";
+	ContinueStatement expected = ContinueStatement.create();
+	test(json, NodeType.CONTINUE_STATEMENT, expected);
+    }
+
+    @Test
+    void testContinueStatementWithLabelParsed() {
+	String json = "{ 'type': 'ContinueStatement', 'label': { 'type': 'Identifier', 'name': 'a' } }";
+	ContinueStatement expected = ContinueStatement.create(Identifier.create("a"));
+	test(json, NodeType.CONTINUE_STATEMENT, expected);
     }
 
 }

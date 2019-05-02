@@ -10,6 +10,10 @@ public enum NodeType {
     EXPRESSION_STATEMENT("ExpressionStatement"), //
     FUNCTION_DECLARATION("FunctionDeclaration"), //
     WITH_STATEMENT("WithStatement"), //
+    RETURN_STATEMENT("ReturnStatement"), //
+    LABELED_STATEMENT("LabeledStatement"), //
+    BREAK_STATEMENT("BreakStatement"), //
+    CONTINUE_STATEMENT("ContinueStatement"), //
 
     // Expressions
     FUNCTION_EXPRESSION("FunctionExpression"), //
