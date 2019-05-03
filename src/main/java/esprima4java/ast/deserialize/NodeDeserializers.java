@@ -23,6 +23,9 @@ public class NodeDeserializers {
 	    new ReturnStatementDeserializer(), //
 	    new BreakStatementDeserializer(), //
 	    new ContinueStatementDeserializer(), //
+	    // Choice
+	    new IfStatementDeserializer(), //
+	    new SwitchCaseDeserializer(), //
 	    // Expressions
 	    new FunctionExpressionDeserializer(), //
 	    new IdentifierDeserializer(), //

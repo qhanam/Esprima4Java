@@ -18,6 +18,7 @@ import esprima4java.ast.EmptyStatement;
 import esprima4java.ast.ExpressionStatement;
 import esprima4java.ast.FunctionExpression;
 import esprima4java.ast.Identifier;
+import esprima4java.ast.IfStatement;
 import esprima4java.ast.LabeledStatement;
 import esprima4java.ast.Literal;
 import esprima4java.ast.Node;
@@ -25,6 +26,7 @@ import esprima4java.ast.NodeType;
 import esprima4java.ast.Program;
 import esprima4java.ast.RegExpLiteral;
 import esprima4java.ast.ReturnStatement;
+import esprima4java.ast.SwitchCase;
 import esprima4java.ast.WithStatement;
 import esprima4java.ast.deserialize.DeserializationException;
 
@@ -199,6 +201,36 @@ class DeserializerTest {
 	String json = "{ 'type': 'ContinueStatement', 'label': { 'type': 'Identifier', 'name': 'a' } }";
 	ContinueStatement expected = ContinueStatement.create(Identifier.create("a"));
 	test(json, NodeType.CONTINUE_STATEMENT, expected);
+    }
+
+    @Test
+    void testIfStatementParsed() {
+	String json = "{ 'type': 'IfStatement', 'test': { 'type': 'Identifier', 'name': 'x' }, 'consequent': { 'type': 'EmptyStatement' } }";
+	IfStatement expected = IfStatement.create(Identifier.create("x"), EmptyStatement.create());
+	test(json, NodeType.IF_STATEMENT, expected);
+    }
+
+    @Test
+    void testIfStatementWithAlternateParsed() {
+	String json = "{ 'type': 'IfStatement', 'test': { 'type': 'Identifier', 'name': 'x' }, 'consequent': { 'type': 'EmptyStatement' }, 'alternate': { 'type': 'EmptyStatement' } }";
+	IfStatement expected = IfStatement.create(Identifier.create("x"), EmptyStatement.create(),
+		EmptyStatement.create());
+	test(json, NodeType.IF_STATEMENT, expected);
+    }
+
+    @Test
+    void testSwitchCaseParsed() {
+	String json = "{ 'type': 'SwitchCase', 'test': { 'type': 'Identifier', 'name': 'x' }, 'consequent': [ { 'type': 'EmptyStatement' } ] }";
+	SwitchCase expected = SwitchCase.create(Identifier.create("x"),
+		Collections.singletonList(EmptyStatement.create()));
+	test(json, NodeType.SWITCH_CASE, expected);
+    }
+
+    @Test
+    void testDefaultSwitchCaseParsed() {
+	String json = "{ 'type': 'SwitchCase', 'consequent': [ { 'type': 'EmptyStatement' } ] }";
+	SwitchCase expected = SwitchCase.create(Collections.singletonList(EmptyStatement.create()));
+	test(json, NodeType.SWITCH_CASE, expected);
     }
 
 }

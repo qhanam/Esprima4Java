@@ -1,24 +1,25 @@
 package esprima4java.ast;
 
 public enum NodeType {
-
+    // Program
     PROGRAM("Program"), //
-
+    // Declarations
+    FUNCTION_DECLARATION("FunctionDeclaration"), //
     // Statements
     BLOCK_STATEMENT("BlockStatement"), //
     EMPTY_STATEMENT("EmptyStatement"), //
     EXPRESSION_STATEMENT("ExpressionStatement"), //
-    FUNCTION_DECLARATION("FunctionDeclaration"), //
     WITH_STATEMENT("WithStatement"), //
-    RETURN_STATEMENT("ReturnStatement"), //
+    // Control Flow
     LABELED_STATEMENT("LabeledStatement"), //
+    RETURN_STATEMENT("ReturnStatement"), //
     BREAK_STATEMENT("BreakStatement"), //
     CONTINUE_STATEMENT("ContinueStatement"), //
-
+    SWITCH_CASE("SwitchCase"), //
+    // Choice
+    IF_STATEMENT("IfStatement"), //
     // Expressions
     FUNCTION_EXPRESSION("FunctionExpression"), //
-
-    // Other
     LITERAL("Literal"), //
     IDENTIFIER("Identifier");
 
