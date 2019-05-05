@@ -26,7 +26,8 @@ public class Esprima2Java {
 	return deserialize((JsonObject) je);
     }
 
-    public static Node deserialize(JsonObject jo) throws DeserializationException {
+    public static Node deserialize(JsonElement je) throws DeserializationException {
+	JsonObject jo = (JsonObject) je;
 	if (!jo.has("type") || !jo.get("type").isJsonPrimitive())
 	    throw new DeserializationException("JSON node has no 'type' property.");
 	return NodeDeserializers.instance().getDeserializer(jo.get("type").getAsString())

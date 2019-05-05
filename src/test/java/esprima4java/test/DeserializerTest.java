@@ -13,9 +13,13 @@ import org.junit.jupiter.api.Test;
 import esprima4java.Esprima2Java;
 import esprima4java.ast.BlockStatement;
 import esprima4java.ast.BreakStatement;
+import esprima4java.ast.CatchClause;
 import esprima4java.ast.ContinueStatement;
+import esprima4java.ast.DoWhileStatement;
 import esprima4java.ast.EmptyStatement;
 import esprima4java.ast.ExpressionStatement;
+import esprima4java.ast.ForInStatement;
+import esprima4java.ast.ForStatement;
 import esprima4java.ast.FunctionExpression;
 import esprima4java.ast.Identifier;
 import esprima4java.ast.IfStatement;
@@ -27,6 +31,13 @@ import esprima4java.ast.Program;
 import esprima4java.ast.RegExpLiteral;
 import esprima4java.ast.ReturnStatement;
 import esprima4java.ast.SwitchCase;
+import esprima4java.ast.SwitchStatement;
+import esprima4java.ast.ThisExpression;
+import esprima4java.ast.ThrowStatement;
+import esprima4java.ast.TryStatement;
+import esprima4java.ast.VariableDeclaration;
+import esprima4java.ast.VariableDeclarator;
+import esprima4java.ast.WhileStatement;
 import esprima4java.ast.WithStatement;
 import esprima4java.ast.deserialize.DeserializationException;
 
@@ -231,6 +242,118 @@ class DeserializerTest {
 	String json = "{ 'type': 'SwitchCase', 'consequent': [ { 'type': 'EmptyStatement' } ] }";
 	SwitchCase expected = SwitchCase.create(Collections.singletonList(EmptyStatement.create()));
 	test(json, NodeType.SWITCH_CASE, expected);
+    }
+
+    @Test
+    void testSwitchStatementParsed() {
+	String json = "{ 'type': 'SwitchStatement', 'discriminant': { 'type': 'Identifier', 'name': 'x' }, 'cases': [ { 'type': 'SwitchCase', 'consequent': [ { 'type': 'EmptyStatement' } ] } ] }";
+	SwitchStatement expected = SwitchStatement.create(Identifier.create("x"),
+		Collections.singletonList(
+			SwitchCase.create(Collections.singletonList(EmptyStatement.create()))));
+	test(json, NodeType.SWITCH_STATEMENT, expected);
+    }
+
+    @Test
+    void testThrowStatementParsed() {
+	String json = "{ 'type': 'ThrowStatement', 'expression': { 'type': 'Identifier', 'name': 'a' } }";
+	ThrowStatement expected = ThrowStatement.create(Identifier.create("a"));
+	test(json, NodeType.THROW_STATEMENT, expected);
+    }
+
+    @Test
+    void testCatchClauseParsed() {
+	String json = "{ 'type': 'CatchClause', 'param': { 'type': 'Identifier', 'name': 'a' }, 'body': { 'type': 'BlockStatement', 'body': [ { 'type': 'EmptyStatement' } ] } }";
+	CatchClause expected = CatchClause.create(Identifier.create("a"),
+		BlockStatement.create(Collections.singletonList(EmptyStatement.create())));
+	test(json, NodeType.CATCH_CLAUSE, expected);
+    }
+
+    @Test
+    void testTryStatementParsed() {
+	String json = " { 'type': 'TryStatement', 'block': { 'type': 'BlockStatement', 'body': [ { 'type': 'EmptyStatement' } ] } } ";
+	TryStatement expected = TryStatement.create(
+		BlockStatement.create(Collections.singletonList(EmptyStatement.create())), null,
+		null);
+	test(json, NodeType.TRY_STATEMENT, expected);
+    }
+
+    @Test
+    void testTryStatementWithHandlerAndFinalizerParsed() {
+	String json = " { 'type': 'TryStatement', 'block': { 'type': 'BlockStatement', 'body': [ ] }, 'handler': { 'type': 'CatchClause', 'param': { 'type': 'Identifier', 'name': 'a' }, 'body': { 'type': 'BlockStatement', 'body': [ ] } }, 'finalizer': { 'type': 'BlockStatement', 'body': [ ] } } ";
+	TryStatement expected = TryStatement.create(BlockStatement.create(Collections.emptyList()),
+		CatchClause.create(Identifier.create("a"),
+			BlockStatement.create(Collections.emptyList())),
+		BlockStatement.create(Collections.emptyList()));
+	test(json, NodeType.TRY_STATEMENT, expected);
+    }
+
+    @Test
+    void testWhileStatementParsed() {
+	String json = " { 'type': 'WhileStatement', 'test': { 'type': 'Identifier', 'name': 'x' }, 'body': { 'type': 'EmptyStatement' } }";
+	WhileStatement expected = WhileStatement.create(Identifier.create("x"),
+		EmptyStatement.create());
+	test(json, NodeType.WHILE_STATEMENT, expected);
+    }
+
+    @Test
+    void testDoWhileStatementParsed() {
+	String json = " { 'type': 'DoWhileStatement', 'test': { 'type': 'Identifier', 'name': 'x' }, 'body': { 'type': 'EmptyStatement' } }";
+	DoWhileStatement expected = DoWhileStatement.create(Identifier.create("x"),
+		EmptyStatement.create());
+	test(json, NodeType.DO_WHILE_STATEMENT, expected);
+    }
+
+    @Test
+    void testForStatementParsed() {
+	String json = " { 'type': 'ForStatement', 'init': { 'type': 'Identifier', 'name': 'i' }, 'test': { 'type': 'Identifier', 'name': 'i' }, 'update': { 'type': 'Identifier', 'name': 'i'}, 'body': { 'type': 'EmptyStatement' } }";
+	ForStatement expected = ForStatement.create(Identifier.create("i"), Identifier.create("i"),
+		Identifier.create("i"), EmptyStatement.create());
+	test(json, NodeType.FOR_STATEMENT, expected);
+    }
+
+    @Test
+    void testEmptyForStatementParsed() {
+	String json = " { 'type': 'ForStatement', 'body': { 'type': 'EmptyStatement' } }";
+	ForStatement expected = ForStatement.create(null, null, null, EmptyStatement.create());
+	test(json, NodeType.FOR_STATEMENT, expected);
+    }
+
+    @Test
+    void testForInStatementParsed() {
+	String json = " { 'type': 'ForInStatement', 'left': { 'type': 'Identifier', 'name': 'val' }, 'right': { 'type': 'Identifier', 'name': 'vals' }, 'body': { 'type': 'EmptyStatement' } }";
+	ForInStatement expected = ForInStatement.create(Identifier.create("val"),
+		Identifier.create("vals"), EmptyStatement.create());
+	test(json, NodeType.FOR_IN_STATEMENT, expected);
+    }
+
+    @Test
+    void testVariableDeclaratorParsed() {
+	String json = " { 'type': 'VariableDeclarator', 'id': { 'type': 'Identifier', 'name': 'a' } }";
+	VariableDeclarator expected = VariableDeclarator.create(Identifier.create("a"), null);
+	test(json, NodeType.VARIABLE_DECLARATOR, expected);
+    }
+
+    @Test
+    void testVariableDeclaratorWithInitParsed() {
+	String json = " { 'type': 'VariableDeclarator', 'id': { 'type': 'Identifier', 'name': 'a' }, 'init': { 'type': 'Identifier', 'name': 'x' } }";
+	VariableDeclarator expected = VariableDeclarator.create(Identifier.create("a"),
+		Identifier.create("x"));
+	test(json, NodeType.VARIABLE_DECLARATOR, expected);
+    }
+
+    @Test
+    void testVariableDeclarationParsed() {
+	String json = " { 'type': 'VariableDeclaration', 'declarations': [ { 'type': 'VariableDeclarator', 'id': { 'type': 'Identifier', 'name': 'a' } } ] }";
+	VariableDeclaration expected = VariableDeclaration.create(
+		Collections.singletonList(VariableDeclarator.create(Identifier.create("a"), null)));
+	test(json, NodeType.VARIABLE_DECLARATION, expected);
+    }
+
+    @Test
+    void testThisExpressionParsed() {
+	String json = " { 'type': 'ThisExpression' }";
+	ThisExpression expected = ThisExpression.create();
+	test(json, NodeType.THIS_EXPRESSION, expected);
     }
 
 }

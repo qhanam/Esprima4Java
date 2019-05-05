@@ -11,8 +11,6 @@ public class NodeDeserializers {
     private static final NodeDeserializer[] deserializers = { //
 	    // Program
 	    new ProgramDeserializer(), //
-	    // Declarations
-	    new FunctionDeclarationDeserializer(), //
 	    // Statements
 	    new BlockStatementDeserializer(), //
 	    new EmptyStatementDeserializer(), //
@@ -25,8 +23,23 @@ public class NodeDeserializers {
 	    new ContinueStatementDeserializer(), //
 	    // Choice
 	    new IfStatementDeserializer(), //
+	    new SwitchStatementDeserializer(), //
 	    new SwitchCaseDeserializer(), //
+	    // Exceptions
+	    new ThrowStatementDeserializer(), //
+	    new TryStatementDeserializer(), //
+	    new CatchClauseDeserializer(), //
+	    // Loops
+	    new WhileStatementDeserializer(), //
+	    new DoWhileStatementDeserializer(), //
+	    new ForStatementDeserializer(), //
+	    new ForInStatementDeserializer(), //
+	    // Declarations
+	    new FunctionDeclarationDeserializer(), //
+	    new VariableDeclarationDeserializer(), //
+	    new VariableDeclaratorDeserializer(), //
 	    // Expressions
+	    new ThisExpressionDeserializer(), //
 	    new FunctionExpressionDeserializer(), //
 	    new IdentifierDeserializer(), //
 	    new LiteralDeserializer() //

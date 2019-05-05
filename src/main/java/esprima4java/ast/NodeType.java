@@ -3,8 +3,6 @@ package esprima4java.ast;
 public enum NodeType {
     // Program
     PROGRAM("Program"), //
-    // Declarations
-    FUNCTION_DECLARATION("FunctionDeclaration"), //
     // Statements
     BLOCK_STATEMENT("BlockStatement"), //
     EMPTY_STATEMENT("EmptyStatement"), //
@@ -15,10 +13,25 @@ public enum NodeType {
     RETURN_STATEMENT("ReturnStatement"), //
     BREAK_STATEMENT("BreakStatement"), //
     CONTINUE_STATEMENT("ContinueStatement"), //
-    SWITCH_CASE("SwitchCase"), //
     // Choice
     IF_STATEMENT("IfStatement"), //
+    SWITCH_STATEMENT("SwitchStatement"), //
+    SWITCH_CASE("SwitchCase"), //
+    // Exceptions
+    THROW_STATEMENT("ThrowStatement"), //
+    TRY_STATEMENT("TryStatement"), //
+    CATCH_CLAUSE("CatchClause"), //
+    // Loops
+    WHILE_STATEMENT("WhileStatement"), //
+    DO_WHILE_STATEMENT("DoWhileStatement"), //
+    FOR_STATEMENT("ForStatement"), //
+    FOR_IN_STATEMENT("ForInStatement"), //
+    // Declarations
+    FUNCTION_DECLARATION("FunctionDeclaration"), //
+    VARIABLE_DECLARATION("VariableDeclaration"), //
+    VARIABLE_DECLARATOR("VariableDeclarator"), //
     // Expressions
+    THIS_EXPRESSION("ThisExpression"), //
     FUNCTION_EXPRESSION("FunctionExpression"), //
     LITERAL("Literal"), //
     IDENTIFIER("Identifier");
