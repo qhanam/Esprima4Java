@@ -40,7 +40,16 @@ public class NodeDeserializers {
 	    new VariableDeclaratorDeserializer(), //
 	    // Expressions
 	    new ThisExpressionDeserializer(), //
+	    new ArrayExpressionDeserializer(), //
+	    new ObjectExpressionDeserializer(), //
+	    new PropertyDeserializer(), //
 	    new FunctionExpressionDeserializer(), //
+	    // Unary Operators
+	    new UnaryExpressionDeserializer(), //
+	    new UpdateExpressionDeserializer(), //
+	    // Binary Operators
+	    new BinaryExpressionDeserializer(), //
+	    new AssignmentExpressionDeserializer(), //
 	    new IdentifierDeserializer(), //
 	    new LiteralDeserializer() //
     };

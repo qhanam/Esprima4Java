@@ -1,6 +1,10 @@
 package esprima4java.ast;
 
 public enum NodeType {
+    // Identifier
+    IDENTIFIER("Identifier"), //
+    // Literal
+    LITERAL("Literal"), //
     // Program
     PROGRAM("Program"), //
     // Statements
@@ -32,9 +36,16 @@ public enum NodeType {
     VARIABLE_DECLARATOR("VariableDeclarator"), //
     // Expressions
     THIS_EXPRESSION("ThisExpression"), //
+    ARRAY_EXPRESSION("ArrayExpression"), //
+    OBJECT_EXPRESSION("ObjectExpression"), //
+    PROPERTY("Property"), //
     FUNCTION_EXPRESSION("FunctionExpression"), //
-    LITERAL("Literal"), //
-    IDENTIFIER("Identifier");
+    // Unary Operators
+    UNARY_EXPRESSION("UnaryExpression"), //
+    UPDATE_EXPRESSION("UpdateExpression"), //
+    // Binary Operators
+    BINARY_EXPRESSION("BinaryExpression"), //
+    ASSIGNMENT_EXPRESSION("AssignmentExpression");
 
     private String esprimaName;
 

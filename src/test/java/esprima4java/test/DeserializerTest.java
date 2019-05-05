@@ -11,6 +11,11 @@ import java.util.Collections;
 import org.junit.jupiter.api.Test;
 
 import esprima4java.Esprima2Java;
+import esprima4java.ast.ArrayExpression;
+import esprima4java.ast.AssignmentExpression;
+import esprima4java.ast.AssignmentExpression.AssignmentOperator;
+import esprima4java.ast.BinaryExpression;
+import esprima4java.ast.BinaryExpression.BinaryOperator;
 import esprima4java.ast.BlockStatement;
 import esprima4java.ast.BreakStatement;
 import esprima4java.ast.CatchClause;
@@ -27,7 +32,10 @@ import esprima4java.ast.LabeledStatement;
 import esprima4java.ast.Literal;
 import esprima4java.ast.Node;
 import esprima4java.ast.NodeType;
+import esprima4java.ast.ObjectExpression;
 import esprima4java.ast.Program;
+import esprima4java.ast.Property;
+import esprima4java.ast.Property.Kind;
 import esprima4java.ast.RegExpLiteral;
 import esprima4java.ast.ReturnStatement;
 import esprima4java.ast.SwitchCase;
@@ -35,6 +43,10 @@ import esprima4java.ast.SwitchStatement;
 import esprima4java.ast.ThisExpression;
 import esprima4java.ast.ThrowStatement;
 import esprima4java.ast.TryStatement;
+import esprima4java.ast.UnaryExpression;
+import esprima4java.ast.UnaryExpression.UnaryOperator;
+import esprima4java.ast.UpdateExpression;
+import esprima4java.ast.UpdateExpression.UpdateOperator;
 import esprima4java.ast.VariableDeclaration;
 import esprima4java.ast.VariableDeclarator;
 import esprima4java.ast.WhileStatement;
@@ -136,24 +148,6 @@ class DeserializerTest {
 	String json = "{ 'type': 'Program', 'body': [ { 'type': 'EmptyStatement' } ] }";
 	Program expected = Program.create(Collections.singletonList(EmptyStatement.create()));
 	test(json, NodeType.PROGRAM, expected);
-    }
-
-    @Test
-    void testFunctionExpressionParsed() {
-	String json = "{ 'type': 'FunctionExpression', 'id': { 'type': 'Identifier', 'name': 'foo' }, params: [ { 'type': 'Identifier', 'name': 'a' } ], body: { 'type': 'BlockStatement', 'body': [ ] } }";
-	FunctionExpression expected = FunctionExpression.create(Identifier.create("foo"),
-		Collections.singletonList(Identifier.create("a")),
-		BlockStatement.create(Collections.emptyList()));
-	test(json, NodeType.FUNCTION_EXPRESSION, expected);
-    }
-
-    @Test
-    void testAnonFunctionExpressionParsed() {
-	String json = "{ 'type': 'FunctionExpression', params: [ { 'type': 'Identifier', 'name': 'a' } ], body: { 'type': 'BlockStatement', 'body': [ ] } }";
-	FunctionExpression expected = FunctionExpression.create(
-		Collections.singletonList(Identifier.create("a")),
-		BlockStatement.create(Collections.emptyList()));
-	test(json, NodeType.FUNCTION_EXPRESSION, expected);
     }
 
     @Test
@@ -356,4 +350,77 @@ class DeserializerTest {
 	test(json, NodeType.THIS_EXPRESSION, expected);
     }
 
+    @Test
+    void testArrayExpressionParsed() {
+	String json = " { 'type': 'ArrayExpression', 'elements': [ { 'type': 'Identifier', 'name': 'a' } ] }";
+	ArrayExpression expected = ArrayExpression
+		.create(Collections.singletonList(Identifier.create("a")));
+	test(json, NodeType.ARRAY_EXPRESSION, expected);
+    }
+
+    @Test
+    void testObjectExpressionParsed() {
+	String json = " { 'type': 'ObjectExpression', 'properties': [ { 'type': 'Property', key: { 'type': 'Identifier', 'name': 'a' }, 'value': { 'type': 'Identifier', 'name': 'b' }, 'kind': 'init' } ] }";
+	ObjectExpression expected = ObjectExpression.create(Collections.singletonList(
+		Property.create(Identifier.create("a"), Identifier.create("b"), Kind.INIT)));
+	test(json, NodeType.OBJECT_EXPRESSION, expected);
+    }
+
+    @Test
+    void testPropertyParsed() {
+	String json = " { 'type': 'Property', key: { 'type': 'Identifier', 'name': 'a' }, 'value': { 'type': 'Identifier', 'name': 'b' }, 'kind': 'init' }";
+	Property expected = Property.create(Identifier.create("a"), Identifier.create("b"),
+		Kind.INIT);
+	test(json, NodeType.PROPERTY, expected);
+    }
+
+    @Test
+    void testFunctionExpressionParsed() {
+	String json = "{ 'type': 'FunctionExpression', 'id': { 'type': 'Identifier', 'name': 'foo' }, params: [ { 'type': 'Identifier', 'name': 'a' } ], body: { 'type': 'BlockStatement', 'body': [ ] } }";
+	FunctionExpression expected = FunctionExpression.create(Identifier.create("foo"),
+		Collections.singletonList(Identifier.create("a")),
+		BlockStatement.create(Collections.emptyList()));
+	test(json, NodeType.FUNCTION_EXPRESSION, expected);
+    }
+
+    @Test
+    void testAnonFunctionExpressionParsed() {
+	String json = "{ 'type': 'FunctionExpression', params: [ { 'type': 'Identifier', 'name': 'a' } ], body: { 'type': 'BlockStatement', 'body': [ ] } }";
+	FunctionExpression expected = FunctionExpression.create(
+		Collections.singletonList(Identifier.create("a")),
+		BlockStatement.create(Collections.emptyList()));
+	test(json, NodeType.FUNCTION_EXPRESSION, expected);
+    }
+
+    @Test
+    void testUnaryExpressionParsed() {
+	String json = "{ 'type': 'UnaryExpression', 'operator': '+', 'prefix': true, 'argument': { 'type': 'Identifier', 'name': 'a' } }";
+	UnaryExpression expected = UnaryExpression.create(UnaryOperator.ADD, true,
+		Identifier.create("a"));
+	test(json, NodeType.UNARY_EXPRESSION, expected);
+    }
+
+    @Test
+    void testUpdateExpressionParsed() {
+	String json = "{ 'type': 'UpdateExpression', 'operator': '++', 'prefix': true, 'argument': { 'type': 'Identifier', 'name': 'a' } }";
+	UpdateExpression expected = UpdateExpression.create(UpdateOperator.INCREMENT, true,
+		Identifier.create("a"));
+	test(json, NodeType.UPDATE_EXPRESSION, expected);
+    }
+
+    @Test
+    void testBinaryExpressionParsed() {
+	String json = "{ 'type': 'BinaryExpression', 'operator': '+', 'left': { 'type': 'Identifier', 'name': 'a' }, 'right': { 'type': 'Identifier', 'name': 'b' } }";
+	BinaryExpression expected = BinaryExpression.create(BinaryOperator.ADD,
+		Identifier.create("a"), Identifier.create("b"));
+	test(json, NodeType.BINARY_EXPRESSION, expected);
+    }
+
+    @Test
+    void testAssignmentExpressionParsed() {
+	String json = "{ 'type': 'AssignmentExpression', 'operator': '+=', 'left': { 'type': 'Identifier', 'name': 'a' }, 'right': { 'type': 'Identifier', 'name': 'b' } }";
+	AssignmentExpression expected = AssignmentExpression.create(AssignmentOperator.ASSIGN_ADD,
+		Identifier.create("a"), Identifier.create("b"));
+	test(json, NodeType.ASSIGNMENT_EXPRESSION, expected);
+    }
 }
