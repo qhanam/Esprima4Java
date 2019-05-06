@@ -30,16 +30,21 @@ public enum NodeType {
     DO_WHILE_STATEMENT("DoWhileStatement"), //
     FOR_STATEMENT("ForStatement"), //
     FOR_IN_STATEMENT("ForInStatement"), //
+    FOR_OF_STATEMENT("ForOfStatement"), //
     // Declarations
     FUNCTION_DECLARATION("FunctionDeclaration"), //
     VARIABLE_DECLARATION("VariableDeclaration"), //
     VARIABLE_DECLARATOR("VariableDeclarator"), //
     // Expressions
+    SUPER("Super"), //
+    YIELD_EXPRESSION("YieldExpression"), //
     THIS_EXPRESSION("ThisExpression"), //
     ARRAY_EXPRESSION("ArrayExpression"), //
+    SPREAD_ELEMENT("SpreadElement"), //
     OBJECT_EXPRESSION("ObjectExpression"), //
     PROPERTY("Property"), //
     FUNCTION_EXPRESSION("FunctionExpression"), //
+    ARROW_FUNCTION_EXPRESSION("ArrowFunctionExpression"), //
     // Unary Operators
     UNARY_EXPRESSION("UnaryExpression"), //
     UPDATE_EXPRESSION("UpdateExpression"), //

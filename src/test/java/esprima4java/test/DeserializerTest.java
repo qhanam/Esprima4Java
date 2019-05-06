@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import esprima4java.Esprima2Java;
 import esprima4java.ast.ArrayExpression;
+import esprima4java.ast.ArrowFunctionExpression;
 import esprima4java.ast.AssignmentExpression;
 import esprima4java.ast.AssignmentExpression.AssignmentOperator;
 import esprima4java.ast.BinaryExpression;
@@ -26,6 +27,7 @@ import esprima4java.ast.DoWhileStatement;
 import esprima4java.ast.EmptyStatement;
 import esprima4java.ast.ExpressionStatement;
 import esprima4java.ast.ForInStatement;
+import esprima4java.ast.ForOfStatement;
 import esprima4java.ast.ForStatement;
 import esprima4java.ast.FunctionExpression;
 import esprima4java.ast.Identifier;
@@ -40,11 +42,14 @@ import esprima4java.ast.Node;
 import esprima4java.ast.NodeType;
 import esprima4java.ast.ObjectExpression;
 import esprima4java.ast.Program;
+import esprima4java.ast.Program.SourceType;
 import esprima4java.ast.Property;
 import esprima4java.ast.Property.Kind;
 import esprima4java.ast.RegExpLiteral;
 import esprima4java.ast.ReturnStatement;
 import esprima4java.ast.SequenceExpression;
+import esprima4java.ast.SpreadElement;
+import esprima4java.ast.Super;
 import esprima4java.ast.SwitchCase;
 import esprima4java.ast.SwitchStatement;
 import esprima4java.ast.ThisExpression;
@@ -58,6 +63,7 @@ import esprima4java.ast.VariableDeclaration;
 import esprima4java.ast.VariableDeclarator;
 import esprima4java.ast.WhileStatement;
 import esprima4java.ast.WithStatement;
+import esprima4java.ast.YieldExpression;
 import esprima4java.ast.deserialize.DeserializationException;
 
 class DeserializerTest {
@@ -152,8 +158,9 @@ class DeserializerTest {
 
     @Test
     void testProgramParsed() {
-	String json = "{ 'type': 'Program', 'body': [ { 'type': 'EmptyStatement' } ] }";
-	Program expected = Program.create(Collections.singletonList(EmptyStatement.create()));
+	String json = "{ 'type': 'Program', 'sourceType': 'script', 'body': [ { 'type': 'EmptyStatement' } ] }";
+	Program expected = Program.create(SourceType.SCRIPT,
+		Collections.singletonList(EmptyStatement.create()));
 	test(json, NodeType.PROGRAM, expected);
     }
 
@@ -328,6 +335,14 @@ class DeserializerTest {
     }
 
     @Test
+    void testForOfStatementParsed() {
+	String json = " { 'type': 'ForOfStatement', 'left': { 'type': 'Identifier', 'name': 'val' }, 'right': { 'type': 'Identifier', 'name': 'vals' }, 'body': { 'type': 'EmptyStatement' } }";
+	ForOfStatement expected = ForOfStatement.create(Identifier.create("val"),
+		Identifier.create("vals"), EmptyStatement.create());
+	test(json, NodeType.FOR_OF_STATEMENT, expected);
+    }
+
+    @Test
     void testVariableDeclaratorParsed() {
 	String json = " { 'type': 'VariableDeclarator', 'id': { 'type': 'Identifier', 'name': 'a' } }";
 	VariableDeclarator expected = VariableDeclarator.create(Identifier.create("a"), null);
@@ -344,10 +359,25 @@ class DeserializerTest {
 
     @Test
     void testVariableDeclarationParsed() {
-	String json = " { 'type': 'VariableDeclaration', 'declarations': [ { 'type': 'VariableDeclarator', 'id': { 'type': 'Identifier', 'name': 'a' } } ] }";
+	String json = " { 'type': 'VariableDeclaration', 'kind': 'var', 'declarations': [ { 'type': 'VariableDeclarator', 'id': { 'type': 'Identifier', 'name': 'a' } } ] }";
 	VariableDeclaration expected = VariableDeclaration.create(
-		Collections.singletonList(VariableDeclarator.create(Identifier.create("a"), null)));
+		Collections.singletonList(VariableDeclarator.create(Identifier.create("a"), null)),
+		VariableDeclaration.Kind.VAR);
 	test(json, NodeType.VARIABLE_DECLARATION, expected);
+    }
+
+    @Test
+    void testSuperParsed() {
+	String json = " { 'type': 'Super' }";
+	Super expected = Super.create();
+	test(json, NodeType.SUPER, expected);
+    }
+
+    @Test
+    void testSpreadElementParsed() {
+	String json = "{ 'type': 'SpreadElement', 'argument': { 'type': 'Identifier', 'name': 'a' } }";
+	SpreadElement expected = SpreadElement.create(Identifier.create("a"));
+	test(json, NodeType.SPREAD_ELEMENT, expected);
     }
 
     @Test
@@ -367,24 +397,25 @@ class DeserializerTest {
 
     @Test
     void testObjectExpressionParsed() {
-	String json = " { 'type': 'ObjectExpression', 'properties': [ { 'type': 'Property', key: { 'type': 'Identifier', 'name': 'a' }, 'value': { 'type': 'Identifier', 'name': 'b' }, 'kind': 'init' } ] }";
-	ObjectExpression expected = ObjectExpression.create(Collections.singletonList(
-		Property.create(Identifier.create("a"), Identifier.create("b"), Kind.INIT)));
+	String json = " { 'type': 'ObjectExpression', 'properties': [ { 'type': 'Property', key: { 'type': 'Identifier', 'name': 'a' }, 'value': { 'type': 'Identifier', 'name': 'b' }, 'kind': 'init', 'method': false, 'shorthand': false, 'computed': false } ] }";
+	ObjectExpression expected = ObjectExpression
+		.create(Collections.singletonList(Property.create(Identifier.create("a"),
+			Identifier.create("b"), Kind.INIT, false, false, false)));
 	test(json, NodeType.OBJECT_EXPRESSION, expected);
     }
 
     @Test
     void testPropertyParsed() {
-	String json = " { 'type': 'Property', key: { 'type': 'Identifier', 'name': 'a' }, 'value': { 'type': 'Identifier', 'name': 'b' }, 'kind': 'init' }";
+	String json = " { 'type': 'Property', key: { 'type': 'Identifier', 'name': 'a' }, 'value': { 'type': 'Identifier', 'name': 'b' }, 'kind': 'init', 'method': false, 'shorthand': false, 'computed': false }";
 	Property expected = Property.create(Identifier.create("a"), Identifier.create("b"),
-		Kind.INIT);
+		Kind.INIT, false, false, false);
 	test(json, NodeType.PROPERTY, expected);
     }
 
     @Test
     void testFunctionExpressionParsed() {
-	String json = "{ 'type': 'FunctionExpression', 'id': { 'type': 'Identifier', 'name': 'foo' }, params: [ { 'type': 'Identifier', 'name': 'a' } ], body: { 'type': 'BlockStatement', 'body': [ ] } }";
-	FunctionExpression expected = FunctionExpression.create(Identifier.create("foo"),
+	String json = "{ 'type': 'FunctionExpression', 'generator': false, 'id': { 'type': 'Identifier', 'name': 'foo' }, params: [ { 'type': 'Identifier', 'name': 'a' } ], body: { 'type': 'BlockStatement', 'body': [ ] } }";
+	FunctionExpression expected = FunctionExpression.create(false, Identifier.create("foo"),
 		Collections.singletonList(Identifier.create("a")),
 		BlockStatement.create(Collections.emptyList()));
 	test(json, NodeType.FUNCTION_EXPRESSION, expected);
@@ -392,11 +423,29 @@ class DeserializerTest {
 
     @Test
     void testAnonFunctionExpressionParsed() {
-	String json = "{ 'type': 'FunctionExpression', params: [ { 'type': 'Identifier', 'name': 'a' } ], body: { 'type': 'BlockStatement', 'body': [ ] } }";
-	FunctionExpression expected = FunctionExpression.create(
+	String json = "{ 'type': 'FunctionExpression', 'generator': false, params: [ { 'type': 'Identifier', 'name': 'a' } ], body: { 'type': 'BlockStatement', 'body': [ ] } }";
+	FunctionExpression expected = FunctionExpression.create(false, null,
 		Collections.singletonList(Identifier.create("a")),
 		BlockStatement.create(Collections.emptyList()));
 	test(json, NodeType.FUNCTION_EXPRESSION, expected);
+    }
+
+    @Test
+    void testArrowFunctionExpressionParsed() {
+	String json = "{ 'type': 'ArrowFunctionExpression', 'generator': false, params: [ { 'type': 'Identifier', 'name': 'a' } ], body: { 'type': 'BlockStatement', 'body': [ ] }, 'expression': false }";
+	ArrowFunctionExpression expected = ArrowFunctionExpression.create(false,
+		Collections.singletonList(Identifier.create("a")),
+		BlockStatement.create(Collections.emptyList()), false);
+	test(json, NodeType.ARROW_FUNCTION_EXPRESSION, expected);
+    }
+
+    @Test
+    void testExpressionArrowFunctionExpressionParsed() {
+	String json = "{ 'type': 'ArrowFunctionExpression', 'generator': false, params: [ { 'type': 'Identifier', 'name': 'a' } ], body: { 'type': 'BlockStatement', 'body': [ ] }, 'expression': true }";
+	ArrowFunctionExpression expected = ArrowFunctionExpression.create(false,
+		Collections.singletonList(Identifier.create("a")),
+		BlockStatement.create(Collections.emptyList()), true);
+	test(json, NodeType.ARROW_FUNCTION_EXPRESSION, expected);
     }
 
     @Test
@@ -477,6 +526,20 @@ class DeserializerTest {
 	SequenceExpression expected = SequenceExpression
 		.create(Collections.singletonList(Identifier.create("a")));
 	test(json, NodeType.SEQUENCE_EXPRESSION, expected);
+    }
+
+    @Test
+    void testYieldExpressionParsed() {
+	String json = "{ 'type': 'YieldExpression', 'delegate': false }";
+	YieldExpression expected = YieldExpression.create(null, false);
+	test(json, NodeType.YIELD_EXPRESSION, expected);
+    }
+
+    @Test
+    void testYieldExpressionWithArgumentParsed() {
+	String json = "{ 'type': 'YieldExpression', 'argument': { 'type': 'Identifier', 'name': 'a' }, 'delegate': false }";
+	YieldExpression expected = YieldExpression.create(Identifier.create("a"), false);
+	test(json, NodeType.YIELD_EXPRESSION, expected);
     }
 
 }

@@ -7,14 +7,11 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 
 @AutoValue
-public abstract class FunctionExpression extends Node {
-    public static FunctionExpression create(Identifier id, List<Identifier> params,
-	    BlockStatement body) {
-	return new AutoValue_FunctionExpression(NodeType.FUNCTION_EXPRESSION, id, params, body);
-    }
-
-    public static FunctionExpression create(List<Identifier> params, BlockStatement body) {
-	return new AutoValue_FunctionExpression(NodeType.FUNCTION_EXPRESSION, null, params, body);
+public abstract class FunctionExpression extends Function {
+    public static FunctionExpression create(boolean generator, Identifier id,
+	    List<Identifier> params, BlockStatement body) {
+	return new AutoValue_FunctionExpression(NodeType.FUNCTION_EXPRESSION, generator, id, params,
+		body);
     }
 
     @Nullable

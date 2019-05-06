@@ -9,6 +9,10 @@ public class NodeDeserializers {
      * ADD NEW DESERIALIZERS HERE
      */
     private static final NodeDeserializer[] deserializers = { //
+	    // Identifier
+	    new IdentifierDeserializer(), //
+	    // Literal
+	    new LiteralDeserializer(), //
 	    // Program
 	    new ProgramDeserializer(), //
 	    // Statements
@@ -34,16 +38,21 @@ public class NodeDeserializers {
 	    new DoWhileStatementDeserializer(), //
 	    new ForStatementDeserializer(), //
 	    new ForInStatementDeserializer(), //
+	    new ForOfStatementDeserializer(), //
 	    // Declarations
 	    new FunctionDeclarationDeserializer(), //
 	    new VariableDeclarationDeserializer(), //
 	    new VariableDeclaratorDeserializer(), //
 	    // Expressions
+	    new SuperDeserializer(), //
+	    new YieldExpressionDeserializer(), //
 	    new ThisExpressionDeserializer(), //
 	    new ArrayExpressionDeserializer(), //
+	    new SpreadElementDeserializer(), //
 	    new ObjectExpressionDeserializer(), //
 	    new PropertyDeserializer(), //
 	    new FunctionExpressionDeserializer(), //
+	    new ArrowFunctionExpressionDeserializer(), //
 	    // Unary Operators
 	    new UnaryExpressionDeserializer(), //
 	    new UpdateExpressionDeserializer(), //
@@ -55,9 +64,7 @@ public class NodeDeserializers {
 	    new ConditionalExpressionDeserializer(), //
 	    new CallExpressionDeserializer(), //
 	    new NewExpressionDeserializer(), //
-	    new SequenceExpressionDeserializer(), //
-	    new IdentifierDeserializer(), //
-	    new LiteralDeserializer() //
+	    new SequenceExpressionDeserializer() //
     };
 
     private static NodeDeserializers instance = null;

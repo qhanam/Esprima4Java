@@ -10,6 +10,7 @@ import esprima4java.Esprima2Java;
 import esprima4java.ast.Node;
 import esprima4java.ast.NodeType;
 import esprima4java.ast.VariableDeclaration;
+import esprima4java.ast.VariableDeclaration.Kind;
 import esprima4java.ast.VariableDeclarator;
 
 public class VariableDeclarationDeserializer implements NodeDeserializer {
@@ -25,7 +26,8 @@ public class VariableDeclarationDeserializer implements NodeDeserializer {
 	for (JsonElement je : json.get("declarations").getAsJsonArray()) {
 	    declarations.add((VariableDeclarator) Esprima2Java.deserialize(je));
 	}
-	return VariableDeclaration.create(declarations);
+	Kind kind = Kind.deserializer(json.get("kind").getAsString());
+	return VariableDeclaration.create(declarations, kind);
     }
 
 }

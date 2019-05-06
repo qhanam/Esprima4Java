@@ -34,7 +34,10 @@ public class PropertyDeserializer implements NodeDeserializer {
 	    throw new DeserializationException(
 		    "Unrecognized property kind " + json.get("kind").getAsString());
 	}
-	return Property.create(key, value, kind);
+	boolean method = json.get("method").getAsBoolean();
+	boolean shorthand = json.get("shorthand").getAsBoolean();
+	boolean computed = json.get("computed").getAsBoolean();
+	return Property.create(key, value, kind, method, shorthand, computed);
     }
 
 }
