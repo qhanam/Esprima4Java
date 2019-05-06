@@ -18,7 +18,9 @@ import esprima4java.ast.BinaryExpression;
 import esprima4java.ast.BinaryExpression.BinaryOperator;
 import esprima4java.ast.BlockStatement;
 import esprima4java.ast.BreakStatement;
+import esprima4java.ast.CallExpression;
 import esprima4java.ast.CatchClause;
+import esprima4java.ast.ConditionalExpression;
 import esprima4java.ast.ContinueStatement;
 import esprima4java.ast.DoWhileStatement;
 import esprima4java.ast.EmptyStatement;
@@ -33,6 +35,7 @@ import esprima4java.ast.Literal;
 import esprima4java.ast.LogicalExpression;
 import esprima4java.ast.LogicalExpression.LogicalOperator;
 import esprima4java.ast.MemberExpression;
+import esprima4java.ast.NewExpression;
 import esprima4java.ast.Node;
 import esprima4java.ast.NodeType;
 import esprima4java.ast.ObjectExpression;
@@ -41,6 +44,7 @@ import esprima4java.ast.Property;
 import esprima4java.ast.Property.Kind;
 import esprima4java.ast.RegExpLiteral;
 import esprima4java.ast.ReturnStatement;
+import esprima4java.ast.SequenceExpression;
 import esprima4java.ast.SwitchCase;
 import esprima4java.ast.SwitchStatement;
 import esprima4java.ast.ThisExpression;
@@ -441,6 +445,38 @@ class DeserializerTest {
 	MemberExpression expected = MemberExpression.create(Identifier.create("a"),
 		Identifier.create("b"), false);
 	test(json, NodeType.MEMBER_EXPRESSION, expected);
+    }
+
+    @Test
+    void testConditionalExpressionParsed() {
+	String json = "{ 'type': 'ConditionalExpression', 'test': { 'type': 'Identifier', 'name': 'a' }, 'alternate': { 'type': 'Identifier', 'name': 'b' }, 'consequent': { 'type': 'Identifier', 'name': 'c' } }";
+	ConditionalExpression expected = ConditionalExpression.create(Identifier.create("a"),
+		Identifier.create("b"), Identifier.create("c"));
+	test(json, NodeType.CONDITIONAL_EXPRESSION, expected);
+    }
+
+    @Test
+    void testCallExpressionParsed() {
+	String json = "{ 'type': 'CallExpression', 'callee': { 'type': 'Identifier', 'name': 'foo' }, 'arguments': [ { 'type': 'Identifier', 'name': 'a' } ] }";
+	CallExpression expected = CallExpression.create(Identifier.create("foo"),
+		Collections.singletonList(Identifier.create("a")));
+	test(json, NodeType.CALL_EXPRESSION, expected);
+    }
+
+    @Test
+    void testNewExpressionParsed() {
+	String json = "{ 'type': 'NewExpression', 'callee': { 'type': 'Identifier', 'name': 'foo' }, 'arguments': [ { 'type': 'Identifier', 'name': 'a' } ] }";
+	NewExpression expected = NewExpression.create(Identifier.create("foo"),
+		Collections.singletonList(Identifier.create("a")));
+	test(json, NodeType.NEW_EXPRESSION, expected);
+    }
+
+    @Test
+    void testSequenceExpressionParsed() {
+	String json = "{ 'type': 'SequenceExpression', 'expressions': [ { 'type': 'Identifier', 'name': 'a' } ] }";
+	SequenceExpression expected = SequenceExpression
+		.create(Collections.singletonList(Identifier.create("a")));
+	test(json, NodeType.SEQUENCE_EXPRESSION, expected);
     }
 
 }

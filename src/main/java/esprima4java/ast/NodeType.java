@@ -47,7 +47,12 @@ public enum NodeType {
     BINARY_EXPRESSION("BinaryExpression"), //
     ASSIGNMENT_EXPRESSION("AssignmentExpression"), //
     LOGICAL_EXPRESSION("LogicalExpression"), //
-    MEMBER_EXPRESSION("MemberExpression");
+    MEMBER_EXPRESSION("MemberExpression"), //
+    CONDITIONAL_EXPRESSION("ConditionalExpression"), //
+    // Function Calls
+    CALL_EXPRESSION("CallExpression"), //
+    NEW_EXPRESSION("NewExpression"), //
+    SEQUENCE_EXPRESSION("SequenceExpression");
 
     private String esprimaName;
 

@@ -52,6 +52,10 @@ public class NodeDeserializers {
 	    new AssignmentExpressionDeserializer(), //
 	    new LogicalExpressionDeserializer(), //
 	    new MemberExpressionDeserializer(), //
+	    new ConditionalExpressionDeserializer(), //
+	    new CallExpressionDeserializer(), //
+	    new NewExpressionDeserializer(), //
+	    new SequenceExpressionDeserializer(), //
 	    new IdentifierDeserializer(), //
 	    new LiteralDeserializer() //
     };
