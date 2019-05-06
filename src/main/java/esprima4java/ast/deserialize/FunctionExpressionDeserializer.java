@@ -24,13 +24,12 @@ public class FunctionExpressionDeserializer implements NodeDeserializer {
     public Node deserialize(JsonObject json) throws DeserializationException {
 	List<Identifier> params = new ArrayList<>();
 	for (JsonElement param : json.get("params").getAsJsonArray()) {
-	    params.add((Identifier) Esprima2Java.deserialize((JsonObject) param));
+	    params.add((Identifier) Esprima2Java.deserialize(param));
 	}
-	BlockStatement body = (BlockStatement) Esprima2Java
-		.deserialize((JsonObject) json.get("body"));
+	BlockStatement body = (BlockStatement) Esprima2Java.deserialize(json.get("body"));
 
 	if (json.has("id")) {
-	    Identifier id = (Identifier) Esprima2Java.deserialize((JsonObject) json.get("id"));
+	    Identifier id = (Identifier) Esprima2Java.deserialize(json.get("id"));
 	    return FunctionExpression.create(id, params, body);
 	} else {
 	    return FunctionExpression.create(params, body);

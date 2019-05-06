@@ -17,12 +17,10 @@ public class ExpressionStatementDeserializer implements NodeDeserializer {
     @Override
     public Node deserialize(JsonObject json) throws DeserializationException {
 	if (json.has("directive")) {
-	    return ExpressionStatement.create(
-		    Esprima2Java.deserialize((JsonObject) json.get("expression")),
+	    return ExpressionStatement.create(Esprima2Java.deserialize(json.get("expression")),
 		    json.get("directive").getAsString());
 	}
-	return ExpressionStatement
-		.create(Esprima2Java.deserialize((JsonObject) json.get("expression")));
+	return ExpressionStatement.create(Esprima2Java.deserialize(json.get("expression")));
     }
 
 }

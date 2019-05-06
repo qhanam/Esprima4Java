@@ -18,8 +18,7 @@ public class TryStatementDeserializer implements NodeDeserializer {
 
     @Override
     public Node deserialize(JsonObject json) throws DeserializationException {
-	BlockStatement block = (BlockStatement) Esprima2Java
-		.deserialize((JsonObject) json.get("block"));
+	BlockStatement block = (BlockStatement) Esprima2Java.deserialize(json.get("block"));
 	CatchClause handler = json.has("handler")
 		? (CatchClause) Esprima2Java.deserialize(json.get("handler"))
 		: null;

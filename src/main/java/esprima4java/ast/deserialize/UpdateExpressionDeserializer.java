@@ -17,17 +17,9 @@ public class UpdateExpressionDeserializer implements NodeDeserializer {
 
     @Override
     public Node deserialize(JsonObject json) throws DeserializationException {
-	UpdateOperator operator;
-	switch (json.get("operator").getAsString()) {
-	case "++":
-	    operator = UpdateOperator.INCREMENT;
-	    break;
-	case "--":
-	    operator = UpdateOperator.DECREMENT;
-	    break;
-	default:
+	UpdateOperator operator = UpdateOperator.deserialize(json.get("operator").getAsString());
+	if (operator == null)
 	    throw new DeserializationException("Unknown update operator.");
-	}
 	boolean prefix = json.get("prefix").getAsBoolean();
 	Node argument = Esprima2Java.deserialize(json.get("argument"));
 	return UpdateExpression.create(operator, prefix, argument);

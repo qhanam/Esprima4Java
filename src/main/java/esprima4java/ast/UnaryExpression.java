@@ -18,6 +18,14 @@ public abstract class UnaryExpression extends Node {
 	    this.op = op;
 	}
 
+	public static UnaryOperator deserialize(String serial) {
+	    for (UnaryOperator op : UnaryOperator.values()) {
+		if (op.toString().equals(serial))
+		    return op;
+	    }
+	    return null;
+	}
+
 	@Override
 	public String toString() {
 	    return op;

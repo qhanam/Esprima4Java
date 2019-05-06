@@ -17,9 +17,8 @@ public class CatchClauseDeserializer implements NodeDeserializer {
 
     @Override
     public Node deserialize(JsonObject json) throws DeserializationException {
-	Node param = Esprima2Java.deserialize((JsonObject) json.get("param"));
-	BlockStatement body = (BlockStatement) Esprima2Java
-		.deserialize((JsonObject) json.get("body"));
+	Node param = Esprima2Java.deserialize(json.get("param"));
+	BlockStatement body = (BlockStatement) Esprima2Java.deserialize(json.get("body"));
 	return CatchClause.create(param, body);
     }
 

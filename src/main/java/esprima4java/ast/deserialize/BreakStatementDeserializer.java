@@ -18,8 +18,7 @@ public class BreakStatementDeserializer implements NodeDeserializer {
     @Override
     public Node deserialize(JsonObject json) throws DeserializationException {
 	if (json.has("label")) {
-	    return BreakStatement
-		    .create((Identifier) Esprima2Java.deserialize((JsonObject) json.get("label")));
+	    return BreakStatement.create((Identifier) Esprima2Java.deserialize(json.get("label")));
 	}
 	return BreakStatement.create();
     }

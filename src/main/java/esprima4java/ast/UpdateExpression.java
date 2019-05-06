@@ -18,6 +18,14 @@ public abstract class UpdateExpression extends Node {
 	    this.op = op;
 	}
 
+	public static UpdateOperator deserialize(String serial) {
+	    for (UpdateOperator op : UpdateOperator.values()) {
+		if (op.toString().equals(serial))
+		    return op;
+	    }
+	    return null;
+	}
+
 	@Override
 	public String toString() {
 	    return op;

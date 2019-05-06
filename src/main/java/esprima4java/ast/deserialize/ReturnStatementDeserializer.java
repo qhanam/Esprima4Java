@@ -17,8 +17,7 @@ public class ReturnStatementDeserializer implements NodeDeserializer {
     @Override
     public Node deserialize(JsonObject json) throws DeserializationException {
 	if (json.has("argument")) {
-	    return ReturnStatement
-		    .create(Esprima2Java.deserialize((JsonObject) json.get("argument")));
+	    return ReturnStatement.create(Esprima2Java.deserialize(json.get("argument")));
 	} else {
 	    return ReturnStatement.create();
 	}

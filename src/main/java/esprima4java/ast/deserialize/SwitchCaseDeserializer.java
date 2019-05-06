@@ -3,7 +3,6 @@ package esprima4java.ast.deserialize;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
@@ -23,7 +22,7 @@ public class SwitchCaseDeserializer implements NodeDeserializer {
     public Node deserialize(JsonObject json) throws DeserializationException {
 
 	List<Node> consequent = new ArrayList<>();
-	for (JsonElement je : (JsonArray) json.get("consequent")) {
+	for (JsonElement je : json.get("consequent").getAsJsonArray()) {
 	    consequent.add(Esprima2Java.deserialize((JsonObject) je));
 	}
 

@@ -22,9 +22,9 @@ public class ProgramDeserializer implements NodeDeserializer {
     @Override
     public Node deserialize(JsonObject json) throws DeserializationException {
 	List<Node> statements = new ArrayList<Node>();
-	JsonArray jsonStatements = (JsonArray) json.get("body");
+	JsonArray jsonStatements = json.get("body").getAsJsonArray();
 	for (JsonElement jsonStatement : jsonStatements) {
-	    statements.add(Esprima2Java.deserialize((JsonObject) jsonStatement));
+	    statements.add(Esprima2Java.deserialize(jsonStatement));
 	}
 	return Program.create(statements);
     }

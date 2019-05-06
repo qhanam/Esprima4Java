@@ -21,7 +21,7 @@ public class SwitchStatementDeserializer implements NodeDeserializer {
 
     @Override
     public Node deserialize(JsonObject json) throws DeserializationException {
-	Node discriminant = Esprima2Java.deserialize((JsonObject) json.get("discriminant"));
+	Node discriminant = Esprima2Java.deserialize(json.get("discriminant"));
 	List<SwitchCase> cases = new ArrayList<>();
 	for (JsonElement je : json.get("cases").getAsJsonArray()) {
 	    cases.add((SwitchCase) Esprima2Java.deserialize((JsonObject) je));

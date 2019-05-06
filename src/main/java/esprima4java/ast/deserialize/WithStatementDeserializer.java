@@ -16,8 +16,8 @@ public class WithStatementDeserializer implements NodeDeserializer {
 
     @Override
     public Node deserialize(JsonObject json) throws DeserializationException {
-	Node object = Esprima2Java.deserialize((JsonObject) json.get("object"));
-	Node body = Esprima2Java.deserialize((JsonObject) json.get("body"));
+	Node object = Esprima2Java.deserialize(json.get("object"));
+	Node body = Esprima2Java.deserialize(json.get("body"));
 	return WithStatement.create(object, body);
     }
 

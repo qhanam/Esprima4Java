@@ -17,9 +17,8 @@ public class LabeledStatementDeserializer implements NodeDeserializer {
 
     @Override
     public Node deserialize(JsonObject json) throws DeserializationException {
-	return LabeledStatement.create(
-		(Identifier) Esprima2Java.deserialize((JsonObject) json.get("label")),
-		Esprima2Java.deserialize((JsonObject) json.get("body")));
+	return LabeledStatement.create((Identifier) Esprima2Java.deserialize(json.get("label")),
+		Esprima2Java.deserialize(json.get("body")));
     }
 
 }

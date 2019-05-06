@@ -16,7 +16,7 @@ public class ThrowStatementDeserializer implements NodeDeserializer {
 
     @Override
     public Node deserialize(JsonObject json) throws DeserializationException {
-	Node expression = Esprima2Java.deserialize((JsonObject) json.get("expression"));
+	Node expression = Esprima2Java.deserialize(json.get("expression"));
 	return ThrowStatement.create(expression);
     }
 

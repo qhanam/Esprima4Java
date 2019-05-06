@@ -22,13 +22,12 @@ public class FunctionDeclarationDeserializer implements NodeDeserializer {
 
     @Override
     public Node deserialize(JsonObject json) throws DeserializationException {
-	Identifier id = (Identifier) Esprima2Java.deserialize((JsonObject) json.get("id"));
+	Identifier id = (Identifier) Esprima2Java.deserialize(json.get("id"));
 	List<Identifier> params = new ArrayList<>();
 	for (JsonElement param : json.get("params").getAsJsonArray()) {
-	    params.add((Identifier) Esprima2Java.deserialize((JsonObject) param));
+	    params.add((Identifier) Esprima2Java.deserialize(param));
 	}
-	BlockStatement body = (BlockStatement) Esprima2Java
-		.deserialize((JsonObject) json.get("body"));
+	BlockStatement body = (BlockStatement) Esprima2Java.deserialize(json.get("body"));
 	return FunctionDeclaration.create(id, params, body);
     }
 
