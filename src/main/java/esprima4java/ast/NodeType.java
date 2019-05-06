@@ -45,7 +45,9 @@ public enum NodeType {
     UPDATE_EXPRESSION("UpdateExpression"), //
     // Binary Operators
     BINARY_EXPRESSION("BinaryExpression"), //
-    ASSIGNMENT_EXPRESSION("AssignmentExpression");
+    ASSIGNMENT_EXPRESSION("AssignmentExpression"), //
+    LOGICAL_EXPRESSION("LogicalExpression"), //
+    MEMBER_EXPRESSION("MemberExpression");
 
     private String esprimaName;
 

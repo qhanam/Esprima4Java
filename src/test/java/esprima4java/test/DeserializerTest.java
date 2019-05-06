@@ -30,6 +30,9 @@ import esprima4java.ast.Identifier;
 import esprima4java.ast.IfStatement;
 import esprima4java.ast.LabeledStatement;
 import esprima4java.ast.Literal;
+import esprima4java.ast.LogicalExpression;
+import esprima4java.ast.LogicalExpression.LogicalOperator;
+import esprima4java.ast.MemberExpression;
 import esprima4java.ast.Node;
 import esprima4java.ast.NodeType;
 import esprima4java.ast.ObjectExpression;
@@ -423,4 +426,21 @@ class DeserializerTest {
 		Identifier.create("a"), Identifier.create("b"));
 	test(json, NodeType.ASSIGNMENT_EXPRESSION, expected);
     }
+
+    @Test
+    void testLogicalExpressionParsed() {
+	String json = "{ 'type': 'LogicalExpression', 'operator': '||', 'left': { 'type': 'Identifier', 'name': 'a' }, 'right': { 'type': 'Identifier', 'name': 'b' } }";
+	LogicalExpression expected = LogicalExpression.create(LogicalOperator.OR,
+		Identifier.create("a"), Identifier.create("b"));
+	test(json, NodeType.LOGICAL_EXPRESSION, expected);
+    }
+
+    @Test
+    void testMemberExpressionParsed() {
+	String json = "{ 'type': 'MemberExpression', 'object': { 'type': 'Identifier', 'name': 'a' }, 'property': { 'type': 'Identifier', 'name': 'b' }, 'computed': false }";
+	MemberExpression expected = MemberExpression.create(Identifier.create("a"),
+		Identifier.create("b"), false);
+	test(json, NodeType.MEMBER_EXPRESSION, expected);
+    }
+
 }

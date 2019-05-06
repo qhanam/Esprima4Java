@@ -50,6 +50,8 @@ public class NodeDeserializers {
 	    // Binary Operators
 	    new BinaryExpressionDeserializer(), //
 	    new AssignmentExpressionDeserializer(), //
+	    new LogicalExpressionDeserializer(), //
+	    new MemberExpressionDeserializer(), //
 	    new IdentifierDeserializer(), //
 	    new LiteralDeserializer() //
     };
