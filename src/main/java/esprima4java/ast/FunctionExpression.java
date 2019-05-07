@@ -8,10 +8,10 @@ import com.google.auto.value.AutoValue;
 
 @AutoValue
 public abstract class FunctionExpression extends Function {
-    public static FunctionExpression create(boolean generator, Identifier id,
+    public static FunctionExpression create(boolean generator, boolean async, Identifier id,
 	    List<Identifier> params, BlockStatement body) {
-	return new AutoValue_FunctionExpression(NodeType.FUNCTION_EXPRESSION, generator, id, params,
-		body);
+	return new AutoValue_FunctionExpression(NodeType.FUNCTION_EXPRESSION, generator, async, id,
+		params, body);
     }
 
     @Nullable

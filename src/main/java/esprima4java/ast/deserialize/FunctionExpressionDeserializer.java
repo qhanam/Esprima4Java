@@ -23,6 +23,7 @@ public class FunctionExpressionDeserializer implements NodeDeserializer {
     @Override
     public Node deserialize(JsonObject json) throws DeserializationException {
 	boolean generator = json.get("generator").getAsBoolean();
+	boolean async = json.get("async").getAsBoolean();
 	Identifier id = json.has("id") ? (Identifier) Esprima2Java.deserialize(json.get("id"))
 		: null;
 	List<Identifier> params = new ArrayList<>();
@@ -30,7 +31,7 @@ public class FunctionExpressionDeserializer implements NodeDeserializer {
 	    params.add((Identifier) Esprima2Java.deserialize(param));
 	}
 	BlockStatement body = (BlockStatement) Esprima2Java.deserialize(json.get("body"));
-	return FunctionExpression.create(generator, id, params, body);
+	return FunctionExpression.create(generator, async, id, params, body);
     }
 
 }

@@ -427,17 +427,17 @@ class DeserializerTest {
 
     @Test
     void testFunctionExpressionParsed() {
-	String json = "{ 'type': 'FunctionExpression', 'generator': false, 'id': { 'type': 'Identifier', 'name': 'foo' }, params: [ { 'type': 'Identifier', 'name': 'a' } ], body: { 'type': 'BlockStatement', 'body': [ ] } }";
-	FunctionExpression expected = FunctionExpression.create(false, Identifier.create("foo"),
-		Collections.singletonList(Identifier.create("a")),
+	String json = "{ 'type': 'FunctionExpression', 'generator': false, 'async': false, 'id': { 'type': 'Identifier', 'name': 'foo' }, params: [ { 'type': 'Identifier', 'name': 'a' } ], body: { 'type': 'BlockStatement', 'body': [ ] } }";
+	FunctionExpression expected = FunctionExpression.create(false, false,
+		Identifier.create("foo"), Collections.singletonList(Identifier.create("a")),
 		BlockStatement.create(Collections.emptyList()));
 	test(json, NodeType.FUNCTION_EXPRESSION, expected);
     }
 
     @Test
     void testAnonFunctionExpressionParsed() {
-	String json = "{ 'type': 'FunctionExpression', 'generator': false, params: [ { 'type': 'Identifier', 'name': 'a' } ], body: { 'type': 'BlockStatement', 'body': [ ] } }";
-	FunctionExpression expected = FunctionExpression.create(false, null,
+	String json = "{ 'type': 'FunctionExpression', 'generator': false, 'async': false, params: [ { 'type': 'Identifier', 'name': 'a' } ], body: { 'type': 'BlockStatement', 'body': [ ] } }";
+	FunctionExpression expected = FunctionExpression.create(false, false, null,
 		Collections.singletonList(Identifier.create("a")),
 		BlockStatement.create(Collections.emptyList()));
 	test(json, NodeType.FUNCTION_EXPRESSION, expected);
@@ -445,8 +445,8 @@ class DeserializerTest {
 
     @Test
     void testArrowFunctionExpressionParsed() {
-	String json = "{ 'type': 'ArrowFunctionExpression', 'generator': false, params: [ { 'type': 'Identifier', 'name': 'a' } ], body: { 'type': 'BlockStatement', 'body': [ ] }, 'expression': false }";
-	ArrowFunctionExpression expected = ArrowFunctionExpression.create(false,
+	String json = "{ 'type': 'ArrowFunctionExpression', 'generator': false, 'async': false, params: [ { 'type': 'Identifier', 'name': 'a' } ], body: { 'type': 'BlockStatement', 'body': [ ] }, 'expression': false }";
+	ArrowFunctionExpression expected = ArrowFunctionExpression.create(false, false,
 		Collections.singletonList(Identifier.create("a")),
 		BlockStatement.create(Collections.emptyList()), false);
 	test(json, NodeType.ARROW_FUNCTION_EXPRESSION, expected);
@@ -454,8 +454,8 @@ class DeserializerTest {
 
     @Test
     void testExpressionArrowFunctionExpressionParsed() {
-	String json = "{ 'type': 'ArrowFunctionExpression', 'generator': false, params: [ { 'type': 'Identifier', 'name': 'a' } ], body: { 'type': 'BlockStatement', 'body': [ ] }, 'expression': true }";
-	ArrowFunctionExpression expected = ArrowFunctionExpression.create(false,
+	String json = "{ 'type': 'ArrowFunctionExpression', 'generator': false, 'async': false, params: [ { 'type': 'Identifier', 'name': 'a' } ], body: { 'type': 'BlockStatement', 'body': [ ] }, 'expression': true }";
+	ArrowFunctionExpression expected = ArrowFunctionExpression.create(false, false,
 		Collections.singletonList(Identifier.create("a")),
 		BlockStatement.create(Collections.emptyList()), true);
 	test(json, NodeType.ARROW_FUNCTION_EXPRESSION, expected);
@@ -616,9 +616,9 @@ class DeserializerTest {
 
     @Test
     void testMethodDefinition() {
-	String json = "{ 'type': 'MethodDefinition', 'key': { 'type': 'Identifier', 'name': 'foo' }, 'value': { 'type': 'FunctionExpression', 'generator': false, params: [ ], body: { 'type': 'BlockStatement', 'body': [ ] } }, 'kind': 'method', 'computed': false, 'static': false }";
+	String json = "{ 'type': 'MethodDefinition', 'key': { 'type': 'Identifier', 'name': 'foo' }, 'value': { 'type': 'FunctionExpression', 'generator': false, 'async': false, params: [ ], body: { 'type': 'BlockStatement', 'body': [ ] } }, 'kind': 'method', 'computed': false, 'static': false }";
 	MethodDefinition expected = MethodDefinition.create(Identifier.create("foo"),
-		FunctionExpression.create(false, null, Collections.emptyList(),
+		FunctionExpression.create(false, false, null, Collections.emptyList(),
 			BlockStatement.create(Collections.emptyList())),
 		MethodDefinition.Kind.METHOD, false, false);
 	test(json, NodeType.METHOD_DEFINITION, expected);
@@ -626,10 +626,10 @@ class DeserializerTest {
 
     @Test
     void testClassBody() {
-	String json = "{ 'type': 'ClassBody', 'body': [ { 'type': 'MethodDefinition', 'key': { 'type': 'Identifier', 'name': 'foo' }, 'value': { 'type': 'FunctionExpression', 'generator': false, params: [ ], body: { 'type': 'BlockStatement', 'body': [ ] } }, 'kind': 'method', 'computed': false, 'static': false } ] }";
+	String json = "{ 'type': 'ClassBody', 'body': [ { 'type': 'MethodDefinition', 'key': { 'type': 'Identifier', 'name': 'foo' }, 'value': { 'type': 'FunctionExpression', 'generator': false, 'async': false, params: [ ], body: { 'type': 'BlockStatement', 'body': [ ] } }, 'kind': 'method', 'computed': false, 'static': false } ] }";
 	ClassBody expected = ClassBody
 		.create(Collections.singletonList(MethodDefinition.create(Identifier.create("foo"),
-			FunctionExpression.create(false, null, Collections.emptyList(),
+			FunctionExpression.create(false, false, null, Collections.emptyList(),
 				BlockStatement.create(Collections.emptyList())),
 			MethodDefinition.Kind.METHOD, false, false)));
 	test(json, NodeType.CLASS_BODY, expected);

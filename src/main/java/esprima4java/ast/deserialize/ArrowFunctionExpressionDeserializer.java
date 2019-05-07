@@ -22,13 +22,14 @@ public class ArrowFunctionExpressionDeserializer implements NodeDeserializer {
     @Override
     public Node deserialize(JsonObject json) throws DeserializationException {
 	boolean generator = json.get("generator").getAsBoolean();
+	boolean async = json.get("async").getAsBoolean();
 	List<Identifier> params = new ArrayList<>();
 	for (JsonElement param : json.get("params").getAsJsonArray()) {
 	    params.add((Identifier) Esprima2Java.deserialize(param));
 	}
 	Node body = Esprima2Java.deserialize(json.get("body"));
 	boolean expression = json.get("expression").getAsBoolean();
-	return ArrowFunctionExpression.create(generator, params, body, expression);
+	return ArrowFunctionExpression.create(generator, async, params, body, expression);
     }
 
 }
