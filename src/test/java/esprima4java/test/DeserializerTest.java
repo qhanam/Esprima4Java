@@ -479,16 +479,16 @@ class DeserializerTest {
 
     @Test
     void testBinaryExpressionParsed() {
-	String json = "{ 'type': 'BinaryExpression', 'operator': '+', 'left': { 'type': 'Identifier', 'name': 'a' }, 'right': { 'type': 'Identifier', 'name': 'b' } }";
-	BinaryExpression expected = BinaryExpression.create(BinaryOperator.ADD,
+	String json = "{ 'type': 'BinaryExpression', 'operator': '**', 'left': { 'type': 'Identifier', 'name': 'a' }, 'right': { 'type': 'Identifier', 'name': 'b' } }";
+	BinaryExpression expected = BinaryExpression.create(BinaryOperator.EXP,
 		Identifier.create("a"), Identifier.create("b"));
 	test(json, NodeType.BINARY_EXPRESSION, expected);
     }
 
     @Test
     void testAssignmentExpressionParsed() {
-	String json = "{ 'type': 'AssignmentExpression', 'operator': '+=', 'left': { 'type': 'Identifier', 'name': 'a' }, 'right': { 'type': 'Identifier', 'name': 'b' } }";
-	AssignmentExpression expected = AssignmentExpression.create(AssignmentOperator.ASSIGN_ADD,
+	String json = "{ 'type': 'AssignmentExpression', 'operator': '**=', 'left': { 'type': 'Identifier', 'name': 'a' }, 'right': { 'type': 'Identifier', 'name': 'b' } }";
+	AssignmentExpression expected = AssignmentExpression.create(AssignmentOperator.ASSIGN_EXP,
 		Identifier.create("a"), Identifier.create("b"));
 	test(json, NodeType.ASSIGNMENT_EXPRESSION, expected);
     }

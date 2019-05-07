@@ -13,7 +13,8 @@ public abstract class AssignmentExpression extends Node {
 	ASSIGN("="), ASSIGN_ADD("+="), ASSIGN_SUB("-="), //
 	ASSIGN_MULT("*="), ASSIGN_DIV("/="), ASSIGN_MOD("%="), //
 	ASSIGN_LSH("<<="), ASSIGN_RSH(">>="), ASSIGN_URSH(">>>="), //
-	ASSIGN_BITOR("|="), ASSIGN_BITNOT("^="), ASSIGN_BITAND("&=");
+	ASSIGN_BITOR("|="), ASSIGN_BITNOT("^="), ASSIGN_BITAND("&="), //
+	ASSIGN_EXP("**=");
 
 	private String op;
 

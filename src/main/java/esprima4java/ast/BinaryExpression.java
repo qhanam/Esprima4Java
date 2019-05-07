@@ -14,7 +14,8 @@ public abstract class BinaryExpression extends Node {
 	LSH("<<"), RSH(">>"), URSH(">>>"), //
 	ADD("+"), SUB("-"), MULT("*"), DIV("/"), MOD("%"), //
 	BITOR("|"), BITNOT("^"), BITAND("&"), //
-	IN("in"), INSTANCEOF("instanceof");
+	IN("in"), INSTANCEOF("instanceof"), //
+	EXP("**");
 
 	private String op;
 
