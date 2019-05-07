@@ -291,6 +291,14 @@ class DeserializerTest {
     }
 
     @Test
+    void testCatchClauseWithoutParam() {
+	String json = "{ 'type': 'CatchClause', 'param': null, 'body': { 'type': 'BlockStatement', 'body': [ { 'type': 'EmptyStatement' } ] } }";
+	CatchClause expected = CatchClause.create(null,
+		BlockStatement.create(Collections.singletonList(EmptyStatement.create())));
+	test(json, NodeType.CATCH_CLAUSE, expected);
+    }
+
+    @Test
     void testTryStatementParsed() {
 	String json = " { 'type': 'TryStatement', 'block': { 'type': 'BlockStatement', 'body': [ { 'type': 'EmptyStatement' } ] } } ";
 	TryStatement expected = TryStatement.create(
