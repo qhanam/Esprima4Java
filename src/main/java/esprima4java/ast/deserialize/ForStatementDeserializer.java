@@ -16,9 +16,15 @@ public class ForStatementDeserializer implements NodeDeserializer {
 
     @Override
     public Node deserialize(JsonObject json) throws DeserializationException {
-	Node init = json.has("init") ? Esprima2Java.deserialize(json.get("init")) : null;
-	Node test = json.has("test") ? Esprima2Java.deserialize(json.get("test")) : null;
-	Node update = json.has("update") ? Esprima2Java.deserialize(json.get("update")) : null;
+	Node init = json.has("init") && !json.get("init").isJsonNull()
+		? Esprima2Java.deserialize(json.get("init"))
+		: null;
+	Node test = json.has("test") && !json.get("test").isJsonNull()
+		? Esprima2Java.deserialize(json.get("test"))
+		: null;
+	Node update = json.has("update") && !json.get("update").isJsonNull()
+		? Esprima2Java.deserialize(json.get("update"))
+		: null;
 	Node body = Esprima2Java.deserialize(json.get("body"));
 	return ForStatement.create(init, test, update, body);
     }

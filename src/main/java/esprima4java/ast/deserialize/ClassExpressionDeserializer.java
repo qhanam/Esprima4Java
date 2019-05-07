@@ -18,9 +18,11 @@ public class ClassExpressionDeserializer implements NodeDeserializer {
 
     @Override
     public Node deserialize(JsonObject json) throws DeserializationException {
-	Identifier id = json.has("id") ? (Identifier) Esprima2Java.deserialize(json.get("id"))
+	Identifier id = json.has("id") && !json.get("id").isJsonNull()
+		? (Identifier) Esprima2Java.deserialize(json.get("id"))
 		: null;
-	Node superClass = json.has("superClass") ? Esprima2Java.deserialize(json.get("superClass"))
+	Node superClass = json.has("superClass") && !json.get("superClass").isJsonNull()
+		? Esprima2Java.deserialize(json.get("superClass"))
 		: null;
 	ClassBody body = (ClassBody) Esprima2Java.deserialize(json.get("body"));
 	return ClassExpression.create(id, superClass, body);

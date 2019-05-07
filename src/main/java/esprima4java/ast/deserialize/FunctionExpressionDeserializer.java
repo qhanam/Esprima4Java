@@ -24,7 +24,8 @@ public class FunctionExpressionDeserializer implements NodeDeserializer {
     public Node deserialize(JsonObject json) throws DeserializationException {
 	boolean generator = json.get("generator").getAsBoolean();
 	boolean async = json.get("async").getAsBoolean();
-	Identifier id = json.has("id") ? (Identifier) Esprima2Java.deserialize(json.get("id"))
+	Identifier id = json.has("id") && !json.get("id").isJsonNull()
+		? (Identifier) Esprima2Java.deserialize(json.get("id"))
 		: null;
 	List<Identifier> params = new ArrayList<>();
 	for (JsonElement param : json.get("params").getAsJsonArray()) {

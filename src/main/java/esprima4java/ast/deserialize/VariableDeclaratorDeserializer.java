@@ -17,7 +17,9 @@ public class VariableDeclaratorDeserializer implements NodeDeserializer {
     @Override
     public Node deserialize(JsonObject json) throws DeserializationException {
 	Node id = Esprima2Java.deserialize(json.get("id"));
-	Node init = json.has("init") ? Esprima2Java.deserialize(json.get("init")) : null;
+	Node init = json.has("init") && !json.get("init").isJsonNull()
+		? Esprima2Java.deserialize(json.get("init"))
+		: null;
 	return VariableDeclarator.create(id, init);
     }
 
