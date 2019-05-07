@@ -350,9 +350,9 @@ class DeserializerTest {
 
     @Test
     void testForOfStatementParsed() {
-	String json = " { 'type': 'ForOfStatement', 'left': { 'type': 'Identifier', 'name': 'val' }, 'right': { 'type': 'Identifier', 'name': 'vals' }, 'body': { 'type': 'EmptyStatement' } }";
+	String json = " { 'type': 'ForOfStatement', 'left': { 'type': 'Identifier', 'name': 'val' }, 'right': { 'type': 'Identifier', 'name': 'vals' }, 'body': { 'type': 'EmptyStatement' }, 'await': false }";
 	ForOfStatement expected = ForOfStatement.create(Identifier.create("val"),
-		Identifier.create("vals"), EmptyStatement.create());
+		Identifier.create("vals"), EmptyStatement.create(), false);
 	test(json, NodeType.FOR_OF_STATEMENT, expected);
     }
 
@@ -415,6 +415,14 @@ class DeserializerTest {
 	ObjectExpression expected = ObjectExpression
 		.create(Collections.singletonList(Property.create(Identifier.create("a"),
 			Identifier.create("b"), Kind.INIT, false, false, false)));
+	test(json, NodeType.OBJECT_EXPRESSION, expected);
+    }
+
+    @Test
+    void testObjectExpressionWithSpreadElement() {
+	String json = " { 'type': 'ObjectExpression', 'properties': [ { 'type': 'SpreadElement', 'argument': { 'type': 'Identifier', 'name': 'a' } } ] }";
+	ObjectExpression expected = ObjectExpression
+		.create(Collections.singletonList(SpreadElement.create(Identifier.create("a"))));
 	test(json, NodeType.OBJECT_EXPRESSION, expected);
     }
 
@@ -559,7 +567,16 @@ class DeserializerTest {
     @Test
     void testTemplateElementParsed() {
 	String json = "{ 'type': 'TemplateElement', 'tail': false, 'value': { 'cooked': 'x', 'raw': 'x' } }";
-	TemplateElement expected = TemplateElement.create(false, TemplateValue.create("x", "x"));
+	TemplateElement expected = TemplateElement.create(false,
+		TemplateValue.create("\"x\"", "\"x\""));
+	test(json, NodeType.TEMPLATE_ELEMENT, expected);
+    }
+
+    @Test
+    void testTemplateElementWithNullCooked() {
+	String json = "{ 'type': 'TemplateElement', 'tail': false, 'value': { 'cooked': null, 'raw': 'x' } }";
+	TemplateElement expected = TemplateElement.create(false,
+		TemplateValue.create(null, "\"x\""));
 	test(json, NodeType.TEMPLATE_ELEMENT, expected);
     }
 

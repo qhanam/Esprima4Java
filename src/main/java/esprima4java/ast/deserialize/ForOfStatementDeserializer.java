@@ -19,7 +19,8 @@ public class ForOfStatementDeserializer implements NodeDeserializer {
 	Node left = Esprima2Java.deserialize(json.get("left"));
 	Node right = Esprima2Java.deserialize(json.get("right"));
 	Node body = Esprima2Java.deserialize(json.get("body"));
-	return ForOfStatement.create(left, right, body);
+	boolean await = json.get("await").getAsBoolean();
+	return ForOfStatement.create(left, right, body, await);
     }
 
 }

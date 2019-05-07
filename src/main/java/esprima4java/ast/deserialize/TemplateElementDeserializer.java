@@ -17,9 +17,12 @@ public class TemplateElementDeserializer implements NodeDeserializer {
     @Override
     public Node deserialize(JsonObject json) throws DeserializationException {
 	boolean tail = json.get("tail").getAsBoolean();
-	TemplateValue value = TemplateValue.create(
-		json.get("value").getAsJsonObject().get("cooked").getAsString(),
-		json.get("value").getAsJsonObject().get("raw").getAsString());
+	JsonObject serialValue = json.get("value").getAsJsonObject();
+	String cooked = serialValue.has("cooked") && !serialValue.get("cooked").isJsonNull()
+		? serialValue.get("cooked").toString()
+		: null;
+	String raw = serialValue.get("raw").toString();
+	TemplateValue value = TemplateValue.create(cooked, raw);
 	return TemplateElement.create(tail, value);
     }
 
