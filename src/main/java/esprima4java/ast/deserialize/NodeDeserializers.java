@@ -79,6 +79,7 @@ public class NodeDeserializers {
 	    new ClassExpressionDeserializer(), //
 	    new ClassBodyDeserializer(), //
 	    new MethodDefinitionDeserializer(), //
+	    new MetaPropertyDeserializer(), //
     };
 
     private static NodeDeserializers instance = null;

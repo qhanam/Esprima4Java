@@ -42,6 +42,7 @@ import esprima4java.ast.Literal;
 import esprima4java.ast.LogicalExpression;
 import esprima4java.ast.LogicalExpression.LogicalOperator;
 import esprima4java.ast.MemberExpression;
+import esprima4java.ast.MetaProperty;
 import esprima4java.ast.MethodDefinition;
 import esprima4java.ast.NewExpression;
 import esprima4java.ast.Node;
@@ -648,5 +649,13 @@ class DeserializerTest {
 	ClassDeclaration expected = ClassDeclaration.create(Identifier.create("Foo"),
 		Identifier.create("Bar"), ClassBody.create(Collections.emptyList()));
 	test(json, NodeType.CLASS_DECLARATION, expected);
+    }
+
+    @Test
+    void testMetaProperty() {
+	String json = "{ 'type': 'MetaProperty', 'meta': { 'type': 'Identifier', 'name': 'new' }, 'property': { 'type': 'Identifier', 'name': 'target' } }";
+	MetaProperty expected = MetaProperty.create(Identifier.create("new"),
+		Identifier.create("target"));
+	test(json, NodeType.META_PROPERTY, expected);
     }
 }

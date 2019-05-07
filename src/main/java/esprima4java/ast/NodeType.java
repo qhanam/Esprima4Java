@@ -71,7 +71,8 @@ public enum NodeType {
     CLASS_DECLARATION("ClassDeclaration"), //
     CLASS_EXPRESSION("ClassExpression"), //
     CLASS_BODY("ClassBody"), //
-    METHOD_DEFINITION("MethodDefinition");
+    METHOD_DEFINITION("MethodDefinition"), //
+    META_PROPERTY("MetaProperty");
 
     private String esprimaName;
 
