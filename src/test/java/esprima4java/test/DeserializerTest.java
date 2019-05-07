@@ -17,6 +17,7 @@ import esprima4java.ast.ArrowFunctionExpression;
 import esprima4java.ast.AssignmentExpression;
 import esprima4java.ast.AssignmentExpression.AssignmentOperator;
 import esprima4java.ast.AssignmentPattern;
+import esprima4java.ast.AwaitExpression;
 import esprima4java.ast.BinaryExpression;
 import esprima4java.ast.BinaryExpression.BinaryOperator;
 import esprima4java.ast.BlockStatement;
@@ -658,4 +659,12 @@ class DeserializerTest {
 		Identifier.create("target"));
 	test(json, NodeType.META_PROPERTY, expected);
     }
+
+    @Test
+    void testAwaitExpressionParsed() {
+	String json = "{ 'type': 'AwaitExpression', 'argument': { 'type': 'Identifier', 'name': 'a' } }";
+	AwaitExpression expected = AwaitExpression.create(Identifier.create("a"));
+	test(json, NodeType.AWAIT_EXPRESSION, expected);
+    }
+
 }

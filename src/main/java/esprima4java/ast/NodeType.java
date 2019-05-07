@@ -37,6 +37,7 @@ public enum NodeType {
     VARIABLE_DECLARATOR("VariableDeclarator"), //
     // Expressions
     SUPER("Super"), //
+    AWAIT_EXPRESSION("AwaitExpression"), //
     YIELD_EXPRESSION("YieldExpression"), //
     THIS_EXPRESSION("ThisExpression"), //
     ARRAY_EXPRESSION("ArrayExpression"), //

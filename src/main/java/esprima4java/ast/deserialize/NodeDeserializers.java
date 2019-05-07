@@ -45,6 +45,7 @@ public class NodeDeserializers {
 	    new VariableDeclaratorDeserializer(), //
 	    // Expressions
 	    new SuperDeserializer(), //
+	    new AwaitExpressionDeserializer(), //
 	    new YieldExpressionDeserializer(), //
 	    new ThisExpressionDeserializer(), //
 	    new ArrayExpressionDeserializer(), //
