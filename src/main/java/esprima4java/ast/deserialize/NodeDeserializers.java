@@ -64,7 +64,21 @@ public class NodeDeserializers {
 	    new ConditionalExpressionDeserializer(), //
 	    new CallExpressionDeserializer(), //
 	    new NewExpressionDeserializer(), //
-	    new SequenceExpressionDeserializer() //
+	    new SequenceExpressionDeserializer(), //
+	    // Templates
+	    new TaggedTemplateExpressionDeserializer(), //
+	    new TemplateLiteralDeserializer(), //
+	    new TemplateElementDeserializer(), //
+	    // Patterns
+	    new ObjectPatternDeserializer(), //
+	    new ArrayPatternDeserializer(), //
+	    new RestElementDeserializer(), //
+	    new AssignmentPatternDeserializer(), //
+	    // Classes
+	    new ClassDefinitionDeserializer(), //
+	    new ClassExpressionDeserializer(), //
+	    new ClassBodyDeserializer(), //
+	    new MethodDefinitionDeserializer(), //
     };
 
     private static NodeDeserializers instance = null;

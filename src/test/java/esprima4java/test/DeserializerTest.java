@@ -12,15 +12,20 @@ import org.junit.jupiter.api.Test;
 
 import esprima4java.Esprima2Java;
 import esprima4java.ast.ArrayExpression;
+import esprima4java.ast.ArrayPattern;
 import esprima4java.ast.ArrowFunctionExpression;
 import esprima4java.ast.AssignmentExpression;
 import esprima4java.ast.AssignmentExpression.AssignmentOperator;
+import esprima4java.ast.AssignmentPattern;
 import esprima4java.ast.BinaryExpression;
 import esprima4java.ast.BinaryExpression.BinaryOperator;
 import esprima4java.ast.BlockStatement;
 import esprima4java.ast.BreakStatement;
 import esprima4java.ast.CallExpression;
 import esprima4java.ast.CatchClause;
+import esprima4java.ast.ClassBody;
+import esprima4java.ast.ClassDeclaration;
+import esprima4java.ast.ClassExpression;
 import esprima4java.ast.ConditionalExpression;
 import esprima4java.ast.ContinueStatement;
 import esprima4java.ast.DoWhileStatement;
@@ -37,21 +42,28 @@ import esprima4java.ast.Literal;
 import esprima4java.ast.LogicalExpression;
 import esprima4java.ast.LogicalExpression.LogicalOperator;
 import esprima4java.ast.MemberExpression;
+import esprima4java.ast.MethodDefinition;
 import esprima4java.ast.NewExpression;
 import esprima4java.ast.Node;
 import esprima4java.ast.NodeType;
 import esprima4java.ast.ObjectExpression;
+import esprima4java.ast.ObjectPattern;
 import esprima4java.ast.Program;
 import esprima4java.ast.Program.SourceType;
 import esprima4java.ast.Property;
 import esprima4java.ast.Property.Kind;
 import esprima4java.ast.RegExpLiteral;
+import esprima4java.ast.RestElement;
 import esprima4java.ast.ReturnStatement;
 import esprima4java.ast.SequenceExpression;
 import esprima4java.ast.SpreadElement;
 import esprima4java.ast.Super;
 import esprima4java.ast.SwitchCase;
 import esprima4java.ast.SwitchStatement;
+import esprima4java.ast.TaggedTemplateExpression;
+import esprima4java.ast.TemplateElement;
+import esprima4java.ast.TemplateLiteral;
+import esprima4java.ast.TemplateValue;
 import esprima4java.ast.ThisExpression;
 import esprima4java.ast.ThrowStatement;
 import esprima4java.ast.TryStatement;
@@ -542,4 +554,99 @@ class DeserializerTest {
 	test(json, NodeType.YIELD_EXPRESSION, expected);
     }
 
+    @Test
+    void testTemplateElementParsed() {
+	String json = "{ 'type': 'TemplateElement', 'tail': false, 'value': { 'cooked': 'x', 'raw': 'x' } }";
+	TemplateElement expected = TemplateElement.create(false, TemplateValue.create("x", "x"));
+	test(json, NodeType.TEMPLATE_ELEMENT, expected);
+    }
+
+    @Test
+    void testTemplateLiteralParsed() {
+	String json = "{ 'type': 'TemplateLiteral', quasis: [ { 'type': 'TemplateElement', 'tail': false, 'value': { 'cooked': 'x', 'raw': 'x' } } ], expressions: [ { 'type': 'Identifier', 'name': 'a' } ] }";
+	TemplateLiteral expected = TemplateLiteral.create(
+		Collections.singletonList(
+			TemplateElement.create(false, TemplateValue.create("x", "x"))),
+		Collections.singletonList(Identifier.create("a")));
+	test(json, NodeType.TEMPLATE_LITERAL, expected);
+    }
+
+    @Test
+    void testTaggedTemplateExpression() {
+	String json = "{ 'type': 'TaggedTemplateExpression', 'tag': { 'type': 'Identifier', 'name': 'foo' }, 'quasi': { 'type': 'TemplateLiteral', quasis: [ ], expressions: [ ] } }";
+	TaggedTemplateExpression expected = TaggedTemplateExpression.create(
+		Identifier.create("foo"),
+		TemplateLiteral.create(Collections.emptyList(), Collections.emptyList()));
+	test(json, NodeType.TAGGED_TEMPLATE_EXPRESSION, expected);
+    }
+
+    @Test
+    void testObjectPattern() {
+	String json = "{ 'type': 'ObjectPattern', 'properties': [ { 'type': 'Property', 'computed': false, 'key': { 'type': 'Identifier', 'name': 'a' }, 'value': { 'type': 'Identifier', 'name': 'a' }, 'kind': 'init', 'method': false, 'shorthand': true } ] }";
+	ObjectPattern expected = ObjectPattern
+		.create(Collections.singletonList(Property.create(Identifier.create("a"),
+			Identifier.create("a"), Kind.INIT, false, true, false)));
+	test(json, NodeType.OBJECT_PATTERN, expected);
+    }
+
+    @Test
+    void testArrayPattern() {
+	String json = "{ 'type': 'ArrayPattern', 'elements': [ { 'type': 'Identifier', 'name': 'a' } ] }";
+	ArrayPattern expected = ArrayPattern
+		.create(Collections.singletonList(Identifier.create("a")));
+	test(json, NodeType.ARRAY_PATTERN, expected);
+    }
+
+    @Test
+    void testRestElement() {
+	String json = "{ 'type': 'RestElement', 'argument': { 'type': 'Identifier', 'name': 'a' } }";
+	RestElement expected = RestElement.create(Identifier.create("a"));
+	test(json, NodeType.REST_ELEMENT, expected);
+    }
+
+    @Test
+    void testAssignmentPattern() {
+	String json = "{ 'type': 'AssignmentPattern', 'left': { 'type': 'ArrayPattern', 'elements': [ { 'type': 'Identifier', 'name': 'a' } ] }, 'right': { 'type': 'Identifier', 'name': 'b' } }";
+	AssignmentPattern expected = AssignmentPattern.create(
+		ArrayPattern.create(Collections.singletonList(Identifier.create("a"))),
+		Identifier.create("b"));
+	test(json, NodeType.ASSIGNMENT_PATTERN, expected);
+    }
+
+    @Test
+    void testMethodDefinition() {
+	String json = "{ 'type': 'MethodDefinition', 'key': { 'type': 'Identifier', 'name': 'foo' }, 'value': { 'type': 'FunctionExpression', 'generator': false, params: [ ], body: { 'type': 'BlockStatement', 'body': [ ] } }, 'kind': 'method', 'computed': false, 'static': false }";
+	MethodDefinition expected = MethodDefinition.create(Identifier.create("foo"),
+		FunctionExpression.create(false, null, Collections.emptyList(),
+			BlockStatement.create(Collections.emptyList())),
+		MethodDefinition.Kind.METHOD, false, false);
+	test(json, NodeType.METHOD_DEFINITION, expected);
+    }
+
+    @Test
+    void testClassBody() {
+	String json = "{ 'type': 'ClassBody', 'body': [ { 'type': 'MethodDefinition', 'key': { 'type': 'Identifier', 'name': 'foo' }, 'value': { 'type': 'FunctionExpression', 'generator': false, params: [ ], body: { 'type': 'BlockStatement', 'body': [ ] } }, 'kind': 'method', 'computed': false, 'static': false } ] }";
+	ClassBody expected = ClassBody
+		.create(Collections.singletonList(MethodDefinition.create(Identifier.create("foo"),
+			FunctionExpression.create(false, null, Collections.emptyList(),
+				BlockStatement.create(Collections.emptyList())),
+			MethodDefinition.Kind.METHOD, false, false)));
+	test(json, NodeType.CLASS_BODY, expected);
+    }
+
+    @Test
+    void testAnonClassExpression() {
+	String json = "{ 'type': 'ClassExpression', 'body': { 'type': 'ClassBody', 'body': [ ] } }";
+	ClassExpression expected = ClassExpression.create(null, null,
+		ClassBody.create(Collections.emptyList()));
+	test(json, NodeType.CLASS_EXPRESSION, expected);
+    }
+
+    @Test
+    void testClassDefinition() {
+	String json = "{ 'type': 'ClassDeclaration', 'id': { 'type': 'Identifier', 'name': 'Foo' }, 'superClass': { 'type': 'Identifier', 'name': 'Bar' }, 'body': { 'type': 'ClassBody', 'body': [ ] } }";
+	ClassDeclaration expected = ClassDeclaration.create(Identifier.create("Foo"),
+		Identifier.create("Bar"), ClassBody.create(Collections.emptyList()));
+	test(json, NodeType.CLASS_DECLARATION, expected);
+    }
 }

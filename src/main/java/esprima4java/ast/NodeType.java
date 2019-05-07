@@ -57,7 +57,21 @@ public enum NodeType {
     // Function Calls
     CALL_EXPRESSION("CallExpression"), //
     NEW_EXPRESSION("NewExpression"), //
-    SEQUENCE_EXPRESSION("SequenceExpression");
+    SEQUENCE_EXPRESSION("SequenceExpression"), //
+    // Templates
+    TAGGED_TEMPLATE_EXPRESSION("TaggedTemplateExpression"), //
+    TEMPLATE_LITERAL("TemplateLiteral"), //
+    TEMPLATE_ELEMENT("TemplateElement"), //
+    // Patterns
+    OBJECT_PATTERN("ObjectPattern"), //
+    ARRAY_PATTERN("ArrayPattern"), //
+    REST_ELEMENT("RestElement"), //
+    ASSIGNMENT_PATTERN("AssignmentPattern"), //
+    // Classes
+    CLASS_DECLARATION("ClassDeclaration"), //
+    CLASS_EXPRESSION("ClassExpression"), //
+    CLASS_BODY("ClassBody"), //
+    METHOD_DEFINITION("MethodDefinition");
 
     private String esprimaName;
 
