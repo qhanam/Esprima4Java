@@ -6,9 +6,9 @@ import com.google.auto.value.AutoValue;
 
 @AutoValue
 public abstract class ObjectPattern extends Node {
-    public static ObjectPattern create(List<Property> properties) {
+    public static ObjectPattern create(List<Node> properties) {
 	return new AutoValue_ObjectPattern(NodeType.OBJECT_PATTERN, properties);
     }
 
-    public abstract List<Property> properties();
+    public abstract List<Node> properties();
 }

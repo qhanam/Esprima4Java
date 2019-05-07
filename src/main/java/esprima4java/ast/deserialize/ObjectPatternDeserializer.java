@@ -10,7 +10,6 @@ import esprima4java.Esprima2Java;
 import esprima4java.ast.Node;
 import esprima4java.ast.NodeType;
 import esprima4java.ast.ObjectPattern;
-import esprima4java.ast.Property;
 
 public class ObjectPatternDeserializer implements NodeDeserializer {
 
@@ -21,9 +20,9 @@ public class ObjectPatternDeserializer implements NodeDeserializer {
 
     @Override
     public Node deserialize(JsonObject json) throws DeserializationException {
-	List<Property> properties = new ArrayList<>();
+	List<Node> properties = new ArrayList<>();
 	for (JsonElement je : json.get("properties").getAsJsonArray()) {
-	    properties.add((Property) Esprima2Java.deserialize(je));
+	    properties.add(Esprima2Java.deserialize(je));
 	}
 	return ObjectPattern.create(properties);
     }

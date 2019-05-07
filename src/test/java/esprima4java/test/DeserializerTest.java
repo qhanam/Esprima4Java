@@ -609,6 +609,14 @@ class DeserializerTest {
     }
 
     @Test
+    void testObjectPatternWithRestElement() {
+	String json = "{ 'type': 'ObjectPattern', 'properties': [ { 'type': 'RestElement', 'argument': { 'type': 'Identifier', 'name': 'a' } } ] }";
+	ObjectPattern expected = ObjectPattern
+		.create(Collections.singletonList(RestElement.create(Identifier.create("a"))));
+	test(json, NodeType.OBJECT_PATTERN, expected);
+    }
+
+    @Test
     void testArrayPattern() {
 	String json = "{ 'type': 'ArrayPattern', 'elements': [ { 'type': 'Identifier', 'name': 'a' } ] }";
 	ArrayPattern expected = ArrayPattern
