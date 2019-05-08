@@ -7,7 +7,7 @@ import esprima4java.ast.Node;
 import esprima4java.ast.NodeType;
 import esprima4java.ast.YieldExpression;
 
-public class YieldExpressionDeserializer implements NodeDeserializer {
+public class YieldExpressionDeserializer extends NodeDeserializer {
 
     @Override
     public NodeType getSupportedType() {
@@ -15,7 +15,7 @@ public class YieldExpressionDeserializer implements NodeDeserializer {
     }
 
     @Override
-    public Node deserialize(JsonObject json) throws DeserializationException {
+    public Node deserializePartial(JsonObject json) throws DeserializationException {
 	Node argument = json.has("argument") && !json.get("argument").isJsonNull()
 		? Esprima2Java.deserialize(json.get("argument"))
 		: null;

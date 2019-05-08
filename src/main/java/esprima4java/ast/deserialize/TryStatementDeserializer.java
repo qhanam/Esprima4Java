@@ -9,7 +9,7 @@ import esprima4java.ast.Node;
 import esprima4java.ast.NodeType;
 import esprima4java.ast.TryStatement;
 
-public class TryStatementDeserializer implements NodeDeserializer {
+public class TryStatementDeserializer extends NodeDeserializer {
 
     @Override
     public NodeType getSupportedType() {
@@ -17,7 +17,7 @@ public class TryStatementDeserializer implements NodeDeserializer {
     }
 
     @Override
-    public Node deserialize(JsonObject json) throws DeserializationException {
+    public Node deserializePartial(JsonObject json) throws DeserializationException {
 	BlockStatement block = (BlockStatement) Esprima2Java.deserialize(json.get("block"));
 	CatchClause handler = json.has("handler") && !json.get("handler").isJsonNull()
 		? (CatchClause) Esprima2Java.deserialize(json.get("handler"))

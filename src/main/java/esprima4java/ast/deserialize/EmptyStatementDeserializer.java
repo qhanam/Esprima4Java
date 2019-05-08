@@ -6,7 +6,7 @@ import esprima4java.ast.EmptyStatement;
 import esprima4java.ast.Node;
 import esprima4java.ast.NodeType;
 
-public class EmptyStatementDeserializer implements NodeDeserializer {
+public class EmptyStatementDeserializer extends NodeDeserializer {
 
     @Override
     public NodeType getSupportedType() {
@@ -14,7 +14,7 @@ public class EmptyStatementDeserializer implements NodeDeserializer {
     }
 
     @Override
-    public Node deserialize(JsonObject json) throws DeserializationException {
+    public Node deserializePartial(JsonObject json) throws DeserializationException {
 	return EmptyStatement.create();
     }
 

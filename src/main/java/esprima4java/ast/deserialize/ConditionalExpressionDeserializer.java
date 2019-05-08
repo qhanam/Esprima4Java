@@ -7,7 +7,7 @@ import esprima4java.ast.ConditionalExpression;
 import esprima4java.ast.Node;
 import esprima4java.ast.NodeType;
 
-public class ConditionalExpressionDeserializer implements NodeDeserializer {
+public class ConditionalExpressionDeserializer extends NodeDeserializer {
 
     @Override
     public NodeType getSupportedType() {
@@ -15,7 +15,7 @@ public class ConditionalExpressionDeserializer implements NodeDeserializer {
     }
 
     @Override
-    public Node deserialize(JsonObject json) throws DeserializationException {
+    public Node deserializePartial(JsonObject json) throws DeserializationException {
 	Node test = Esprima2Java.deserialize(json.get("test"));
 	Node alternate = Esprima2Java.deserialize(json.get("alternate"));
 	Node consequent = Esprima2Java.deserialize(json.get("consequent"));

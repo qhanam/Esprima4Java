@@ -13,7 +13,7 @@ import esprima4java.ast.VariableDeclaration;
 import esprima4java.ast.VariableDeclaration.Kind;
 import esprima4java.ast.VariableDeclarator;
 
-public class VariableDeclarationDeserializer implements NodeDeserializer {
+public class VariableDeclarationDeserializer extends NodeDeserializer {
 
     @Override
     public NodeType getSupportedType() {
@@ -21,7 +21,7 @@ public class VariableDeclarationDeserializer implements NodeDeserializer {
     }
 
     @Override
-    public Node deserialize(JsonObject json) throws DeserializationException {
+    public Node deserializePartial(JsonObject json) throws DeserializationException {
 	List<VariableDeclarator> declarations = new ArrayList<>();
 	for (JsonElement je : json.get("declarations").getAsJsonArray()) {
 	    declarations.add((VariableDeclarator) Esprima2Java.deserialize(je));

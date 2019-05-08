@@ -8,7 +8,7 @@ import esprima4java.ast.Node;
 import esprima4java.ast.NodeType;
 import esprima4java.ast.RegExpLiteral;
 
-public class LiteralDeserializer implements NodeDeserializer {
+public class LiteralDeserializer extends NodeDeserializer {
 
     @Override
     public NodeType getSupportedType() {
@@ -16,7 +16,7 @@ public class LiteralDeserializer implements NodeDeserializer {
     }
 
     @Override
-    public Node deserialize(JsonObject json) throws DeserializationException {
+    public Node deserializePartial(JsonObject json) throws DeserializationException {
 	String raw = json.get("raw").getAsString();
 	if (json.get("value").isJsonNull()) {
 	    return Literal.createNull(raw);

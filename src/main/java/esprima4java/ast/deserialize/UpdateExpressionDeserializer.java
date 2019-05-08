@@ -8,7 +8,7 @@ import esprima4java.ast.NodeType;
 import esprima4java.ast.UpdateExpression;
 import esprima4java.ast.UpdateExpression.UpdateOperator;
 
-public class UpdateExpressionDeserializer implements NodeDeserializer {
+public class UpdateExpressionDeserializer extends NodeDeserializer {
 
     @Override
     public NodeType getSupportedType() {
@@ -16,7 +16,7 @@ public class UpdateExpressionDeserializer implements NodeDeserializer {
     }
 
     @Override
-    public Node deserialize(JsonObject json) throws DeserializationException {
+    public Node deserializePartial(JsonObject json) throws DeserializationException {
 	UpdateOperator operator = UpdateOperator.deserialize(json.get("operator").getAsString());
 	if (operator == null)
 	    throw new DeserializationException("Unknown update operator.");

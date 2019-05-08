@@ -11,7 +11,7 @@ import esprima4java.ast.Node;
 import esprima4java.ast.NodeType;
 import esprima4java.ast.SwitchCase;
 
-public class SwitchCaseDeserializer implements NodeDeserializer {
+public class SwitchCaseDeserializer extends NodeDeserializer {
 
     @Override
     public NodeType getSupportedType() {
@@ -19,7 +19,7 @@ public class SwitchCaseDeserializer implements NodeDeserializer {
     }
 
     @Override
-    public Node deserialize(JsonObject json) throws DeserializationException {
+    public Node deserializePartial(JsonObject json) throws DeserializationException {
 
 	List<Node> consequent = new ArrayList<>();
 	for (JsonElement je : json.get("consequent").getAsJsonArray()) {

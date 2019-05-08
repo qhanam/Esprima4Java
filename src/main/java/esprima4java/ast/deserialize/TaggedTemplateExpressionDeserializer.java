@@ -8,7 +8,7 @@ import esprima4java.ast.NodeType;
 import esprima4java.ast.TaggedTemplateExpression;
 import esprima4java.ast.TemplateLiteral;
 
-public class TaggedTemplateExpressionDeserializer implements NodeDeserializer {
+public class TaggedTemplateExpressionDeserializer extends NodeDeserializer {
 
     @Override
     public NodeType getSupportedType() {
@@ -16,7 +16,7 @@ public class TaggedTemplateExpressionDeserializer implements NodeDeserializer {
     }
 
     @Override
-    public Node deserialize(JsonObject json) throws DeserializationException {
+    public Node deserializePartial(JsonObject json) throws DeserializationException {
 	Node tag = Esprima2Java.deserialize(json.get("tag"));
 	TemplateLiteral quasi = (TemplateLiteral) Esprima2Java.deserialize(json.get("quasi"));
 	return TaggedTemplateExpression.create(tag, quasi);

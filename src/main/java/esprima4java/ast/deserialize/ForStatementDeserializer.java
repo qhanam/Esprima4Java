@@ -7,7 +7,7 @@ import esprima4java.ast.ForStatement;
 import esprima4java.ast.Node;
 import esprima4java.ast.NodeType;
 
-public class ForStatementDeserializer implements NodeDeserializer {
+public class ForStatementDeserializer extends NodeDeserializer {
 
     @Override
     public NodeType getSupportedType() {
@@ -15,7 +15,7 @@ public class ForStatementDeserializer implements NodeDeserializer {
     }
 
     @Override
-    public Node deserialize(JsonObject json) throws DeserializationException {
+    public Node deserializePartial(JsonObject json) throws DeserializationException {
 	Node init = json.has("init") && !json.get("init").isJsonNull()
 		? Esprima2Java.deserialize(json.get("init"))
 		: null;

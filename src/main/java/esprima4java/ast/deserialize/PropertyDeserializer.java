@@ -8,7 +8,7 @@ import esprima4java.ast.NodeType;
 import esprima4java.ast.Property;
 import esprima4java.ast.Property.Kind;
 
-public class PropertyDeserializer implements NodeDeserializer {
+public class PropertyDeserializer extends NodeDeserializer {
 
     @Override
     public NodeType getSupportedType() {
@@ -16,7 +16,7 @@ public class PropertyDeserializer implements NodeDeserializer {
     }
 
     @Override
-    public Node deserialize(JsonObject json) throws DeserializationException {
+    public Node deserializePartial(JsonObject json) throws DeserializationException {
 	Node key = Esprima2Java.deserialize(json.get("key"));
 	Node value = Esprima2Java.deserialize(json.get("value"));
 	Kind kind;

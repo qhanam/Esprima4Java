@@ -11,6 +11,7 @@ import java.util.Collections;
 import org.junit.jupiter.api.Test;
 
 import esprima4java.Esprima2Java;
+import esprima4java.addons.SourceLocation;
 import esprima4java.ast.ArrayExpression;
 import esprima4java.ast.ArrayPattern;
 import esprima4java.ast.ArrowFunctionExpression;
@@ -96,6 +97,15 @@ class DeserializerTest {
 	    fail("Deserialization should succeed.");
 	}
 	return null;
+    }
+
+    @Test
+    void testLocation() {
+	String json = "{ 'type': 'Identifier', 'name': 'foo', 'range': [36, 39], 'loc': { 'start': { 'line': 4, 'column': 0 }, 'end': { 'line': 4, 'column': 3 } } }";
+	Identifier expected = Identifier.create("foo");
+	expected.setSourceLocation(SourceLocation.create(4, 4, 0, 3, 36, 39));
+	Node actual = test(json, NodeType.IDENTIFIER, expected);
+	assertEquals(expected.sourceLocation(), actual.sourceLocation());
     }
 
     @Test

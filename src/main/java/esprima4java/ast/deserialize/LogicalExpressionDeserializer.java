@@ -8,7 +8,7 @@ import esprima4java.ast.LogicalExpression.LogicalOperator;
 import esprima4java.ast.Node;
 import esprima4java.ast.NodeType;
 
-public class LogicalExpressionDeserializer implements NodeDeserializer {
+public class LogicalExpressionDeserializer extends NodeDeserializer {
 
     @Override
     public NodeType getSupportedType() {
@@ -16,7 +16,7 @@ public class LogicalExpressionDeserializer implements NodeDeserializer {
     }
 
     @Override
-    public Node deserialize(JsonObject json) throws DeserializationException {
+    public Node deserializePartial(JsonObject json) throws DeserializationException {
 	LogicalOperator operator = LogicalOperator.deserialize(json.get("operator").getAsString());
 	if (operator == null)
 	    throw new DeserializationException("Unknown update operator.");

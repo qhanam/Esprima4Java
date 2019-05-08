@@ -12,7 +12,7 @@ import esprima4java.ast.MethodDefinition;
 import esprima4java.ast.Node;
 import esprima4java.ast.NodeType;
 
-public class ClassBodyDeserializer implements NodeDeserializer {
+public class ClassBodyDeserializer extends NodeDeserializer {
 
     @Override
     public NodeType getSupportedType() {
@@ -20,7 +20,7 @@ public class ClassBodyDeserializer implements NodeDeserializer {
     }
 
     @Override
-    public Node deserialize(JsonObject json) throws DeserializationException {
+    public Node deserializePartial(JsonObject json) throws DeserializationException {
 	List<MethodDefinition> body = new ArrayList<>();
 	for (JsonElement je : json.get("body").getAsJsonArray()) {
 	    body.add((MethodDefinition) Esprima2Java.deserialize(je));

@@ -8,7 +8,7 @@ import esprima4java.ast.LabeledStatement;
 import esprima4java.ast.Node;
 import esprima4java.ast.NodeType;
 
-public class LabeledStatementDeserializer implements NodeDeserializer {
+public class LabeledStatementDeserializer extends NodeDeserializer {
 
     @Override
     public NodeType getSupportedType() {
@@ -16,7 +16,7 @@ public class LabeledStatementDeserializer implements NodeDeserializer {
     }
 
     @Override
-    public Node deserialize(JsonObject json) throws DeserializationException {
+    public Node deserializePartial(JsonObject json) throws DeserializationException {
 	return LabeledStatement.create((Identifier) Esprima2Java.deserialize(json.get("label")),
 		Esprima2Java.deserialize(json.get("body")));
     }

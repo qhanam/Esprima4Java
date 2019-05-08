@@ -6,7 +6,7 @@ import esprima4java.ast.Identifier;
 import esprima4java.ast.Node;
 import esprima4java.ast.NodeType;
 
-public class IdentifierDeserializer implements NodeDeserializer {
+public class IdentifierDeserializer extends NodeDeserializer {
 
     @Override
     public NodeType getSupportedType() {
@@ -14,7 +14,7 @@ public class IdentifierDeserializer implements NodeDeserializer {
     }
 
     @Override
-    public Node deserialize(JsonObject json) throws DeserializationException {
+    public Node deserializePartial(JsonObject json) throws DeserializationException {
 	return Identifier.create(json.get("name").getAsString());
     }
 

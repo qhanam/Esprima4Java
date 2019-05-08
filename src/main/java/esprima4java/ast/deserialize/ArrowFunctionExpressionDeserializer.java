@@ -12,7 +12,7 @@ import esprima4java.ast.Identifier;
 import esprima4java.ast.Node;
 import esprima4java.ast.NodeType;
 
-public class ArrowFunctionExpressionDeserializer implements NodeDeserializer {
+public class ArrowFunctionExpressionDeserializer extends NodeDeserializer {
 
     @Override
     public NodeType getSupportedType() {
@@ -20,7 +20,7 @@ public class ArrowFunctionExpressionDeserializer implements NodeDeserializer {
     }
 
     @Override
-    public Node deserialize(JsonObject json) throws DeserializationException {
+    public Node deserializePartial(JsonObject json) throws DeserializationException {
 	boolean generator = json.get("generator").getAsBoolean();
 	boolean async = json.get("async").getAsBoolean();
 	List<Identifier> params = new ArrayList<>();

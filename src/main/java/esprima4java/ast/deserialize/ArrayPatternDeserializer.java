@@ -11,7 +11,7 @@ import esprima4java.ast.ArrayPattern;
 import esprima4java.ast.Node;
 import esprima4java.ast.NodeType;
 
-public class ArrayPatternDeserializer implements NodeDeserializer {
+public class ArrayPatternDeserializer extends NodeDeserializer {
 
     @Override
     public NodeType getSupportedType() {
@@ -19,7 +19,7 @@ public class ArrayPatternDeserializer implements NodeDeserializer {
     }
 
     @Override
-    public Node deserialize(JsonObject json) throws DeserializationException {
+    public Node deserializePartial(JsonObject json) throws DeserializationException {
 	List<Node> elements = new ArrayList<>();
 	for (JsonElement je : json.get("elements").getAsJsonArray()) {
 	    elements.add(Esprima2Java.deserialize(je));

@@ -7,7 +7,7 @@ import esprima4java.ast.Node;
 import esprima4java.ast.NodeType;
 import esprima4java.ast.ThrowStatement;
 
-public class ThrowStatementDeserializer implements NodeDeserializer {
+public class ThrowStatementDeserializer extends NodeDeserializer {
 
     @Override
     public NodeType getSupportedType() {
@@ -15,7 +15,7 @@ public class ThrowStatementDeserializer implements NodeDeserializer {
     }
 
     @Override
-    public Node deserialize(JsonObject json) throws DeserializationException {
+    public Node deserializePartial(JsonObject json) throws DeserializationException {
 	Node expression = Esprima2Java.deserialize(json.get("expression"));
 	return ThrowStatement.create(expression);
     }

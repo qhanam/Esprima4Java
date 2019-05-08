@@ -6,7 +6,7 @@ import esprima4java.ast.Node;
 import esprima4java.ast.NodeType;
 import esprima4java.ast.Super;
 
-public class SuperDeserializer implements NodeDeserializer {
+public class SuperDeserializer extends NodeDeserializer {
 
     @Override
     public NodeType getSupportedType() {
@@ -14,7 +14,7 @@ public class SuperDeserializer implements NodeDeserializer {
     }
 
     @Override
-    public Node deserialize(JsonObject json) throws DeserializationException {
+    public Node deserializePartial(JsonObject json) throws DeserializationException {
 	return Super.create();
     }
 

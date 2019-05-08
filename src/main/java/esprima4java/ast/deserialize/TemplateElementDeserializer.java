@@ -7,7 +7,7 @@ import esprima4java.ast.NodeType;
 import esprima4java.ast.TemplateElement;
 import esprima4java.ast.TemplateValue;
 
-public class TemplateElementDeserializer implements NodeDeserializer {
+public class TemplateElementDeserializer extends NodeDeserializer {
 
     @Override
     public NodeType getSupportedType() {
@@ -15,7 +15,7 @@ public class TemplateElementDeserializer implements NodeDeserializer {
     }
 
     @Override
-    public Node deserialize(JsonObject json) throws DeserializationException {
+    public Node deserializePartial(JsonObject json) throws DeserializationException {
 	boolean tail = json.get("tail").getAsBoolean();
 	JsonObject serialValue = json.get("value").getAsJsonObject();
 	String cooked = serialValue.has("cooked") && !serialValue.get("cooked").isJsonNull()

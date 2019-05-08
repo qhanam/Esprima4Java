@@ -7,7 +7,7 @@ import esprima4java.ast.ExpressionStatement;
 import esprima4java.ast.Node;
 import esprima4java.ast.NodeType;
 
-public class ExpressionStatementDeserializer implements NodeDeserializer {
+public class ExpressionStatementDeserializer extends NodeDeserializer {
 
     @Override
     public NodeType getSupportedType() {
@@ -15,7 +15,7 @@ public class ExpressionStatementDeserializer implements NodeDeserializer {
     }
 
     @Override
-    public Node deserialize(JsonObject json) throws DeserializationException {
+    public Node deserializePartial(JsonObject json) throws DeserializationException {
 	String directive = json.has("directive") && !json.get("directive").isJsonNull()
 		? json.get("directive").getAsString()
 		: null;

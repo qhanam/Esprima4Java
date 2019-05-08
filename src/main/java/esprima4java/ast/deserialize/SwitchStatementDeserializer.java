@@ -12,7 +12,7 @@ import esprima4java.ast.NodeType;
 import esprima4java.ast.SwitchCase;
 import esprima4java.ast.SwitchStatement;
 
-public class SwitchStatementDeserializer implements NodeDeserializer {
+public class SwitchStatementDeserializer extends NodeDeserializer {
 
     @Override
     public NodeType getSupportedType() {
@@ -20,7 +20,7 @@ public class SwitchStatementDeserializer implements NodeDeserializer {
     }
 
     @Override
-    public Node deserialize(JsonObject json) throws DeserializationException {
+    public Node deserializePartial(JsonObject json) throws DeserializationException {
 	Node discriminant = Esprima2Java.deserialize(json.get("discriminant"));
 	List<SwitchCase> cases = new ArrayList<>();
 	for (JsonElement je : json.get("cases").getAsJsonArray()) {

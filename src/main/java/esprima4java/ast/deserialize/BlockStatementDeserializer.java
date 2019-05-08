@@ -12,7 +12,7 @@ import esprima4java.ast.BlockStatement;
 import esprima4java.ast.Node;
 import esprima4java.ast.NodeType;
 
-public class BlockStatementDeserializer implements NodeDeserializer {
+public class BlockStatementDeserializer extends NodeDeserializer {
 
     @Override
     public NodeType getSupportedType() {
@@ -20,7 +20,7 @@ public class BlockStatementDeserializer implements NodeDeserializer {
     }
 
     @Override
-    public Node deserialize(JsonObject json) throws DeserializationException {
+    public Node deserializePartial(JsonObject json) throws DeserializationException {
 	List<Node> statements = new ArrayList<Node>();
 	JsonArray jsonStatements = json.get("body").getAsJsonArray();
 	for (JsonElement jsonStatement : jsonStatements) {

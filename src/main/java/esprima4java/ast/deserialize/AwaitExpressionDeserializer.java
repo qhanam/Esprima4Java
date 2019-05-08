@@ -7,7 +7,7 @@ import esprima4java.ast.AwaitExpression;
 import esprima4java.ast.Node;
 import esprima4java.ast.NodeType;
 
-public class AwaitExpressionDeserializer implements NodeDeserializer {
+public class AwaitExpressionDeserializer extends NodeDeserializer {
 
     @Override
     public NodeType getSupportedType() {
@@ -15,7 +15,7 @@ public class AwaitExpressionDeserializer implements NodeDeserializer {
     }
 
     @Override
-    public Node deserialize(JsonObject json) throws DeserializationException {
+    public Node deserializePartial(JsonObject json) throws DeserializationException {
 	Node argument = Esprima2Java.deserialize(json.get("argument"));
 	return AwaitExpression.create(argument);
     }

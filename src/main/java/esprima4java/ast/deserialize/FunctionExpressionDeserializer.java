@@ -13,7 +13,7 @@ import esprima4java.ast.Identifier;
 import esprima4java.ast.Node;
 import esprima4java.ast.NodeType;
 
-public class FunctionExpressionDeserializer implements NodeDeserializer {
+public class FunctionExpressionDeserializer extends NodeDeserializer {
 
     @Override
     public NodeType getSupportedType() {
@@ -21,7 +21,7 @@ public class FunctionExpressionDeserializer implements NodeDeserializer {
     }
 
     @Override
-    public Node deserialize(JsonObject json) throws DeserializationException {
+    public Node deserializePartial(JsonObject json) throws DeserializationException {
 	boolean generator = json.get("generator").getAsBoolean();
 	boolean async = json.get("async").getAsBoolean();
 	Identifier id = json.has("id") && !json.get("id").isJsonNull()

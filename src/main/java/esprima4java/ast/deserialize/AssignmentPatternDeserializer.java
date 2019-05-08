@@ -7,7 +7,7 @@ import esprima4java.ast.AssignmentPattern;
 import esprima4java.ast.Node;
 import esprima4java.ast.NodeType;
 
-public class AssignmentPatternDeserializer implements NodeDeserializer {
+public class AssignmentPatternDeserializer extends NodeDeserializer {
 
     @Override
     public NodeType getSupportedType() {
@@ -15,7 +15,7 @@ public class AssignmentPatternDeserializer implements NodeDeserializer {
     }
 
     @Override
-    public Node deserialize(JsonObject json) throws DeserializationException {
+    public Node deserializePartial(JsonObject json) throws DeserializationException {
 	Node left = Esprima2Java.deserialize(json.get("left"));
 	Node right = Esprima2Java.deserialize(json.get("right"));
 	return AssignmentPattern.create(left, right);

@@ -13,7 +13,7 @@ import esprima4java.ast.NodeType;
 import esprima4java.ast.Program;
 import esprima4java.ast.Program.SourceType;
 
-public class ProgramDeserializer implements NodeDeserializer {
+public class ProgramDeserializer extends NodeDeserializer {
 
     @Override
     public NodeType getSupportedType() {
@@ -21,7 +21,7 @@ public class ProgramDeserializer implements NodeDeserializer {
     }
 
     @Override
-    public Node deserialize(JsonObject json) throws DeserializationException {
+    public Node deserializePartial(JsonObject json) throws DeserializationException {
 	SourceType sourceType = SourceType.deserialize(json.get("sourceType").getAsString());
 	List<Node> statements = new ArrayList<Node>();
 	JsonArray jsonStatements = json.get("body").getAsJsonArray();

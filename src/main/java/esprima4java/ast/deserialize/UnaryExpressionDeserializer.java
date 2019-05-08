@@ -8,7 +8,7 @@ import esprima4java.ast.NodeType;
 import esprima4java.ast.UnaryExpression;
 import esprima4java.ast.UnaryExpression.UnaryOperator;
 
-public class UnaryExpressionDeserializer implements NodeDeserializer {
+public class UnaryExpressionDeserializer extends NodeDeserializer {
 
     @Override
     public NodeType getSupportedType() {
@@ -16,7 +16,7 @@ public class UnaryExpressionDeserializer implements NodeDeserializer {
     }
 
     @Override
-    public Node deserialize(JsonObject json) throws DeserializationException {
+    public Node deserializePartial(JsonObject json) throws DeserializationException {
 	UnaryOperator operator = UnaryOperator.deserialize(json.get("operator").getAsString());
 	if (operator == null)
 	    throw new DeserializationException("Unknown unary operator.");

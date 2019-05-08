@@ -9,7 +9,7 @@ import esprima4java.ast.MethodDefinition.Kind;
 import esprima4java.ast.Node;
 import esprima4java.ast.NodeType;
 
-public class MethodDefinitionDeserializer implements NodeDeserializer {
+public class MethodDefinitionDeserializer extends NodeDeserializer {
 
     @Override
     public NodeType getSupportedType() {
@@ -17,7 +17,7 @@ public class MethodDefinitionDeserializer implements NodeDeserializer {
     }
 
     @Override
-    public Node deserialize(JsonObject json) throws DeserializationException {
+    public Node deserializePartial(JsonObject json) throws DeserializationException {
 	Node key = Esprima2Java.deserialize(json.get("key"));
 	FunctionExpression value = (FunctionExpression) Esprima2Java.deserialize(json.get("value"));
 	Kind kind = Kind.deserialize(json.get("kind").getAsString());

@@ -8,7 +8,7 @@ import esprima4java.ast.BinaryExpression.BinaryOperator;
 import esprima4java.ast.Node;
 import esprima4java.ast.NodeType;
 
-public class BinaryExpressionDeserializer implements NodeDeserializer {
+public class BinaryExpressionDeserializer extends NodeDeserializer {
 
     @Override
     public NodeType getSupportedType() {
@@ -16,7 +16,7 @@ public class BinaryExpressionDeserializer implements NodeDeserializer {
     }
 
     @Override
-    public Node deserialize(JsonObject json) throws DeserializationException {
+    public Node deserializePartial(JsonObject json) throws DeserializationException {
 	BinaryOperator operator = BinaryOperator.deserialize(json.get("operator").getAsString());
 	if (operator == null)
 	    throw new DeserializationException("Unknown update operator.");

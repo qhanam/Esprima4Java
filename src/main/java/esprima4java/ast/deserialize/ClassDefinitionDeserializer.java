@@ -9,7 +9,7 @@ import esprima4java.ast.Identifier;
 import esprima4java.ast.Node;
 import esprima4java.ast.NodeType;
 
-public class ClassDefinitionDeserializer implements NodeDeserializer {
+public class ClassDefinitionDeserializer extends NodeDeserializer {
 
     @Override
     public NodeType getSupportedType() {
@@ -17,7 +17,7 @@ public class ClassDefinitionDeserializer implements NodeDeserializer {
     }
 
     @Override
-    public Node deserialize(JsonObject json) throws DeserializationException {
+    public Node deserializePartial(JsonObject json) throws DeserializationException {
 	Identifier id = (Identifier) Esprima2Java.deserialize(json.get("id"));
 	Node superClass = json.has("superClass") ? Esprima2Java.deserialize(json.get("superClass"))
 		: null;

@@ -7,7 +7,7 @@ import esprima4java.ast.Node;
 import esprima4java.ast.NodeType;
 import esprima4java.ast.VariableDeclarator;
 
-public class VariableDeclaratorDeserializer implements NodeDeserializer {
+public class VariableDeclaratorDeserializer extends NodeDeserializer {
 
     @Override
     public NodeType getSupportedType() {
@@ -15,7 +15,7 @@ public class VariableDeclaratorDeserializer implements NodeDeserializer {
     }
 
     @Override
-    public Node deserialize(JsonObject json) throws DeserializationException {
+    public Node deserializePartial(JsonObject json) throws DeserializationException {
 	Node id = Esprima2Java.deserialize(json.get("id"));
 	Node init = json.has("init") && !json.get("init").isJsonNull()
 		? Esprima2Java.deserialize(json.get("init"))

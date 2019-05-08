@@ -7,7 +7,7 @@ import esprima4java.ast.MemberExpression;
 import esprima4java.ast.Node;
 import esprima4java.ast.NodeType;
 
-public class MemberExpressionDeserializer implements NodeDeserializer {
+public class MemberExpressionDeserializer extends NodeDeserializer {
 
     @Override
     public NodeType getSupportedType() {
@@ -15,7 +15,7 @@ public class MemberExpressionDeserializer implements NodeDeserializer {
     }
 
     @Override
-    public Node deserialize(JsonObject json) throws DeserializationException {
+    public Node deserializePartial(JsonObject json) throws DeserializationException {
 	Node object = Esprima2Java.deserialize(json.get("object"));
 	Node property = Esprima2Java.deserialize(json.get("property"));
 	boolean computed = json.get("computed").getAsBoolean();

@@ -12,7 +12,7 @@ import esprima4java.ast.NodeType;
 import esprima4java.ast.TemplateElement;
 import esprima4java.ast.TemplateLiteral;
 
-public class TemplateLiteralDeserializer implements NodeDeserializer {
+public class TemplateLiteralDeserializer extends NodeDeserializer {
 
     @Override
     public NodeType getSupportedType() {
@@ -20,7 +20,7 @@ public class TemplateLiteralDeserializer implements NodeDeserializer {
     }
 
     @Override
-    public Node deserialize(JsonObject json) throws DeserializationException {
+    public Node deserializePartial(JsonObject json) throws DeserializationException {
 	List<TemplateElement> quasis = new ArrayList<>();
 	for (JsonElement je : json.get("quasis").getAsJsonArray()) {
 	    quasis.add((TemplateElement) Esprima2Java.deserialize(je));

@@ -8,7 +8,7 @@ import esprima4java.ast.MetaProperty;
 import esprima4java.ast.Node;
 import esprima4java.ast.NodeType;
 
-public class MetaPropertyDeserializer implements NodeDeserializer {
+public class MetaPropertyDeserializer extends NodeDeserializer {
 
     @Override
     public NodeType getSupportedType() {
@@ -16,7 +16,7 @@ public class MetaPropertyDeserializer implements NodeDeserializer {
     }
 
     @Override
-    public Node deserialize(JsonObject json) throws DeserializationException {
+    public Node deserializePartial(JsonObject json) throws DeserializationException {
 	Identifier meta = (Identifier) Esprima2Java.deserialize(json.get("meta"));
 	Identifier property = (Identifier) Esprima2Java.deserialize(json.get("property"));
 	return MetaProperty.create(meta, property);

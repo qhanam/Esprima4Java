@@ -8,7 +8,7 @@ import esprima4java.ast.CatchClause;
 import esprima4java.ast.Node;
 import esprima4java.ast.NodeType;
 
-public class CatchClauseDeserializer implements NodeDeserializer {
+public class CatchClauseDeserializer extends NodeDeserializer {
 
     @Override
     public NodeType getSupportedType() {
@@ -16,7 +16,7 @@ public class CatchClauseDeserializer implements NodeDeserializer {
     }
 
     @Override
-    public Node deserialize(JsonObject json) throws DeserializationException {
+    public Node deserializePartial(JsonObject json) throws DeserializationException {
 	Node param = json.has("param") && !json.get("param").isJsonNull()
 		? Esprima2Java.deserialize(json.get("param"))
 		: null;

@@ -7,7 +7,7 @@ import esprima4java.ast.Node;
 import esprima4java.ast.NodeType;
 import esprima4java.ast.RestElement;
 
-public class RestElementDeserializer implements NodeDeserializer {
+public class RestElementDeserializer extends NodeDeserializer {
 
     @Override
     public NodeType getSupportedType() {
@@ -15,7 +15,7 @@ public class RestElementDeserializer implements NodeDeserializer {
     }
 
     @Override
-    public Node deserialize(JsonObject json) throws DeserializationException {
+    public Node deserializePartial(JsonObject json) throws DeserializationException {
 	Node argument = Esprima2Java.deserialize(json.get("argument"));
 	return RestElement.create(argument);
     }

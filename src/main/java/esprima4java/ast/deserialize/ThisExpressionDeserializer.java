@@ -6,7 +6,7 @@ import esprima4java.ast.Node;
 import esprima4java.ast.NodeType;
 import esprima4java.ast.ThisExpression;
 
-public class ThisExpressionDeserializer implements NodeDeserializer {
+public class ThisExpressionDeserializer extends NodeDeserializer {
 
     @Override
     public NodeType getSupportedType() {
@@ -14,7 +14,7 @@ public class ThisExpressionDeserializer implements NodeDeserializer {
     }
 
     @Override
-    public Node deserialize(JsonObject json) throws DeserializationException {
+    public Node deserializePartial(JsonObject json) throws DeserializationException {
 	return ThisExpression.create();
     }
 
