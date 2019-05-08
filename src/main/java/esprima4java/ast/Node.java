@@ -1,9 +1,13 @@
 package esprima4java.ast;
 
+import java.util.Collections;
+import java.util.List;
+
 import esprima4java.addons.ChangeInfo;
 import esprima4java.addons.Criteria;
 import esprima4java.addons.Dependencies;
 import esprima4java.addons.SourceLocation;
+import esprima4java.utilities.NodeVisitor;
 
 public abstract class Node {
 
@@ -22,6 +26,17 @@ public abstract class Node {
 	this.criteria = new Criteria();
 	this.dependencies = new Dependencies();
 	this.location = null;
+    }
+
+    public void accept(NodeVisitor visitor) {
+	boolean visitChildren = visitor.visit(this);
+	if (visitChildren) {
+	    getChildren().forEach(child -> child.accept(visitor));
+	}
+    }
+
+    protected List<Node> getChildren() {
+	return Collections.emptyList();
     }
 
     public void setChangeInfo(ChangeInfo changeInfo) {

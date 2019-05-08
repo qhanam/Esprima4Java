@@ -11,4 +11,10 @@ public abstract class SequenceExpression extends Node {
     }
 
     public abstract List<Node> expressions();
+
+    @Override
+    protected List<Node> getChildren() {
+	return expressions();
+    }
+
 }

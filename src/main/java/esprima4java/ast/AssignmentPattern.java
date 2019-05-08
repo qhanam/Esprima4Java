@@ -1,6 +1,10 @@
 package esprima4java.ast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.auto.value.AutoValue;
+import com.google.auto.value.extension.memoized.Memoized;
 
 @AutoValue
 public abstract class AssignmentPattern extends Node {
@@ -11,4 +15,14 @@ public abstract class AssignmentPattern extends Node {
     public abstract Node left();
 
     public abstract Node right();
+
+    @Override
+    @Memoized
+    protected List<Node> getChildren() {
+	List<Node> children = new ArrayList<>();
+	children.add(left());
+	children.add(right());
+	return children;
+    }
+
 }

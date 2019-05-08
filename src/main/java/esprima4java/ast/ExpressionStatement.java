@@ -1,5 +1,8 @@
 package esprima4java.ast;
 
+import java.util.Collections;
+import java.util.List;
+
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
@@ -15,4 +18,10 @@ public abstract class ExpressionStatement extends Node {
 
     @Nullable
     abstract String directive();
+
+    @Override
+    protected List<Node> getChildren() {
+	return Collections.singletonList(expression());
+    }
+
 }

@@ -1,5 +1,6 @@
 package esprima4java.ast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.auto.value.AutoValue;
@@ -13,4 +14,13 @@ public abstract class NewExpression extends Node {
     public abstract Node callee();
 
     public abstract List<Node> arguments();
+
+    @Override
+    protected List<Node> getChildren() {
+	List<Node> children = new ArrayList<>();
+	children.add(callee());
+	children.addAll(arguments());
+	return children;
+    }
+
 }

@@ -1,5 +1,8 @@
 package esprima4java.ast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
@@ -20,4 +23,18 @@ public abstract class ForStatement extends Node {
     public abstract Node update();
 
     public abstract Node body();
+
+    @Override
+    protected List<Node> getChildren() {
+	List<Node> children = new ArrayList<>();
+	if (init() != null)
+	    children.add(init());
+	if (test() != null)
+	    children.add(test());
+	if (update() != null)
+	    children.add(update());
+	children.add(body());
+	return children;
+    }
+
 }

@@ -1,5 +1,6 @@
 package esprima4java.ast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.Nullable;
@@ -20,4 +21,14 @@ public abstract class SwitchCase extends Node {
     public abstract Node test();
 
     public abstract List<Node> consequent();
+
+    @Override
+    protected List<Node> getChildren() {
+	List<Node> children = new ArrayList<>();
+	if (test() != null)
+	    children.add(test());
+	children.addAll(consequent());
+	return children;
+    }
+
 }

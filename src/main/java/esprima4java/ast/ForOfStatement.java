@@ -1,5 +1,8 @@
 package esprima4java.ast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.auto.value.AutoValue;
 
 @AutoValue
@@ -15,4 +18,14 @@ public abstract class ForOfStatement extends Node {
     public abstract Node body();
 
     public abstract boolean await();
+
+    @Override
+    protected List<Node> getChildren() {
+	List<Node> children = new ArrayList<>();
+	children.add(left());
+	children.add(right());
+	children.add(body());
+	return children;
+    }
+
 }

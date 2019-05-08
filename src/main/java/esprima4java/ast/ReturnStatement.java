@@ -1,5 +1,8 @@
 package esprima4java.ast;
 
+import java.util.Collections;
+import java.util.List;
+
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
@@ -16,4 +19,12 @@ public abstract class ReturnStatement extends Node {
 
     @Nullable
     public abstract Node argument();
+
+    @Override
+    protected List<Node> getChildren() {
+	if (argument() != null)
+	    return Collections.singletonList(argument());
+	return Collections.emptyList();
+    }
+
 }

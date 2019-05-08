@@ -1,5 +1,6 @@
 package esprima4java.ast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.auto.value.AutoValue;
@@ -17,4 +18,14 @@ public abstract class FunctionDeclaration extends Function {
     public abstract List<Identifier> params();
 
     public abstract BlockStatement body();
+
+    @Override
+    protected List<Node> getChildren() {
+	List<Node> children = new ArrayList<>();
+	children.add(id());
+	children.addAll(params());
+	children.add(body());
+	return children;
+    }
+
 }

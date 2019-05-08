@@ -9,5 +9,4 @@ public abstract class Identifier extends Node {
     }
 
     public abstract String name();
-
 }

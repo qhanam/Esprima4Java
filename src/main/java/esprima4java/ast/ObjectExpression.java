@@ -11,4 +11,10 @@ public abstract class ObjectExpression extends Node {
     }
 
     public abstract List<Node> properties();
+
+    @Override
+    protected List<Node> getChildren() {
+	return properties();
+    }
+
 }

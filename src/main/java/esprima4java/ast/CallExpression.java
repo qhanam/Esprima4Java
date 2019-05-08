@@ -1,8 +1,10 @@
 package esprima4java.ast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.auto.value.AutoValue;
+import com.google.auto.value.extension.memoized.Memoized;
 
 @AutoValue
 public abstract class CallExpression extends Node {
@@ -13,4 +15,14 @@ public abstract class CallExpression extends Node {
     public abstract Node callee();
 
     public abstract List<Node> arguments();
+
+    @Override
+    @Memoized
+    protected List<Node> getChildren() {
+	List<Node> children = new ArrayList<>();
+	children.add(callee());
+	children.addAll(arguments());
+	return children;
+    }
+
 }

@@ -1,5 +1,8 @@
 package esprima4java.ast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.auto.value.AutoValue;
 
 @AutoValue
@@ -36,5 +39,13 @@ public abstract class LogicalExpression extends Node {
     public abstract Node left();
 
     public abstract Node right();
+
+    @Override
+    protected List<Node> getChildren() {
+	List<Node> children = new ArrayList<>();
+	children.add(left());
+	children.add(right());
+	return children;
+    }
 
 }

@@ -1,5 +1,8 @@
 package esprima4java.ast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
@@ -18,4 +21,16 @@ public abstract class TryStatement extends Node {
 
     @Nullable
     public abstract BlockStatement finalizer();
+
+    @Override
+    protected List<Node> getChildren() {
+	List<Node> children = new ArrayList<>();
+	children.add(block());
+	if (handler() != null)
+	    children.add(handler());
+	if (finalizer() != null)
+	    children.add(finalizer());
+	return children;
+    }
+
 }

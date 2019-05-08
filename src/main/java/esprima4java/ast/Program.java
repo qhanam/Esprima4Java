@@ -36,4 +36,10 @@ public abstract class Program extends Node {
     public abstract SourceType sourceType();
 
     public abstract List<Node> body();
+
+    @Override
+    protected List<Node> getChildren() {
+	return body();
+    }
+
 }

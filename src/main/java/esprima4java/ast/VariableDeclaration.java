@@ -1,5 +1,6 @@
 package esprima4java.ast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.auto.value.AutoValue;
@@ -36,4 +37,12 @@ public abstract class VariableDeclaration extends Node {
     public abstract List<VariableDeclarator> declarations();
 
     public abstract Kind kind();
+
+    @Override
+    protected List<Node> getChildren() {
+	List<Node> children = new ArrayList<>();
+	children.addAll(declarations());
+	return children;
+    }
+
 }

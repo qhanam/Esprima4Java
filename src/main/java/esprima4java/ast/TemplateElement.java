@@ -11,5 +11,4 @@ public abstract class TemplateElement extends Node {
     public abstract boolean tail();
 
     public abstract TemplateValue value();
-
 }

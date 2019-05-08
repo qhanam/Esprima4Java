@@ -1,5 +1,8 @@
 package esprima4java.ast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
@@ -17,5 +20,16 @@ public abstract class ClassExpression extends Node {
     public abstract Node superClass();
 
     public abstract ClassBody body();
+
+    @Override
+    protected List<Node> getChildren() {
+	List<Node> children = new ArrayList<>();
+	if (id() != null)
+	    children.add(id());
+	if (superClass() != null)
+	    children.add(superClass());
+	children.add(body());
+	return children;
+    }
 
 }

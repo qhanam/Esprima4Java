@@ -1,5 +1,6 @@
 package esprima4java.ast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.auto.value.AutoValue;
@@ -13,4 +14,13 @@ public abstract class TemplateLiteral extends Node {
     public abstract List<TemplateElement> quasis();
 
     public abstract List<Node> expressions();
+
+    @Override
+    protected List<Node> getChildren() {
+	List<Node> children = new ArrayList<>();
+	children.addAll(quasis());
+	children.addAll(expressions());
+	return children;
+    }
+
 }

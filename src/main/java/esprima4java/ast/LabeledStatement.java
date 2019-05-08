@@ -1,5 +1,8 @@
 package esprima4java.ast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.auto.value.AutoValue;
 
 @AutoValue
@@ -11,4 +14,13 @@ public abstract class LabeledStatement extends Node {
     public abstract Identifier label();
 
     public abstract Node statement();
+
+    @Override
+    protected List<Node> getChildren() {
+	List<Node> children = new ArrayList<>();
+	children.add(label());
+	children.add(statement());
+	return children;
+    }
+
 }

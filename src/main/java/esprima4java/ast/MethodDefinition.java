@@ -1,5 +1,8 @@
 package esprima4java.ast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.auto.value.AutoValue;
 
 @AutoValue
@@ -42,4 +45,13 @@ public abstract class MethodDefinition extends Node {
     public abstract boolean computed();
 
     public abstract boolean stat();
+
+    @Override
+    protected List<Node> getChildren() {
+	List<Node> children = new ArrayList<>();
+	children.add(key());
+	children.add(value());
+	return children;
+    }
+
 }
