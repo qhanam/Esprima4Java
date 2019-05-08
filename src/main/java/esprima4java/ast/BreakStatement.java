@@ -6,10 +6,6 @@ import com.google.auto.value.AutoValue;
 
 @AutoValue
 public abstract class BreakStatement extends Node {
-    public static BreakStatement create() {
-	return new AutoValue_BreakStatement(NodeType.BREAK_STATEMENT, null);
-    }
-
     public static BreakStatement create(Identifier label) {
 	return new AutoValue_BreakStatement(NodeType.BREAK_STATEMENT, label);
     }

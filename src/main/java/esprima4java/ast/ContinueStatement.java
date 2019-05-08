@@ -6,10 +6,6 @@ import com.google.auto.value.AutoValue;
 
 @AutoValue
 public abstract class ContinueStatement extends Node {
-    public static ContinueStatement create() {
-	return new AutoValue_ContinueStatement(NodeType.CONTINUE_STATEMENT, null);
-    }
-
     public static ContinueStatement create(Identifier label) {
 	return new AutoValue_ContinueStatement(NodeType.CONTINUE_STATEMENT, label);
     }

@@ -150,7 +150,7 @@ class DeserializerTest {
     @Test
     void testExpressionStatement() {
 	String json = "{ 'type': 'ExpressionStatement', 'expression': { 'type': 'Identifier', 'name': 'a' } }";
-	ExpressionStatement expected = ExpressionStatement.create(Identifier.create("a"));
+	ExpressionStatement expected = ExpressionStatement.create(Identifier.create("a"), null);
 	test(json, NodeType.EXPRESSION_STATEMENT, expected);
     }
 
@@ -211,7 +211,7 @@ class DeserializerTest {
     @Test
     void testBreakStatement() {
 	String json = "{ 'type': 'BreakStatement' }";
-	BreakStatement expected = BreakStatement.create();
+	BreakStatement expected = BreakStatement.create(null);
 	test(json, NodeType.BREAK_STATEMENT, expected);
     }
 
@@ -225,7 +225,7 @@ class DeserializerTest {
     @Test
     void testContinueStatement() {
 	String json = "{ 'type': 'ContinueStatement' }";
-	ContinueStatement expected = ContinueStatement.create();
+	ContinueStatement expected = ContinueStatement.create(null);
 	test(json, NodeType.CONTINUE_STATEMENT, expected);
     }
 
@@ -238,8 +238,9 @@ class DeserializerTest {
 
     @Test
     void testIfStatement() {
-	String json = "{ 'type': 'IfStatement', 'test': { 'type': 'Identifier', 'name': 'x' }, 'consequent': { 'type': 'EmptyStatement' } }";
-	IfStatement expected = IfStatement.create(Identifier.create("x"), EmptyStatement.create());
+	String json = "{ 'type': 'IfStatement', 'test': { 'type': 'Identifier', 'name': 'x' }, 'consequent': { 'type': 'EmptyStatement' }, 'alternate': null }";
+	IfStatement expected = IfStatement.create(Identifier.create("x"), EmptyStatement.create(),
+		null);
 	test(json, NodeType.IF_STATEMENT, expected);
     }
 

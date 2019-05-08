@@ -18,12 +18,10 @@ public class IfStatementDeserializer implements NodeDeserializer {
     public Node deserialize(JsonObject json) throws DeserializationException {
 	Node test = Esprima2Java.deserialize(json.get("test"));
 	Node consequent = Esprima2Java.deserialize(json.get("consequent"));
-	if (json.has("alternate")) {
-	    Node alternate = Esprima2Java.deserialize(json.get("alternate"));
-	    return IfStatement.create(test, consequent, alternate);
-	} else {
-	    return IfStatement.create(test, consequent);
-	}
+	Node alternate = json.has("alternate") && !json.get("alternate").isJsonNull()
+		? Esprima2Java.deserialize(json.get("alternate"))
+		: null;
+	return IfStatement.create(test, consequent, alternate);
     }
 
 }
