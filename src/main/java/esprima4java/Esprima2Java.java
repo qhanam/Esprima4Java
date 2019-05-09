@@ -30,8 +30,15 @@ public class Esprima2Java {
 	JsonObject jo = (JsonObject) je;
 	if (!jo.has("type") || !jo.get("type").isJsonPrimitive())
 	    throw new DeserializationException("JSON node has no 'type' property.");
-	return NodeDeserializers.instance().getDeserializer(jo.get("type").getAsString())
+	Node node = NodeDeserializers.instance().getDeserializer(jo.get("type").getAsString())
 		.deserialize(jo);
+	setParentRecursive(null, node);
+	return node;
+    }
+
+    private static void setParentRecursive(Node parent, Node child) {
+	child.setParent(parent);
+	child.getChildren().forEach(descendant -> setParentRecursive(child, descendant));
     }
 
 }

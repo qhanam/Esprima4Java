@@ -16,7 +16,7 @@ public abstract class AwaitExpression extends Node {
 
     @Override
     @Memoized
-    protected List<Node> getChildren() {
+    public List<Node> getChildren() {
 	return Collections.singletonList(argument());
     }
 

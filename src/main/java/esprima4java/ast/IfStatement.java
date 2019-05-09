@@ -21,7 +21,7 @@ public abstract class IfStatement extends Node {
     public abstract Node alternate();
 
     @Override
-    protected List<Node> getChildren() {
+    public List<Node> getChildren() {
 	List<Node> children = new ArrayList<>();
 	children.add(test());
 	children.add(consequent());

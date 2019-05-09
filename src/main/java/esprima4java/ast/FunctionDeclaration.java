@@ -20,7 +20,7 @@ public abstract class FunctionDeclaration extends Function {
     public abstract BlockStatement body();
 
     @Override
-    protected List<Node> getChildren() {
+    public List<Node> getChildren() {
 	List<Node> children = new ArrayList<>();
 	children.add(id());
 	children.addAll(params());

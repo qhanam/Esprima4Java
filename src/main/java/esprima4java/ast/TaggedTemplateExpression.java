@@ -17,7 +17,7 @@ public abstract class TaggedTemplateExpression extends Node {
     public abstract TemplateLiteral quasi();
 
     @Override
-    protected List<Node> getChildren() {
+    public List<Node> getChildren() {
 	List<Node> children = new ArrayList<>();
 	children.add(tag());
 	children.add(quasi());

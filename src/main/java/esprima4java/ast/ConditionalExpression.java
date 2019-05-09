@@ -19,7 +19,7 @@ public abstract class ConditionalExpression extends Node {
     public abstract Node expression();
 
     @Override
-    protected List<Node> getChildren() {
+    public List<Node> getChildren() {
 	List<Node> children = new ArrayList<>();
 	children.add(test());
 	children.add(alternate());

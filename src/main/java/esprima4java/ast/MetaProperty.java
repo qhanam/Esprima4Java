@@ -16,7 +16,7 @@ public abstract class MetaProperty extends Node {
     public abstract Identifier property();
 
     @Override
-    protected List<Node> getChildren() {
+    public List<Node> getChildren() {
 	List<Node> children = new ArrayList<>();
 	children.add(meta());
 	children.add(property());

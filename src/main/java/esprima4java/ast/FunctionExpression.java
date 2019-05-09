@@ -23,7 +23,7 @@ public abstract class FunctionExpression extends Function {
     public abstract BlockStatement body();
 
     @Override
-    protected List<Node> getChildren() {
+    public List<Node> getChildren() {
 	List<Node> children = new ArrayList<>();
 	if (id() != null)
 	    children.add(id());

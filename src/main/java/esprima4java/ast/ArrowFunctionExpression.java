@@ -22,7 +22,7 @@ public abstract class ArrowFunctionExpression extends Function {
 
     @Override
     @Memoized
-    protected List<Node> getChildren() {
+    public List<Node> getChildren() {
 	List<Node> children = new ArrayList<>();
 	children.addAll(params());
 	children.add(body());

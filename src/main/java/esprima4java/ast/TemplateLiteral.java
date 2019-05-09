@@ -16,7 +16,7 @@ public abstract class TemplateLiteral extends Node {
     public abstract List<Node> expressions();
 
     @Override
-    protected List<Node> getChildren() {
+    public List<Node> getChildren() {
 	List<Node> children = new ArrayList<>();
 	children.addAll(quasis());
 	children.addAll(expressions());

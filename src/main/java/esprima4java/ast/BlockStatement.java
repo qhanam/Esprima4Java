@@ -15,7 +15,7 @@ public abstract class BlockStatement extends Node {
 
     @Override
     @Memoized
-    protected List<Node> getChildren() {
+    public List<Node> getChildren() {
 	return body();
     }
 

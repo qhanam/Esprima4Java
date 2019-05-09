@@ -21,7 +21,7 @@ public abstract class ReturnStatement extends Node {
     public abstract Node argument();
 
     @Override
-    protected List<Node> getChildren() {
+    public List<Node> getChildren() {
 	if (argument() != null)
 	    return Collections.singletonList(argument());
 	return Collections.emptyList();

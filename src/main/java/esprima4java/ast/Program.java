@@ -38,7 +38,7 @@ public abstract class Program extends Node {
     public abstract List<Node> body();
 
     @Override
-    protected List<Node> getChildren() {
+    public List<Node> getChildren() {
 	return body();
     }
 

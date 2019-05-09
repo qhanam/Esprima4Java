@@ -14,7 +14,7 @@ public abstract class ThrowStatement extends Node {
     abstract Node expression();
 
     @Override
-    protected List<Node> getChildren() {
+    public List<Node> getChildren() {
 	return Collections.singletonList(expression());
     }
 

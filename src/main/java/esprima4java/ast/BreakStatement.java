@@ -19,7 +19,7 @@ public abstract class BreakStatement extends Node {
 
     @Override
     @Memoized
-    protected List<Node> getChildren() {
+    public List<Node> getChildren() {
 	if (label() == null)
 	    return Collections.emptyList();
 	return Collections.singletonList(label());

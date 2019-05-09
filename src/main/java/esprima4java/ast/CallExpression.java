@@ -18,7 +18,7 @@ public abstract class CallExpression extends Node {
 
     @Override
     @Memoized
-    protected List<Node> getChildren() {
+    public List<Node> getChildren() {
 	List<Node> children = new ArrayList<>();
 	children.add(callee());
 	children.addAll(arguments());

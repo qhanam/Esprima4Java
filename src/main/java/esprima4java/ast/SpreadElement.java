@@ -14,7 +14,7 @@ public abstract class SpreadElement extends Node {
     abstract Node argument();
 
     @Override
-    protected List<Node> getChildren() {
+    public List<Node> getChildren() {
 	return Collections.singletonList(argument());
     }
 

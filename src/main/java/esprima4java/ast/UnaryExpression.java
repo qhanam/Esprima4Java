@@ -42,7 +42,7 @@ public abstract class UnaryExpression extends Node {
     public abstract Node argument();
 
     @Override
-    protected List<Node> getChildren() {
+    public List<Node> getChildren() {
 	return Collections.singletonList(argument());
     }
 

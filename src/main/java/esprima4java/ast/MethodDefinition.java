@@ -47,7 +47,7 @@ public abstract class MethodDefinition extends Node {
     public abstract boolean stat();
 
     @Override
-    protected List<Node> getChildren() {
+    public List<Node> getChildren() {
 	List<Node> children = new ArrayList<>();
 	children.add(key());
 	children.add(value());

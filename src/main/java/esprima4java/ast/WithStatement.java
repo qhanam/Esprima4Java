@@ -16,7 +16,7 @@ public abstract class WithStatement extends Node {
     public abstract Node body();
 
     @Override
-    protected List<Node> getChildren() {
+    public List<Node> getChildren() {
 	List<Node> children = new ArrayList<>();
 	children.add(object());
 	children.add(body());

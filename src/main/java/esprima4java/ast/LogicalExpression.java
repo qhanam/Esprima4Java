@@ -41,7 +41,7 @@ public abstract class LogicalExpression extends Node {
     public abstract Node right();
 
     @Override
-    protected List<Node> getChildren() {
+    public List<Node> getChildren() {
 	List<Node> children = new ArrayList<>();
 	children.add(left());
 	children.add(right());

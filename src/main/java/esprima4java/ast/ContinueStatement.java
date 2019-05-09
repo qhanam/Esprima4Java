@@ -17,7 +17,7 @@ public abstract class ContinueStatement extends Node {
     public abstract Identifier label();
 
     @Override
-    protected List<Node> getChildren() {
+    public List<Node> getChildren() {
 	if (label() != null)
 	    return Collections.singletonList(label());
 	return Collections.emptyList();

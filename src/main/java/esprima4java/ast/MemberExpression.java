@@ -19,7 +19,7 @@ public abstract class MemberExpression extends Node {
     public abstract boolean computed();
 
     @Override
-    protected List<Node> getChildren() {
+    public List<Node> getChildren() {
 	List<Node> children = new ArrayList<>();
 	children.add(object());
 	children.add(property());

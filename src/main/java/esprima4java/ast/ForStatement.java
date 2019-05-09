@@ -25,7 +25,7 @@ public abstract class ForStatement extends Node {
     public abstract Node body();
 
     @Override
-    protected List<Node> getChildren() {
+    public List<Node> getChildren() {
 	List<Node> children = new ArrayList<>();
 	if (init() != null)
 	    children.add(init());

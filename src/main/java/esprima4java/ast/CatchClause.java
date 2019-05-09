@@ -21,7 +21,7 @@ public abstract class CatchClause extends Node {
 
     @Override
     @Memoized
-    protected List<Node> getChildren() {
+    public List<Node> getChildren() {
 	List<Node> children = new ArrayList<>();
 	if (param() != null)
 	    children.add(param());

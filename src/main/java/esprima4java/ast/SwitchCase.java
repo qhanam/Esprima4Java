@@ -23,7 +23,7 @@ public abstract class SwitchCase extends Node {
     public abstract List<Node> consequent();
 
     @Override
-    protected List<Node> getChildren() {
+    public List<Node> getChildren() {
 	List<Node> children = new ArrayList<>();
 	if (test() != null)
 	    children.add(test());

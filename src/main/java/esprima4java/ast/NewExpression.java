@@ -16,7 +16,7 @@ public abstract class NewExpression extends Node {
     public abstract List<Node> arguments();
 
     @Override
-    protected List<Node> getChildren() {
+    public List<Node> getChildren() {
 	List<Node> children = new ArrayList<>();
 	children.add(callee());
 	children.addAll(arguments());

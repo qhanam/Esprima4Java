@@ -23,7 +23,7 @@ public abstract class TryStatement extends Node {
     public abstract BlockStatement finalizer();
 
     @Override
-    protected List<Node> getChildren() {
+    public List<Node> getChildren() {
 	List<Node> children = new ArrayList<>();
 	children.add(block());
 	if (handler() != null)

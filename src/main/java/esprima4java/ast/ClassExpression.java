@@ -22,7 +22,7 @@ public abstract class ClassExpression extends Node {
     public abstract ClassBody body();
 
     @Override
-    protected List<Node> getChildren() {
+    public List<Node> getChildren() {
 	List<Node> children = new ArrayList<>();
 	if (id() != null)
 	    children.add(id());

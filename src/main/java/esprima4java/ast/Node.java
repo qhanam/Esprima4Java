@@ -3,6 +3,8 @@ package esprima4java.ast;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 import esprima4java.addons.ChangeInfo;
 import esprima4java.addons.Criteria;
 import esprima4java.addons.Dependencies;
@@ -10,6 +12,10 @@ import esprima4java.addons.SourceLocation;
 import esprima4java.utilities.NodeVisitor;
 
 public abstract class Node {
+
+    /** The node's parent. */
+    @Nullable
+    private Node parent;
 
     /** Populated by the GumTree AST diff utility. */
     private ChangeInfo changeInfo;
@@ -22,6 +28,7 @@ public abstract class Node {
     private SourceLocation location;
 
     public Node() {
+	this.parent = null;
 	this.changeInfo = null;
 	this.criteria = new Criteria();
 	this.dependencies = new Dependencies();
@@ -35,8 +42,16 @@ public abstract class Node {
 	}
     }
 
-    protected List<Node> getChildren() {
+    public List<Node> getChildren() {
 	return Collections.emptyList();
+    }
+
+    public void setParent(Node parent) {
+	this.parent = parent;
+    }
+
+    public Node parent() {
+	return parent;
     }
 
     public void setChangeInfo(ChangeInfo changeInfo) {

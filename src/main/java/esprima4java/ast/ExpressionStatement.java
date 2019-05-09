@@ -20,7 +20,7 @@ public abstract class ExpressionStatement extends Node {
     abstract String directive();
 
     @Override
-    protected List<Node> getChildren() {
+    public List<Node> getChildren() {
 	return Collections.singletonList(expression());
     }
 

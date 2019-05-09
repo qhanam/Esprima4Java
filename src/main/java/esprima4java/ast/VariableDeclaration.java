@@ -39,7 +39,7 @@ public abstract class VariableDeclaration extends Node {
     public abstract Kind kind();
 
     @Override
-    protected List<Node> getChildren() {
+    public List<Node> getChildren() {
 	List<Node> children = new ArrayList<>();
 	children.addAll(declarations());
 	return children;

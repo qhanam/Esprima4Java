@@ -16,7 +16,7 @@ public abstract class LabeledStatement extends Node {
     public abstract Node statement();
 
     @Override
-    protected List<Node> getChildren() {
+    public List<Node> getChildren() {
 	List<Node> children = new ArrayList<>();
 	children.add(label());
 	children.add(statement());

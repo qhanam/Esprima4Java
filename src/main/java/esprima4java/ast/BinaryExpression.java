@@ -49,7 +49,7 @@ public abstract class BinaryExpression extends Node {
 
     @Override
     @Memoized
-    protected List<Node> getChildren() {
+    public List<Node> getChildren() {
 	List<Node> children = new ArrayList<>();
 	children.add(left());
 	children.add(right());

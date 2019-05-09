@@ -19,7 +19,7 @@ public abstract class VariableDeclarator extends Node {
     public abstract Node init();
 
     @Override
-    protected List<Node> getChildren() {
+    public List<Node> getChildren() {
 	List<Node> children = new ArrayList<>();
 	children.add(id());
 	if (init() != null)

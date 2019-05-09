@@ -15,7 +15,7 @@ public abstract class ArrayPattern extends Node {
 
     @Override
     @Memoized
-    protected List<Node> getChildren() {
+    public List<Node> getChildren() {
 	return elements();
     }
 }

@@ -21,7 +21,7 @@ public abstract class ClassDeclaration extends Node {
     public abstract ClassBody body();
 
     @Override
-    protected List<Node> getChildren() {
+    public List<Node> getChildren() {
 	List<Node> children = new ArrayList<>();
 	children.add(id());
 	if (superClass() != null)

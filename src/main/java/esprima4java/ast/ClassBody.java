@@ -16,7 +16,7 @@ public abstract class ClassBody extends Node {
 
     @Override
     @Memoized
-    protected List<Node> getChildren() {
+    public List<Node> getChildren() {
 	List<Node> children = new ArrayList<>(body());
 	return children;
     }

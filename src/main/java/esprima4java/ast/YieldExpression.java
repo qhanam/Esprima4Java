@@ -19,7 +19,7 @@ public abstract class YieldExpression extends Node {
     public abstract boolean delegate();
 
     @Override
-    protected List<Node> getChildren() {
+    public List<Node> getChildren() {
 	if (argument() != null)
 	    return Collections.singletonList(argument());
 	return Collections.emptyList();

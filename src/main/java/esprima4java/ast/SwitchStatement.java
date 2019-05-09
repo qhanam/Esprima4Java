@@ -16,7 +16,7 @@ public abstract class SwitchStatement extends Node {
     public abstract List<SwitchCase> cases();
 
     @Override
-    protected List<Node> getChildren() {
+    public List<Node> getChildren() {
 	List<Node> children = new ArrayList<>();
 	children.add(discriminant());
 	children.addAll(cases());
