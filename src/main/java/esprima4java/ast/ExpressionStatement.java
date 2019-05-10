@@ -7,6 +7,9 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
 
+import esprima4java.cfg.Cfg;
+import esprima4java.cfg.CfgBuilderForStatements;
+
 @AutoValue
 public abstract class ExpressionStatement extends Node {
     public static ExpressionStatement create(Node expression, String directive) {
@@ -24,4 +27,8 @@ public abstract class ExpressionStatement extends Node {
 	return Collections.singletonList(expression());
     }
 
+    @Override
+    public Cfg buildCfg() {
+	return CfgBuilderForStatements.build(this);
+    }
 }

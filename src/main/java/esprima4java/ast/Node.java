@@ -9,6 +9,7 @@ import esprima4java.addons.ChangeInfo;
 import esprima4java.addons.Criteria;
 import esprima4java.addons.Dependencies;
 import esprima4java.addons.SourceLocation;
+import esprima4java.cfg.Cfg;
 import esprima4java.utilities.NodeVisitor;
 
 public abstract class Node {
@@ -68,6 +69,14 @@ public abstract class Node {
 
     public SourceLocation sourceLocation() {
 	return location;
+    }
+
+    /**
+     * Builds a control flow graph for the node. The default behaviour is to return
+     * {@code null}, since only statements create control flow graphs.
+     */
+    public Cfg buildCfg() {
+	return null;
     }
 
     public abstract NodeType type();
