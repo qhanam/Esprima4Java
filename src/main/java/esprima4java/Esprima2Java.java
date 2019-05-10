@@ -36,7 +36,7 @@ public class Esprima2Java {
 	return node;
     }
 
-    private static void setParentRecursive(Node parent, Node child) {
+    public static void setParentRecursive(Node parent, Node child) {
 	child.setParent(parent);
 	child.getChildren().forEach(descendant -> setParentRecursive(child, descendant));
     }

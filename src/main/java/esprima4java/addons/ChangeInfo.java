@@ -1,5 +1,7 @@
 package esprima4java.addons;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.google.auto.value.AutoValue;
 
 import esprima4java.ast.Node;
@@ -29,6 +31,7 @@ public abstract class ChangeInfo {
     public abstract EditOp propEditOp();
 
     /** The matched node in the other version. */
+    @Nullable
     public abstract Node mapped();
 
     /** The version that contains this node. */

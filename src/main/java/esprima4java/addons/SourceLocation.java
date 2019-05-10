@@ -12,6 +12,10 @@ public abstract class SourceLocation {
 		endChar);
     }
 
+    public static SourceLocation create() {
+	return new AutoValue_SourceLocation(0, 0, 0, 0, 0, 0);
+    }
+
     @Nullable
     public abstract Integer startLine();
 

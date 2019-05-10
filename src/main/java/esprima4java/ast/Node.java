@@ -32,7 +32,7 @@ public abstract class Node {
 	this.changeInfo = null;
 	this.criteria = new Criteria();
 	this.dependencies = new Dependencies();
-	this.location = null;
+	this.location = SourceLocation.create();
     }
 
     public void accept(NodeVisitor visitor) {
