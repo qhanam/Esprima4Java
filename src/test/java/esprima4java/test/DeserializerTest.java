@@ -199,7 +199,7 @@ class DeserializerTest {
     @Test
     void testReturnStatement() {
 	String json = "{ 'type': 'ReturnStatement' }";
-	ReturnStatement expected = ReturnStatement.create();
+	ReturnStatement expected = ReturnStatement.create(null);
 	test(json, NodeType.RETURN_STATEMENT, expected);
     }
 

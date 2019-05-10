@@ -7,6 +7,9 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
 
+import esprima4java.cfg.Cfg;
+import esprima4java.cfg.CfgBuilderForContinueStatements;
+
 @AutoValue
 public abstract class ContinueStatement extends Node {
     public static ContinueStatement create(Identifier label) {
@@ -23,4 +26,8 @@ public abstract class ContinueStatement extends Node {
 	return Collections.emptyList();
     }
 
+    @Override
+    public Cfg buildCfg() {
+	return CfgBuilderForContinueStatements.build(this);
+    }
 }

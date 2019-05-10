@@ -7,12 +7,11 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
 
+import esprima4java.cfg.Cfg;
+import esprima4java.cfg.CfgBuilderForReturnStatements;
+
 @AutoValue
 public abstract class ReturnStatement extends Node {
-    public static ReturnStatement create() {
-	return new AutoValue_ReturnStatement(NodeType.RETURN_STATEMENT, null);
-    }
-
     public static ReturnStatement create(Node argument) {
 	return new AutoValue_ReturnStatement(NodeType.RETURN_STATEMENT, argument);
     }
@@ -27,4 +26,8 @@ public abstract class ReturnStatement extends Node {
 	return Collections.emptyList();
     }
 
+    @Override
+    public Cfg buildCfg() {
+	return CfgBuilderForReturnStatements.build(this);
+    }
 }

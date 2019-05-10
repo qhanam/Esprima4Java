@@ -19,7 +19,7 @@ public class ReturnStatementDeserializer extends NodeDeserializer {
 	if (json.has("argument")) {
 	    return ReturnStatement.create(Esprima2Java.deserialize(json.get("argument")));
 	} else {
-	    return ReturnStatement.create();
+	    return ReturnStatement.create(null);
 	}
     }
 
