@@ -17,6 +17,7 @@ import esprima4java.ast.Identifier;
 import esprima4java.ast.Node;
 import esprima4java.ast.NodeType;
 import esprima4java.ast.ReturnStatement;
+import esprima4java.ast.WithStatement;
 import esprima4java.cfg.Cfg;
 
 class CfgBuilderTest {
@@ -72,6 +73,15 @@ class CfgBuilderTest {
     void testBlockStatement() {
 	Node node = BlockStatement.create(Arrays.asList(EmptyStatement.create()));
 	List<NodeType> expected = Arrays.asList(NodeType.EMPTY_STATEMENT, NodeType.LITERAL,
+		NodeType.EMPTY_STATEMENT);
+	Cfg cfg = test(node, expected);
+	assertNotNull(cfg.getExitNode());
+    }
+
+    @Test
+    void testWithStatement() {
+	Node node = WithStatement.create(Identifier.create("a"), EmptyStatement.create());
+	List<NodeType> expected = Arrays.asList(NodeType.WITH_STATEMENT, NodeType.LITERAL,
 		NodeType.EMPTY_STATEMENT);
 	Cfg cfg = test(node, expected);
 	assertNotNull(cfg.getExitNode());

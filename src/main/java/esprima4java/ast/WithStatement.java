@@ -5,6 +5,9 @@ import java.util.List;
 
 import com.google.auto.value.AutoValue;
 
+import esprima4java.cfg.Cfg;
+import esprima4java.cfg.CfgBuilderForWithStatements;
+
 @AutoValue
 public abstract class WithStatement extends Node {
     public static WithStatement create(Node object, Node body) {
@@ -23,4 +26,8 @@ public abstract class WithStatement extends Node {
 	return children;
     }
 
+    @Override
+    public Cfg buildCfg() {
+	return CfgBuilderForWithStatements.build(this);
+    }
 }
