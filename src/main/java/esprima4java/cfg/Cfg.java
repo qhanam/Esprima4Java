@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.Stack;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 import esprima4java.ast.NodeType;
 
 /**
@@ -20,7 +22,8 @@ import esprima4java.ast.NodeType;
 public class Cfg {
 
     private CfgNode entryNode;
-    private List<CfgNode> exitNodes;
+    @Nullable
+    private CfgNode exitNode;
     private List<CfgNode> breakNodes;
     private List<CfgNode> continueNodes;
     private List<CfgNode> throwNodes;
@@ -28,7 +31,7 @@ public class Cfg {
 
     public Cfg(CfgNode entryNode) {
 	this.entryNode = entryNode;
-	this.exitNodes = new LinkedList<CfgNode>();
+	this.exitNode = null;
 	this.breakNodes = new LinkedList<CfgNode>();
 	this.continueNodes = new LinkedList<CfgNode>();
 	this.throwNodes = new LinkedList<CfgNode>();
@@ -50,33 +53,22 @@ public class Cfg {
      * @param node
      *            The last node before exiting an execution branch.
      */
-    public void addExitNode(CfgNode node) {
-	this.exitNodes.add(node);
+    public void setExitNode(CfgNode node) {
+	this.exitNode = node;
     }
 
     /**
      * Remove all exit nodes from the CFG.
      */
     public void clearExitNodes() {
-	this.exitNodes.clear();
+	this.exitNode = null;
     }
 
     /**
-     * Adds all the exit nodes in the list.
-     * 
-     * @param nodes
+     * Get the exit node for this graph.
      */
-    public void addAllExitNodes(List<CfgNode> nodes) {
-	this.exitNodes.addAll(nodes);
-    }
-
-    /**
-     * Get the exit nodes for this graph.
-     * 
-     * @return The list of exit points.
-     */
-    public List<CfgNode> getExitNodes() {
-	return this.exitNodes;
+    public CfgNode getExitNode() {
+	return this.exitNode;
     }
 
     /**

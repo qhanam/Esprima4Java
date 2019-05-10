@@ -5,6 +5,9 @@ import java.util.List;
 import com.google.auto.value.AutoValue;
 import com.google.auto.value.extension.memoized.Memoized;
 
+import esprima4java.cfg.Cfg;
+import esprima4java.cfg.CfgBuilderForBlockStatements;
+
 @AutoValue
 public abstract class BlockStatement extends Node {
     public static BlockStatement create(List<Node> body) {
@@ -19,4 +22,8 @@ public abstract class BlockStatement extends Node {
 	return body();
     }
 
+    @Override
+    public Cfg buildCfg() {
+	return CfgBuilderForBlockStatements.build(this);
+    }
 }

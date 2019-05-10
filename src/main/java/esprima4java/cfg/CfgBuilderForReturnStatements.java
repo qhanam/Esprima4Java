@@ -10,7 +10,6 @@ public class CfgBuilderForReturnStatements {
     public static Cfg build(Node statement) {
 	CfgNode node = CfgNode.create(statement);
 	Cfg cfg = new Cfg(node);
-	cfg.addExitNode(node);
 	cfg.addReturnNode(node);
 	return cfg;
     }
