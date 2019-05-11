@@ -9,4 +9,9 @@ public abstract class Identifier extends Node {
     }
 
     public abstract String name();
+
+    @Override
+    public Node clone() {
+	return new AutoValue_Identifier(type(), name());
+    }
 }

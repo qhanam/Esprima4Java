@@ -18,16 +18,18 @@ public class CfgBuilderForBlockStatements {
 
 	for (Node child : statement.body()) {
 	    Cfg childCfg = child.buildCfg();
-	    CfgEdge edge = CfgEdge.create(Literal.createBoolean(true, "true"));
-	    edge.setFrom(currentNode);
-	    edge.setTo(childCfg.getEntryNode());
-	    currentNode.addOutgoing(edge);
+
+	    CfgEdge.create(Literal.createBoolean(true, "true"), currentNode,
+		    childCfg.getEntryNode());
+
 	    cfg.addAllBreakNodes(childCfg.getBreakNodes());
 	    cfg.addAllContinueNodes(childCfg.getContinueNodes());
 	    cfg.addAllReturnNodes(childCfg.getReturnNodes());
 	    cfg.addAllThrowNodes(childCfg.getThrowNodes());
+
 	    if (childCfg.getExitNode() == null)
 		return cfg;
+
 	    currentNode = childCfg.getExitNode();
 	}
 

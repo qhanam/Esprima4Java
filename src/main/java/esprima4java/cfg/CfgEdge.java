@@ -16,15 +16,17 @@ public class CfgEdge {
     @Nullable
     private CfgNode to;
 
-    private CfgEdge(Node condition) {
+    private CfgEdge(Node condition, CfgNode from, CfgNode to) {
 	this.id = CfgIdGenerator.getUniqueID();
 	this.condition = condition;
-	this.from = null;
-	this.to = null;
+	this.from = from;
+	this.to = to;
+	from.addOutgoing(this);
+	to.addIncoming(this);
     }
 
-    public static CfgEdge create(Node condition) {
-	return new CfgEdge(condition);
+    public static CfgEdge create(Node condition, CfgNode from, CfgNode to) {
+	return new CfgEdge(condition, from, to);
     }
 
     public int id() {

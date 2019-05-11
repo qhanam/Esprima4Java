@@ -14,10 +14,7 @@ public class CfgBuilderForWithStatements {
 
 	Cfg bodyCfg = statement.body().buildCfg();
 
-	CfgEdge edge = CfgEdge.create(Literal.createBoolean(true, "true"));
-	edge.setFrom(entryNode);
-	edge.setTo(bodyCfg.getEntryNode());
-	entryNode.addOutgoing(edge);
+	CfgEdge.create(Literal.createBoolean(true, "true"), entryNode, bodyCfg.getEntryNode());
 
 	cfg.addAllBreakNodes(bodyCfg.getBreakNodes());
 	cfg.addAllContinueNodes(bodyCfg.getContinueNodes());

@@ -79,5 +79,9 @@ public abstract class Node {
 	return null;
     }
 
+    public Node clone() {
+	throw new UnsupportedOperationException();
+    }
+
     public abstract NodeType type();
 }

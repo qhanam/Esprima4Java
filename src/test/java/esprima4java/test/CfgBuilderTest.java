@@ -14,6 +14,7 @@ import esprima4java.ast.ContinueStatement;
 import esprima4java.ast.EmptyStatement;
 import esprima4java.ast.ExpressionStatement;
 import esprima4java.ast.Identifier;
+import esprima4java.ast.IfStatement;
 import esprima4java.ast.Node;
 import esprima4java.ast.NodeType;
 import esprima4java.ast.ReturnStatement;
@@ -86,4 +87,17 @@ class CfgBuilderTest {
 	Cfg cfg = test(node, expected);
 	assertNotNull(cfg.getExitNode());
     }
+
+    @Test
+    void testIfStatement() {
+	Node node = IfStatement.create(Identifier.create("a"), EmptyStatement.create(),
+		EmptyStatement.create());
+	List<NodeType> expected = Arrays.asList(NodeType.EMPTY_STATEMENT, NodeType.IDENTIFIER,
+		NodeType.UNARY_EXPRESSION, NodeType.EMPTY_STATEMENT, NodeType.LITERAL,
+		NodeType.EMPTY_STATEMENT, NodeType.EMPTY_STATEMENT, NodeType.LITERAL,
+		NodeType.EMPTY_STATEMENT);
+	Cfg cfg = test(node, expected);
+	assertNotNull(cfg.getExitNode());
+    }
+
 }
