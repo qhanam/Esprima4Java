@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import esprima4java.ast.BlockStatement;
 import esprima4java.ast.BreakStatement;
 import esprima4java.ast.ContinueStatement;
+import esprima4java.ast.DoWhileStatement;
 import esprima4java.ast.EmptyStatement;
 import esprima4java.ast.ExpressionStatement;
 import esprima4java.ast.Identifier;
@@ -177,5 +178,15 @@ class CfgBuilderTest {
 	Cfg cfg = test(node, expected);
 	assertNotNull(cfg.getExitNode());
 	assertNotNull(cfg.getReturnNodes());
+    }
+
+    @Test
+    void testDoWhileStatement() {
+	Node node = DoWhileStatement.create(Identifier.create("x"), EmptyStatement.create());
+	List<NodeType> expected = Arrays.asList(NodeType.EMPTY_STATEMENT, NodeType.LITERAL,
+		NodeType.EMPTY_STATEMENT, NodeType.IDENTIFIER, NodeType.UNARY_EXPRESSION,
+		NodeType.EMPTY_STATEMENT);
+	Cfg cfg = test(node, expected);
+	assertNotNull(cfg.getExitNode());
     }
 }
