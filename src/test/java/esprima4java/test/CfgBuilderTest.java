@@ -16,6 +16,7 @@ import esprima4java.ast.ContinueStatement;
 import esprima4java.ast.DoWhileStatement;
 import esprima4java.ast.EmptyStatement;
 import esprima4java.ast.ExpressionStatement;
+import esprima4java.ast.ForStatement;
 import esprima4java.ast.Identifier;
 import esprima4java.ast.IfStatement;
 import esprima4java.ast.Node;
@@ -186,6 +187,18 @@ class CfgBuilderTest {
 	List<NodeType> expected = Arrays.asList(NodeType.EMPTY_STATEMENT, NodeType.LITERAL,
 		NodeType.EMPTY_STATEMENT, NodeType.IDENTIFIER, NodeType.UNARY_EXPRESSION,
 		NodeType.EMPTY_STATEMENT);
+	Cfg cfg = test(node, expected);
+	assertNotNull(cfg.getExitNode());
+    }
+
+    @Test
+    void testForStatement() {
+	Node node = ForStatement.create(Identifier.create("x"), Identifier.create("x"),
+		Identifier.create("x"), EmptyStatement.create());
+	List<NodeType> expected = Arrays.asList(NodeType.EXPRESSION_STATEMENT, NodeType.LITERAL,
+		NodeType.EMPTY_STATEMENT, NodeType.IDENTIFIER, NodeType.UNARY_EXPRESSION,
+		NodeType.EMPTY_STATEMENT, NodeType.EMPTY_STATEMENT, NodeType.LITERAL,
+		NodeType.EXPRESSION_STATEMENT, NodeType.LITERAL);
 	Cfg cfg = test(node, expected);
 	assertNotNull(cfg.getExitNode());
     }

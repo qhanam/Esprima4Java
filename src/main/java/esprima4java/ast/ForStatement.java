@@ -7,6 +7,9 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
 
+import esprima4java.cfg.Cfg;
+import esprima4java.cfg.CfgBuilderForForStatements;
+
 @AutoValue
 public abstract class ForStatement extends Node {
     public static ForStatement create(Node init, Node test, Node update, Node body) {
@@ -37,4 +40,8 @@ public abstract class ForStatement extends Node {
 	return children;
     }
 
+    @Override
+    public Cfg buildCfg() {
+	return CfgBuilderForForStatements.build(this);
+    }
 }
