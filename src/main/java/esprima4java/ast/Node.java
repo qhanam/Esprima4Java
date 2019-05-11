@@ -84,4 +84,9 @@ public abstract class Node {
     }
 
     public abstract NodeType type();
+
+    @Override
+    public String toString() {
+	return type().toString();
+    }
 }

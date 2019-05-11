@@ -22,6 +22,7 @@ import esprima4java.ast.NodeType;
 import esprima4java.ast.ReturnStatement;
 import esprima4java.ast.SwitchCase;
 import esprima4java.ast.SwitchStatement;
+import esprima4java.ast.WhileStatement;
 import esprima4java.ast.WithStatement;
 import esprima4java.cfg.Cfg;
 
@@ -156,5 +157,25 @@ class CfgBuilderTest {
 		NodeType.EMPTY_STATEMENT, NodeType.LITERAL, NodeType.RETURN_STATEMENT);
 	Cfg cfg = test(node, expected);
 	assertNull(cfg.getExitNode());
+    }
+
+    @Test
+    void testWhileStatement() {
+	Node node = WhileStatement.create(Identifier.create("x"), EmptyStatement.create());
+	List<NodeType> expected = Arrays.asList(NodeType.EMPTY_STATEMENT, NodeType.IDENTIFIER,
+		NodeType.UNARY_EXPRESSION, NodeType.EMPTY_STATEMENT, NodeType.EMPTY_STATEMENT,
+		NodeType.LITERAL);
+	Cfg cfg = test(node, expected);
+	assertNotNull(cfg.getExitNode());
+    }
+
+    @Test
+    void testWhileStatementReturn() {
+	Node node = WhileStatement.create(Identifier.create("x"), ReturnStatement.create(null));
+	List<NodeType> expected = Arrays.asList(NodeType.EMPTY_STATEMENT, NodeType.IDENTIFIER,
+		NodeType.UNARY_EXPRESSION, NodeType.EMPTY_STATEMENT, NodeType.RETURN_STATEMENT);
+	Cfg cfg = test(node, expected);
+	assertNotNull(cfg.getExitNode());
+	assertNotNull(cfg.getReturnNodes());
     }
 }

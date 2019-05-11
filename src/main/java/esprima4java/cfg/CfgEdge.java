@@ -70,4 +70,8 @@ public class CfgEdge {
 	return false;
     }
 
+    @Override
+    public String toString() {
+	return from.toString() + "-(" + id() + ":" + condition.toString() + ")->" + to.toString();
+    }
 }

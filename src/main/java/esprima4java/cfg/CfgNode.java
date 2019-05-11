@@ -67,4 +67,9 @@ public class CfgNode {
 	return false;
     }
 
+    @Override
+    public String toString() {
+	return id() + ":" + statement.toString();
+    }
+
 }
