@@ -7,6 +7,9 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
 
+import esprima4java.cfg.Cfg;
+import esprima4java.cfg.CfgBuilderForSwitchCases;
+
 @AutoValue
 public abstract class SwitchCase extends Node {
     public static SwitchCase create(List<Node> consequent) {
@@ -29,6 +32,11 @@ public abstract class SwitchCase extends Node {
 	    children.add(test());
 	children.addAll(consequent());
 	return children;
+    }
+
+    @Override
+    public Cfg buildCfg() {
+	return CfgBuilderForSwitchCases.build(this);
     }
 
 }

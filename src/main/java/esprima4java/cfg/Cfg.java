@@ -205,6 +205,7 @@ public class Cfg {
 	Set<CfgNode> visited = new HashSet<>();
 	Stack<CfgNode> stack = new Stack<>();
 	stack.add(entryNode);
+	visited.add(entryNode);
 	while (!stack.isEmpty()) {
 	    CfgNode current = stack.pop();
 	    trace.add(current.statement().type());
@@ -212,6 +213,7 @@ public class Cfg {
 		trace.add(edge.condition().type());
 		if (!visited.contains(edge.to())) {
 		    stack.push(edge.to());
+		    visited.add(edge.to());
 		}
 	    }
 	}

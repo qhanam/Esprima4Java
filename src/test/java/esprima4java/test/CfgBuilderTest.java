@@ -2,8 +2,10 @@ package esprima4java.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -18,6 +20,8 @@ import esprima4java.ast.IfStatement;
 import esprima4java.ast.Node;
 import esprima4java.ast.NodeType;
 import esprima4java.ast.ReturnStatement;
+import esprima4java.ast.SwitchCase;
+import esprima4java.ast.SwitchStatement;
 import esprima4java.ast.WithStatement;
 import esprima4java.cfg.Cfg;
 
@@ -100,4 +104,57 @@ class CfgBuilderTest {
 	assertNotNull(cfg.getExitNode());
     }
 
+    @Test
+    void testSwitchCaseWithBreak() {
+	Node node = SwitchCase.create(Identifier.create("a"),
+		Collections.singletonList(BreakStatement.create(null)));
+	List<NodeType> expected = Arrays.asList(NodeType.EMPTY_STATEMENT, NodeType.LITERAL,
+		NodeType.BREAK_STATEMENT);
+	Cfg cfg = test(node, expected);
+	assertNull(cfg.getExitNode());
+    }
+
+    @Test
+    void testSwitchCaseWithoutBreak() {
+	Node node = SwitchCase.create(Identifier.create("a"),
+		Collections.singletonList(EmptyStatement.create()));
+	List<NodeType> expected = Arrays.asList(NodeType.EMPTY_STATEMENT, NodeType.LITERAL,
+		NodeType.EMPTY_STATEMENT);
+	Cfg cfg = test(node, expected);
+	assertNotNull(cfg.getExitNode());
+    }
+
+    @Test
+    void testSwitchStatementFallthrough() {
+	Node node = SwitchStatement.create(Identifier.create("x"),
+		Arrays.asList(SwitchCase.create(Identifier.create("a"),
+			Collections.singletonList(EmptyStatement.create()))));
+	List<NodeType> expected = Arrays.asList(NodeType.EMPTY_STATEMENT, NodeType.IDENTIFIER,
+		NodeType.IDENTIFIER, NodeType.EMPTY_STATEMENT, NodeType.LITERAL,
+		NodeType.EMPTY_STATEMENT, NodeType.LITERAL, NodeType.EMPTY_STATEMENT);
+	Cfg cfg = test(node, expected);
+	assertNotNull(cfg.getExitNode());
+    }
+
+    @Test
+    void testSwitchStatementBreak() {
+	Node node = SwitchStatement.create(Identifier.create("x"),
+		Arrays.asList(SwitchCase.create(Identifier.create("a"),
+			Collections.singletonList(BreakStatement.create(null)))));
+	List<NodeType> expected = Arrays.asList(NodeType.EMPTY_STATEMENT, NodeType.IDENTIFIER,
+		NodeType.IDENTIFIER, NodeType.EMPTY_STATEMENT, NodeType.LITERAL,
+		NodeType.BREAK_STATEMENT, NodeType.LITERAL, NodeType.EMPTY_STATEMENT);
+	Cfg cfg = test(node, expected);
+	assertNotNull(cfg.getExitNode());
+    }
+
+    @Test
+    void testSwitchStatementReturn() {
+	Node node = SwitchStatement.create(Identifier.create("x"), Arrays.asList(
+		SwitchCase.create(null, Collections.singletonList(ReturnStatement.create(null)))));
+	List<NodeType> expected = Arrays.asList(NodeType.EMPTY_STATEMENT, NodeType.LITERAL,
+		NodeType.EMPTY_STATEMENT, NodeType.LITERAL, NodeType.RETURN_STATEMENT);
+	Cfg cfg = test(node, expected);
+	assertNull(cfg.getExitNode());
+    }
 }
