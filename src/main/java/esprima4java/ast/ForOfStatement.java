@@ -28,4 +28,9 @@ public abstract class ForOfStatement extends Node {
 	return children;
     }
 
+    @Override
+    public Node clone() {
+	return new AutoValue_ForOfStatement(type(), left().clone(), right().clone(), body().clone(),
+		await());
+    }
 }

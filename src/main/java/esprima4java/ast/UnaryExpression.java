@@ -46,4 +46,8 @@ public abstract class UnaryExpression extends Node {
 	return Collections.singletonList(argument());
     }
 
+    @Override
+    public Node clone() {
+	return new AutoValue_UnaryExpression(type(), operator(), prefix(), argument().clone());
+    }
 }

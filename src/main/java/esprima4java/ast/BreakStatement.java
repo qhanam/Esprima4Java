@@ -33,4 +33,8 @@ public abstract class BreakStatement extends Node {
 	return CfgBuilderForBreakStatements.build(this);
     }
 
+    @Override
+    public Node clone() {
+	return new AutoValue_BreakStatement(type(), (Identifier) label().clone());
+    }
 }

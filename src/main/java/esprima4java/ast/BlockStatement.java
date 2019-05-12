@@ -1,5 +1,6 @@
 package esprima4java.ast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.auto.value.AutoValue;
@@ -25,5 +26,12 @@ public abstract class BlockStatement extends Node {
     @Override
     public Cfg buildCfg() {
 	return CfgBuilderForBlockStatements.build(this);
+    }
+
+    @Override
+    public Node clone() {
+	List<Node> bodyCopy = new ArrayList<>();
+	body().forEach(statement -> bodyCopy.add(statement.clone()));
+	return new AutoValue_BlockStatement(type(), bodyCopy);
     }
 }

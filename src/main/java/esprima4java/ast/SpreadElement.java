@@ -7,8 +7,8 @@ import com.google.auto.value.AutoValue;
 
 @AutoValue
 public abstract class SpreadElement extends Node {
-    public static SpreadElement create(Node expression) {
-	return new AutoValue_SpreadElement(NodeType.SPREAD_ELEMENT, expression);
+    public static SpreadElement create(Node argument) {
+	return new AutoValue_SpreadElement(NodeType.SPREAD_ELEMENT, argument);
     }
 
     abstract Node argument();
@@ -18,4 +18,8 @@ public abstract class SpreadElement extends Node {
 	return Collections.singletonList(argument());
     }
 
+    @Override
+    public Node clone() {
+	return new AutoValue_SpreadElement(type(), argument().clone());
+    }
 }

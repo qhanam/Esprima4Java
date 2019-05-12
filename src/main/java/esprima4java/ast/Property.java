@@ -37,4 +37,9 @@ public abstract class Property extends Node {
 	return children;
     }
 
+    @Override
+    public Node clone() {
+	return new AutoValue_Property(type(), key().clone(), value().clone(), kind(), method(),
+		shorthand(), computed());
+    }
 }

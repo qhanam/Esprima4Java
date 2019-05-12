@@ -26,4 +26,10 @@ public abstract class ForInStatement extends Node {
 	return children;
     }
 
+    @Override
+    public Node clone() {
+	return new AutoValue_ForInStatement(type(), left().clone(), right().clone(),
+		body().clone());
+    }
+
 }

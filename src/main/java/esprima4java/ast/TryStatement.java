@@ -33,4 +33,10 @@ public abstract class TryStatement extends Node {
 	return children;
     }
 
+    @Override
+    public Node clone() {
+	return new AutoValue_TryStatement(type(), (BlockStatement) block().clone(),
+		(CatchClause) handler().clone(), (BlockStatement) finalizer().clone());
+    }
+
 }

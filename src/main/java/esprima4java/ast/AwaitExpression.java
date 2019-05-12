@@ -20,4 +20,8 @@ public abstract class AwaitExpression extends Node {
 	return Collections.singletonList(argument());
     }
 
+    @Override
+    public Node clone() {
+	return new AutoValue_AwaitExpression(type(), argument().clone());
+    }
 }

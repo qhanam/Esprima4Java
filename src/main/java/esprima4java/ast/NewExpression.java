@@ -23,4 +23,10 @@ public abstract class NewExpression extends Node {
 	return children;
     }
 
+    @Override
+    public Node clone() {
+	List<Node> argumentsCopy = new ArrayList<>();
+	arguments().forEach(argument -> argumentsCopy.add(argument.clone()));
+	return new AutoValue_NewExpression(type(), callee().clone(), argumentsCopy);
+    }
 }

@@ -30,4 +30,9 @@ public abstract class ReturnStatement extends Node {
     public Cfg buildCfg() {
 	return CfgBuilderForReturnStatements.build(this);
     }
+
+    @Override
+    public Node clone() {
+	return new AutoValue_ReturnStatement(type(), argument().clone());
+    }
 }

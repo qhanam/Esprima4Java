@@ -54,4 +54,9 @@ public abstract class MethodDefinition extends Node {
 	return children;
     }
 
+    @Override
+    public Node clone() {
+	return new AutoValue_MethodDefinition(type(), key().clone(),
+		(FunctionExpression) value().clone(), kind(), computed(), stat());
+    }
 }

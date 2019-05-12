@@ -37,4 +37,10 @@ public abstract class IfStatement extends Node {
     public Cfg buildCfg() {
 	return CfgBuilderForIfStatements.build(this);
     }
+
+    @Override
+    public Node clone() {
+	return new AutoValue_IfStatement(type(), test().clone(), consequent().clone(),
+		alternate().clone());
+    }
 }

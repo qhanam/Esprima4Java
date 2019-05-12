@@ -45,4 +45,11 @@ public abstract class VariableDeclaration extends Node {
 	return children;
     }
 
+    @Override
+    public Node clone() {
+	List<VariableDeclarator> declarationsCopy = new ArrayList<>();
+	declarations().forEach(
+		declaration -> declarationsCopy.add((VariableDeclarator) declaration.clone()));
+	return new AutoValue_VariableDeclaration(type(), declarationsCopy, kind());
+    }
 }

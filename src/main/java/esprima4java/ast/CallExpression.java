@@ -25,4 +25,11 @@ public abstract class CallExpression extends Node {
 	return children;
     }
 
+    @Override
+    public Node clone() {
+	List<Node> argumentsCopy = new ArrayList<>();
+	arguments().forEach(argument -> argumentsCopy.add(argument.clone()));
+	return new AutoValue_CallExpression(type(), callee().clone(), argumentsCopy);
+    }
+
 }

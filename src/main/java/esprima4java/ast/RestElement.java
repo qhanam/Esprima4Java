@@ -18,4 +18,8 @@ public abstract class RestElement extends Node {
 	return Collections.singletonList(argument());
     }
 
+    @Override
+    public Node clone() {
+	return new AutoValue_RestElement(type(), argument().clone());
+    }
 }

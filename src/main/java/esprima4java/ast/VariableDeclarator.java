@@ -27,4 +27,8 @@ public abstract class VariableDeclarator extends Node {
 	return children;
     }
 
+    @Override
+    public Node clone() {
+	return new AutoValue_VariableDeclarator(type(), id().clone(), init().clone());
+    }
 }

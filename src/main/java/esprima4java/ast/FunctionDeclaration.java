@@ -28,4 +28,11 @@ public abstract class FunctionDeclaration extends Function {
 	return children;
     }
 
+    @Override
+    public Node clone() {
+	List<Identifier> paramsCopy = new ArrayList<>();
+	params().forEach(param -> paramsCopy.add((Identifier) param.clone()));
+	return new AutoValue_FunctionDeclaration(type(), generator(), async(), id(), paramsCopy,
+		(BlockStatement) body().clone());
+    }
 }

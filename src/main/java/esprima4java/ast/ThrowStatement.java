@@ -18,4 +18,8 @@ public abstract class ThrowStatement extends Node {
 	return Collections.singletonList(expression());
     }
 
+    @Override
+    public Node clone() {
+	return new AutoValue_ThrowStatement(type(), expression().clone());
+    }
 }

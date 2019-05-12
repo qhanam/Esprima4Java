@@ -30,4 +30,9 @@ public abstract class WithStatement extends Node {
     public Cfg buildCfg() {
 	return CfgBuilderForWithStatements.build(this);
     }
+
+    @Override
+    public Node clone() {
+	return new AutoValue_WithStatement(type(), object().clone(), body().clone());
+    }
 }

@@ -25,4 +25,8 @@ public abstract class AssignmentPattern extends Node {
 	return children;
     }
 
+    @Override
+    public Node clone() {
+	return new AutoValue_AssignmentPattern(type(), left().clone(), right().clone());
+    }
 }

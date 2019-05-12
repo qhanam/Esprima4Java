@@ -39,4 +39,10 @@ public abstract class SwitchCase extends Node {
 	return CfgBuilderForSwitchCases.build(this);
     }
 
+    @Override
+    public Node clone() {
+	List<Node> consequentCopy = new ArrayList<>();
+	consequent().forEach(statement -> consequentCopy.add(statement.clone()));
+	return new AutoValue_SwitchCase(type(), test().clone(), consequentCopy);
+    }
 }

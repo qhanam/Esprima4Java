@@ -27,4 +27,9 @@ public abstract class ConditionalExpression extends Node {
 	return children;
     }
 
+    @Override
+    public Node clone() {
+	return new AutoValue_ConditionalExpression(type(), test().clone(), alternate().clone(),
+		expression().clone());
+    }
 }

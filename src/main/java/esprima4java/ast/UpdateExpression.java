@@ -45,4 +45,9 @@ public abstract class UpdateExpression extends Node {
     public List<Node> getChildren() {
 	return Collections.singletonList(argument());
     }
+
+    @Override
+    public Node clone() {
+	return new AutoValue_UpdateExpression(type(), operator(), prefix(), argument().clone());
+    }
 }

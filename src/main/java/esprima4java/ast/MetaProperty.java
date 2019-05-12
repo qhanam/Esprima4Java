@@ -23,4 +23,9 @@ public abstract class MetaProperty extends Node {
 	return children;
     }
 
+    @Override
+    public Node clone() {
+	return new AutoValue_MetaProperty(type(), (Identifier) meta().clone(),
+		(Identifier) property().clone());
+    }
 }

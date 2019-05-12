@@ -56,4 +56,8 @@ public abstract class BinaryExpression extends Node {
 	return children;
     }
 
+    @Override
+    public Node clone() {
+	return new AutoValue_BinaryExpression(type(), operator(), left().clone(), right().clone());
+    }
 }

@@ -1,5 +1,6 @@
 package esprima4java.ast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.auto.value.AutoValue;
@@ -17,4 +18,10 @@ public abstract class SequenceExpression extends Node {
 	return expressions();
     }
 
+    @Override
+    public Node clone() {
+	List<Node> expressionsCopy = new ArrayList<>();
+	expressions().forEach(expression -> expressionsCopy.add(expression.clone()));
+	return new AutoValue_SequenceExpression(type(), expressionsCopy);
+    }
 }

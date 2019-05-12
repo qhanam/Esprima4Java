@@ -1,5 +1,6 @@
 package esprima4java.ast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.auto.value.AutoValue;
@@ -19,4 +20,10 @@ public abstract class ArrayExpression extends Node {
 	return elements();
     }
 
+    @Override
+    public Node clone() {
+	List<Node> elementsCopy = new ArrayList<>();
+	elements().forEach(element -> elementsCopy.add(element.clone()));
+	return new AutoValue_ArrayExpression(type(), elementsCopy);
+    }
 }

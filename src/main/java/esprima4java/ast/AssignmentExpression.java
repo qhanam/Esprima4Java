@@ -55,4 +55,10 @@ public abstract class AssignmentExpression extends Node {
 	return children;
     }
 
+    @Override
+    public Node clone() {
+	return new AutoValue_AssignmentExpression(type(), operator(), left().clone(),
+		right().clone());
+    }
+
 }

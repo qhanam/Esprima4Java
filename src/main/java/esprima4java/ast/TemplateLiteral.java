@@ -23,4 +23,12 @@ public abstract class TemplateLiteral extends Node {
 	return children;
     }
 
+    @Override
+    public Node clone() {
+	List<TemplateElement> quasisCopy = new ArrayList<>();
+	quasis().forEach(quasi -> quasisCopy.add((TemplateElement) quasi.clone()));
+	List<Node> expressionsCopy = new ArrayList<>();
+	expressions().forEach(expression -> expressionsCopy.add(expression.clone()));
+	return new AutoValue_TemplateLiteral(type(), quasisCopy, expressionsCopy);
+    }
 }

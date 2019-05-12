@@ -21,4 +21,10 @@ public abstract class ClassBody extends Node {
 	return children;
     }
 
+    @Override
+    public Node clone() {
+	List<MethodDefinition> childrenCopy = new ArrayList<>();
+	childrenCopy.forEach(child -> childrenCopy.add((MethodDefinition) child.clone()));
+	return new AutoValue_ClassBody(type(), childrenCopy);
+    }
 }

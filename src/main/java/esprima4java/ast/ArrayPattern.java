@@ -1,5 +1,6 @@
 package esprima4java.ast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.auto.value.AutoValue;
@@ -17,5 +18,12 @@ public abstract class ArrayPattern extends Node {
     @Memoized
     public List<Node> getChildren() {
 	return elements();
+    }
+
+    @Override
+    public Node clone() {
+	List<Node> elementsCopy = new ArrayList<>();
+	elements().forEach(element -> elementsCopy.add(element.clone()));
+	return new AutoValue_ArrayPattern(type(), elementsCopy);
     }
 }

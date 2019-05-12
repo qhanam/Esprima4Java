@@ -28,4 +28,12 @@ public abstract class ArrowFunctionExpression extends Function {
 	children.add(body());
 	return children;
     }
+
+    @Override
+    public Node clone() {
+	List<Identifier> paramsCopy = new ArrayList<>();
+	params().forEach(param -> paramsCopy.add((Identifier) param.clone()));
+	return new AutoValue_ArrowFunctionExpression(type(), generator(), async(), paramsCopy,
+		body().clone(), expression());
+    }
 }

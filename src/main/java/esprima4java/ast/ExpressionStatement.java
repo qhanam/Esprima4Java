@@ -31,4 +31,9 @@ public abstract class ExpressionStatement extends Node {
     public Cfg buildCfg() {
 	return CfgBuilderForStatements.build(this);
     }
+
+    @Override
+    public Node clone() {
+	return new AutoValue_ExpressionStatement(type(), expression().clone(), directive());
+    }
 }

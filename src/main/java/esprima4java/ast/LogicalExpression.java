@@ -48,4 +48,8 @@ public abstract class LogicalExpression extends Node {
 	return children;
     }
 
+    @Override
+    public Node clone() {
+	return new AutoValue_LogicalExpression(type(), operator(), left().clone(), right().clone());
+    }
 }

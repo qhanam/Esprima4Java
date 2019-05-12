@@ -26,4 +26,9 @@ public abstract class MemberExpression extends Node {
 	return children;
     }
 
+    @Override
+    public Node clone() {
+	return new AutoValue_MemberExpression(type(), object().clone(), property().clone(),
+		computed());
+    }
 }

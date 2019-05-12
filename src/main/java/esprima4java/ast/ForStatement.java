@@ -44,4 +44,10 @@ public abstract class ForStatement extends Node {
     public Cfg buildCfg() {
 	return CfgBuilderForForStatements.build(this);
     }
+
+    @Override
+    public Node clone() {
+	return new AutoValue_ForStatement(type(), init().clone(), test().clone(), update().clone(),
+		body().clone());
+    }
 }

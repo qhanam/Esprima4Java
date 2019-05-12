@@ -30,4 +30,9 @@ public abstract class ContinueStatement extends Node {
     public Cfg buildCfg() {
 	return CfgBuilderForContinueStatements.build(this);
     }
+
+    @Override
+    public Node clone() {
+	return new AutoValue_ContinueStatement(type(), (Identifier) label().clone());
+    }
 }

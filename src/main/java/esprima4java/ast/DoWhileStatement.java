@@ -30,4 +30,9 @@ public abstract class DoWhileStatement extends Node {
     public Cfg buildCfg() {
 	return CfgBuilderForDoWhileStatements.build(this);
     }
+
+    @Override
+    public Node clone() {
+	return new AutoValue_DoWhileStatement(type(), test().clone(), body().clone());
+    }
 }

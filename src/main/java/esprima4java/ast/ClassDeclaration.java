@@ -30,4 +30,9 @@ public abstract class ClassDeclaration extends Node {
 	return children;
     }
 
+    @Override
+    public Node clone() {
+	return new AutoValue_ClassDeclaration(type(), (Identifier) id().clone(),
+		superClass().clone(), (ClassBody) body().clone());
+    }
 }

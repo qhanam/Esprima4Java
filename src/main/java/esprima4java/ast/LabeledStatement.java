@@ -23,4 +23,9 @@ public abstract class LabeledStatement extends Node {
 	return children;
     }
 
+    @Override
+    public Node clone() {
+	return new AutoValue_LabeledStatement(type(), (Identifier) label().clone(),
+		statement().clone());
+    }
 }

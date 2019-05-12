@@ -30,4 +30,12 @@ public abstract class SwitchStatement extends Node {
     public Cfg buildCfg() {
 	return CfgBuilderForSwitchStatements.build(this);
     }
+
+    @Override
+    public Node clone() {
+	List<SwitchCase> casesCopy = new ArrayList<>();
+	cases().forEach(switchCase -> casesCopy.add((SwitchCase) switchCase.clone()));
+	return new AutoValue_SwitchStatement(type(), discriminant().clone(), casesCopy);
+    }
+
 }

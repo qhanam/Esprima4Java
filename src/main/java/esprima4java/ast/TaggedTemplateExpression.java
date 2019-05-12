@@ -24,4 +24,9 @@ public abstract class TaggedTemplateExpression extends Node {
 	return children;
     }
 
+    @Override
+    public Node clone() {
+	return new AutoValue_TaggedTemplateExpression(type(), tag().clone(),
+		(TemplateLiteral) quasi().clone());
+    }
 }
