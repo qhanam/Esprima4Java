@@ -43,6 +43,7 @@ public abstract class SwitchCase extends Node {
     public Node clone() {
 	List<Node> consequentCopy = new ArrayList<>();
 	consequent().forEach(statement -> consequentCopy.add(statement.clone()));
-	return new AutoValue_SwitchCase(type(), test().clone(), consequentCopy);
+	Node testClone = test() != null ? test().clone() : null;
+	return new AutoValue_SwitchCase(type(), testClone, consequentCopy);
     }
 }

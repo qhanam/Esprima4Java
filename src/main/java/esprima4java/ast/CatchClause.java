@@ -31,6 +31,7 @@ public abstract class CatchClause extends Node {
 
     @Override
     public Node clone() {
-	return new AutoValue_CatchClause(type(), param().clone(), (BlockStatement) body().clone());
+	Node paramClone = param() != null ? param().clone() : null;
+	return new AutoValue_CatchClause(type(), paramClone, (BlockStatement) body().clone());
     }
 }

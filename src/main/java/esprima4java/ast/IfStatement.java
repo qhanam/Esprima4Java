@@ -40,7 +40,8 @@ public abstract class IfStatement extends Node {
 
     @Override
     public Node clone() {
+	Node alternateClone = alternate() != null ? alternate().clone() : null;
 	return new AutoValue_IfStatement(type(), test().clone(), consequent().clone(),
-		alternate().clone());
+		alternateClone);
     }
 }

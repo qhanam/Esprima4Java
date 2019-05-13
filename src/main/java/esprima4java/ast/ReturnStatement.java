@@ -33,6 +33,7 @@ public abstract class ReturnStatement extends Node {
 
     @Override
     public Node clone() {
-	return new AutoValue_ReturnStatement(type(), argument().clone());
+	Node argumentClone = argument() != null ? argument().clone() : null;
+	return new AutoValue_ReturnStatement(type(), argumentClone);
     }
 }

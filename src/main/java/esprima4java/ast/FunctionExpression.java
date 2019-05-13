@@ -34,9 +34,10 @@ public abstract class FunctionExpression extends Function {
 
     @Override
     public Node clone() {
+	Identifier idClone = id() != null ? (Identifier) id().clone() : null;
 	List<Identifier> paramsCopy = new ArrayList<>();
 	params().forEach(param -> paramsCopy.add((Identifier) param.clone()));
-	return new AutoValue_FunctionExpression(type(), generator(), async(), id(), paramsCopy,
+	return new AutoValue_FunctionExpression(type(), generator(), async(), idClone, paramsCopy,
 		(BlockStatement) body().clone());
     }
 }

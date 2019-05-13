@@ -47,7 +47,10 @@ public abstract class ForStatement extends Node {
 
     @Override
     public Node clone() {
-	return new AutoValue_ForStatement(type(), init().clone(), test().clone(), update().clone(),
+	Node initClone = init() != null ? init().clone() : null;
+	Node testClone = test() != null ? test().clone() : null;
+	Node updateClone = update() != null ? update() : null;
+	return new AutoValue_ForStatement(type(), initClone, testClone, updateClone,
 		body().clone());
     }
 }

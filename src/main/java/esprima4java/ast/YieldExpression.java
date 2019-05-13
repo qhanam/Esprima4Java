@@ -27,6 +27,7 @@ public abstract class YieldExpression extends Node {
 
     @Override
     public Node clone() {
-	return new AutoValue_YieldExpression(type(), argument().clone(), delegate());
+	Node argumentClone = argument() != null ? argument().clone() : null;
+	return new AutoValue_YieldExpression(type(), argumentClone, delegate());
     }
 }

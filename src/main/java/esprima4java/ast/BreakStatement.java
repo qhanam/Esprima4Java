@@ -35,6 +35,7 @@ public abstract class BreakStatement extends Node {
 
     @Override
     public Node clone() {
-	return new AutoValue_BreakStatement(type(), (Identifier) label().clone());
+	Identifier labelClone = label() != null ? (Identifier) label().clone() : null;
+	return new AutoValue_BreakStatement(type(), labelClone);
     }
 }

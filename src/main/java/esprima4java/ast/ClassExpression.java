@@ -33,7 +33,9 @@ public abstract class ClassExpression extends Node {
     }
 
     public Node clone() {
-	return new AutoValue_ClassExpression(type(), (Identifier) id().clone(),
-		superClass().clone(), (ClassBody) body().clone());
+	Identifier idClone = id() != null ? (Identifier) id().clone() : null;
+	Node superClassClone = superClass() != null ? superClass().clone() : null;
+	return new AutoValue_ClassExpression(type(), idClone, superClassClone,
+		(ClassBody) body().clone());
     }
 }

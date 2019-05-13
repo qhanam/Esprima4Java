@@ -33,6 +33,7 @@ public abstract class ContinueStatement extends Node {
 
     @Override
     public Node clone() {
-	return new AutoValue_ContinueStatement(type(), (Identifier) label().clone());
+	Identifier labelClone = label() != null ? (Identifier) label().clone() : null;
+	return new AutoValue_ContinueStatement(type(), labelClone);
     }
 }
