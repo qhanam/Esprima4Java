@@ -9,7 +9,7 @@ import com.google.auto.value.AutoValue;
 import com.google.auto.value.extension.memoized.Memoized;
 
 import esprima4java.cfg.Cfg;
-import esprima4java.cfg.CfgBuilderForBreakStatements;
+import esprima4java.cfg.builders.CfgBuilderForBreakStatements;
 
 @AutoValue
 public abstract class BreakStatement extends Node {

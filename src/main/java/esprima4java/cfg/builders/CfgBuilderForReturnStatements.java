@@ -1,6 +1,8 @@
-package esprima4java.cfg;
+package esprima4java.cfg.builders;
 
 import esprima4java.ast.Node;
+import esprima4java.cfg.Cfg;
+import esprima4java.cfg.CfgNode;
 
 /**
  * A builder for creating control flow graphs from return statements.

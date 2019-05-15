@@ -8,7 +8,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 
 import esprima4java.cfg.Cfg;
-import esprima4java.cfg.CfgBuilderForIfStatements;
+import esprima4java.cfg.builders.CfgBuilderForIfStatements;
 
 @AutoValue
 public abstract class IfStatement extends Node {

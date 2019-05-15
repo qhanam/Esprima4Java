@@ -6,7 +6,7 @@ import java.util.List;
 import com.google.auto.value.AutoValue;
 
 import esprima4java.cfg.Cfg;
-import esprima4java.cfg.CfgBuilderForWithStatements;
+import esprima4java.cfg.builders.CfgBuilderForWithStatements;
 
 @AutoValue
 public abstract class WithStatement extends Node {

@@ -1,10 +1,13 @@
-package esprima4java.cfg;
+package esprima4java.cfg.builders;
 
 import esprima4java.ast.EmptyStatement;
 import esprima4java.ast.IfStatement;
 import esprima4java.ast.Literal;
 import esprima4java.ast.UnaryExpression;
 import esprima4java.ast.UnaryExpression.UnaryOperator;
+import esprima4java.cfg.Cfg;
+import esprima4java.cfg.CfgEdge;
+import esprima4java.cfg.CfgNode;
 
 /**
  * A builder for creating control flow graphs from if statements.

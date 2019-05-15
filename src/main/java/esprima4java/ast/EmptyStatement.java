@@ -3,7 +3,7 @@ package esprima4java.ast;
 import com.google.auto.value.AutoValue;
 
 import esprima4java.cfg.Cfg;
-import esprima4java.cfg.CfgBuilderForStatements;
+import esprima4java.cfg.builders.CfgBuilderForStatements;
 
 @AutoValue
 public abstract class EmptyStatement extends Node {

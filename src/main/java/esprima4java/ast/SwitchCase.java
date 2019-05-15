@@ -8,7 +8,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 
 import esprima4java.cfg.Cfg;
-import esprima4java.cfg.CfgBuilderForSwitchCases;
+import esprima4java.cfg.builders.CfgBuilderForSwitchCases;
 
 @AutoValue
 public abstract class SwitchCase extends Node {

@@ -6,7 +6,7 @@ import java.util.List;
 import com.google.auto.value.AutoValue;
 
 import esprima4java.cfg.Cfg;
-import esprima4java.cfg.CfgBuilderForWhileStatements;
+import esprima4java.cfg.builders.CfgBuilderForWhileStatements;
 
 @AutoValue
 public abstract class WhileStatement extends Node {

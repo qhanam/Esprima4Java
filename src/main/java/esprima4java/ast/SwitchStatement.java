@@ -6,7 +6,7 @@ import java.util.List;
 import com.google.auto.value.AutoValue;
 
 import esprima4java.cfg.Cfg;
-import esprima4java.cfg.CfgBuilderForSwitchStatements;
+import esprima4java.cfg.builders.CfgBuilderForSwitchStatements;
 
 @AutoValue
 public abstract class SwitchStatement extends Node {

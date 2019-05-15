@@ -6,7 +6,7 @@ import java.util.List;
 import com.google.auto.value.AutoValue;
 
 import esprima4java.cfg.Cfg;
-import esprima4java.cfg.CfgBuilderForDoWhileStatements;
+import esprima4java.cfg.builders.CfgBuilderForDoWhileStatements;
 
 @AutoValue
 public abstract class DoWhileStatement extends Node {
