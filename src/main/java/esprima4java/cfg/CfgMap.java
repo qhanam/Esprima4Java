@@ -7,17 +7,28 @@ import java.util.Map;
 import esprima4java.ast.Node;
 
 /**
- * A map of {@code Node}s to their CFGs.
+ * A singleton map of {@code Node}s to their CFGs.
  * 
  * This is used by the interpreter to add new frames to the call stack when a
  * call site is encountered.
+ * 
+ * This class is not thread safe (ie. it limits the analysis to inspecting one
+ * program at a time).
  */
 public class CfgMap {
 
-    Map<Node, Cfg> cfgMap;
+    private static CfgMap instance = null;
+
+    private Map<Node, Cfg> cfgMap;
 
     public CfgMap() {
 	this.cfgMap = new HashMap<Node, Cfg>();
+    }
+
+    public CfgMap instance() {
+	if (instance == null)
+	    instance = new CfgMap();
+	return instance;
     }
 
     /**

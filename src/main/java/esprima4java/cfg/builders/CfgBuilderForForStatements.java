@@ -1,13 +1,11 @@
 package esprima4java.cfg.builders;
 
-import esprima4java.ast.EmptyStatement;
-import esprima4java.ast.ExpressionStatement;
 import esprima4java.ast.ForStatement;
-import esprima4java.ast.Literal;
-import esprima4java.ast.UnaryExpression;
-import esprima4java.ast.UnaryExpression.UnaryOperator;
 import esprima4java.cfg.Cfg;
-import esprima4java.cfg.CfgEdge;
+import esprima4java.cfg.CfgBreakNode;
+import esprima4java.cfg.CfgContinueNode;
+import esprima4java.cfg.CfgEmptyNode;
+import esprima4java.cfg.CfgEvaluateNode;
 import esprima4java.cfg.CfgNode;
 
 /**
@@ -16,16 +14,14 @@ import esprima4java.cfg.CfgNode;
 public class CfgBuilderForForStatements {
 
     public static Cfg build(ForStatement statement) {
-	CfgNode entryNode = CfgNode
-		.create(ExpressionStatement.create(statement.init().clone(), null));
-	CfgNode loopNode = CfgNode.create(EmptyStatement.create());
-	CfgNode exitNode = CfgNode.create(EmptyStatement.create());
-	CfgNode updateNode = CfgNode
-		.create(ExpressionStatement.create(statement.update().clone(), null));
+	CfgNode entryNode = new CfgEvaluateNode(statement.init());
+	CfgNode loopNode = new CfgEmptyNode();
+	CfgNode exitNode = new CfgEmptyNode();
+	CfgNode updateNode = new CfgEvaluateNode(statement.update());
 
 	// Edges from init to loop and update to loop.
-	CfgEdge.create(Literal.createBoolean(true, "true"), entryNode, loopNode);
-	CfgEdge.create(Literal.createBoolean(true, "true"), updateNode, loopNode);
+	CfgBuilderUtils.addEdge(entryNode, loopNode);
+	CfgBuilderUtils.addEdge(updateNode, loopNode);
 
 	Cfg cfg = new Cfg(entryNode);
 	cfg.setExitNode(exitNode);
@@ -34,23 +30,26 @@ public class CfgBuilderForForStatements {
 	Cfg bodyCfg = statement.body().buildCfg();
 
 	// Set up the true and false branch edges.
-	CfgEdge.create(statement.test(), loopNode, bodyCfg.getEntryNode());
-	CfgEdge.create(UnaryExpression.create(UnaryOperator.NOT, true, statement.test().clone()),
-		loopNode, exitNode);
+	CfgBuilderUtils.addTrueAssertion(statement.test(), loopNode, bodyCfg.getEntryNode());
+	CfgBuilderUtils.addFalseAssertion(statement.test(), loopNode, bodyCfg.getEntryNode());
 
 	// Add all the exit points
 	cfg.addAllReturnNodes(bodyCfg.getReturnNodes());
 	cfg.addAllThrowNodes(bodyCfg.getThrowNodes());
 
-	// Set up loops and exits
-	for (CfgNode node : bodyCfg.getBreakNodes()) {
-	    CfgEdge.create(Literal.createBoolean(true, "true"), node, exitNode);
+	for (CfgBreakNode node : bodyCfg.getBreakNodes()) {
+	    // Break nodes have edges to the exit node.
+	    CfgBuilderUtils.addEdge(node, exitNode);
 	}
-	for (CfgNode node : bodyCfg.getContinueNodes()) {
-	    CfgEdge.create(Literal.createBoolean(true, "true"), node, updateNode);
+
+	for (CfgContinueNode node : bodyCfg.getContinueNodes()) {
+	    // Continue nodes have edges to the update node.
+	    CfgBuilderUtils.addEdge(node, updateNode);
 	}
+
 	if (bodyCfg.getExitNode() != null) {
-	    CfgEdge.create(Literal.createBoolean(true, "true"), bodyCfg.getExitNode(), updateNode);
+	    // Body has an edge to the update node.
+	    CfgBuilderUtils.addEdge(bodyCfg.getExitNode(), updateNode);
 	}
 
 	return cfg;

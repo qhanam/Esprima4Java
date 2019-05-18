@@ -9,10 +9,8 @@ import java.util.Stack;
 
 import org.eclipse.jdt.annotation.Nullable;
 
-import esprima4java.ast.NodeType;
-
 /**
- * A low(er) level control flow graph or subgraph.
+ * An intra-procedural control flow graph or subgraph.
  *
  * The control flow graph contains an entry node where the graph begins. It also
  * keeps track of statements that exit the CFG. These include the last
@@ -24,18 +22,18 @@ public class Cfg {
     private CfgNode entryNode;
     @Nullable
     private CfgNode exitNode;
-    private List<CfgNode> breakNodes;
-    private List<CfgNode> continueNodes;
-    private List<CfgNode> throwNodes;
-    private List<CfgNode> returnNodes;
+    private List<CfgBreakNode> breakNodes;
+    private List<CfgContinueNode> continueNodes;
+    private List<CfgThrowNode> throwNodes;
+    private List<CfgReturnNode> returnNodes;
 
     public Cfg(CfgNode entryNode) {
 	this.entryNode = entryNode;
 	this.exitNode = null;
-	this.breakNodes = new LinkedList<CfgNode>();
-	this.continueNodes = new LinkedList<CfgNode>();
-	this.throwNodes = new LinkedList<CfgNode>();
-	this.returnNodes = new LinkedList<CfgNode>();
+	this.breakNodes = new LinkedList<CfgBreakNode>();
+	this.continueNodes = new LinkedList<CfgContinueNode>();
+	this.throwNodes = new LinkedList<CfgThrowNode>();
+	this.returnNodes = new LinkedList<CfgReturnNode>();
     }
 
     /**
@@ -77,7 +75,7 @@ public class Cfg {
      * @param node
      *            The last node before breaking an execution branch.
      */
-    public void addBreakNode(CfgNode node) {
+    public void addBreakNode(CfgBreakNode node) {
 	this.breakNodes.add(node);
     }
 
@@ -86,7 +84,7 @@ public class Cfg {
      * 
      * @param nodes
      */
-    public void addAllBreakNodes(List<CfgNode> nodes) {
+    public void addAllBreakNodes(List<CfgBreakNode> nodes) {
 	this.breakNodes.addAll(nodes);
     }
 
@@ -95,7 +93,7 @@ public class Cfg {
      * 
      * @return The list of break points.
      */
-    public List<CfgNode> getBreakNodes() {
+    public List<CfgBreakNode> getBreakNodes() {
 	return this.breakNodes;
     }
 
@@ -105,7 +103,7 @@ public class Cfg {
      * @param node
      *            The last node before continuing an execution branch.
      */
-    public void addContinueNode(CfgNode node) {
+    public void addContinueNode(CfgContinueNode node) {
 	this.continueNodes.add(node);
     }
 
@@ -114,7 +112,7 @@ public class Cfg {
      * 
      * @param nodes
      */
-    public void addAllContinueNodes(List<CfgNode> nodes) {
+    public void addAllContinueNodes(List<CfgContinueNode> nodes) {
 	this.continueNodes.addAll(nodes);
     }
 
@@ -123,7 +121,7 @@ public class Cfg {
      * 
      * @return The list of continue points.
      */
-    public List<CfgNode> getContinueNodes() {
+    public List<CfgContinueNode> getContinueNodes() {
 	return this.continueNodes;
     }
 
@@ -133,7 +131,7 @@ public class Cfg {
      * @param node
      *            The last node before continuing an execution branch.
      */
-    public void addThrowNode(CfgNode node) {
+    public void addThrowNode(CfgThrowNode node) {
 	this.throwNodes.add(node);
     }
 
@@ -142,7 +140,7 @@ public class Cfg {
      * 
      * @param nodes
      */
-    public void addAllThrowNodes(List<CfgNode> nodes) {
+    public void addAllThrowNodes(List<CfgThrowNode> nodes) {
 	this.throwNodes.addAll(nodes);
     }
 
@@ -151,15 +149,8 @@ public class Cfg {
      * 
      * @return The list of throw points.
      */
-    public List<CfgNode> getThrowNodes() {
+    public List<CfgThrowNode> getThrowNodes() {
 	return this.throwNodes;
-    }
-
-    /**
-     * Removes all return nodes from the CFG.
-     */
-    public void clearnReturnNodes() {
-	this.returnNodes.clear();
     }
 
     /**
@@ -168,7 +159,7 @@ public class Cfg {
      * @param node
      *            The last node before returning an execution branch.
      */
-    public void addReturnNode(CfgNode node) {
+    public void addReturnNode(CfgReturnNode node) {
 	this.returnNodes.add(node);
     }
 
@@ -177,7 +168,7 @@ public class Cfg {
      * 
      * @param nodes
      */
-    public void addAllReturnNodes(List<CfgNode> nodes) {
+    public void addAllReturnNodes(List<CfgReturnNode> nodes) {
 	this.returnNodes.addAll(nodes);
     }
 
@@ -186,34 +177,26 @@ public class Cfg {
      * 
      * @return The list of return points.
      */
-    public List<CfgNode> getReturnNodes() {
+    public List<CfgReturnNode> getReturnNodes() {
 	return this.returnNodes;
-    }
-
-    /**
-     * Return {@code true} if the CFG is a script (ie. it is not a function).
-     */
-    public boolean isScript() {
-	return entryNode.statement().type() == NodeType.PROGRAM;
     }
 
     /**
      * Returns a depth-first trace of the statements/conditions in the CFG.
      */
-    public List<NodeType> depthFirstTrace() {
-	List<NodeType> trace = new ArrayList<>();
+    public List<String> depthFirstTrace() {
+	List<String> trace = new ArrayList<>();
 	Set<CfgNode> visited = new HashSet<>();
 	Stack<CfgNode> stack = new Stack<>();
 	stack.add(entryNode);
 	visited.add(entryNode);
 	while (!stack.isEmpty()) {
 	    CfgNode current = stack.pop();
-	    trace.add(current.statement().type());
-	    for (CfgEdge edge : current.outgoing()) {
-		trace.add(edge.condition().type());
-		if (!visited.contains(edge.to())) {
-		    stack.push(edge.to());
-		    visited.add(edge.to());
+	    trace.add(current.type());
+	    for (CfgNode child : current.outgoing()) {
+		if (!visited.contains(child)) {
+		    stack.push(child);
+		    visited.add(child);
 		}
 	    }
 	}

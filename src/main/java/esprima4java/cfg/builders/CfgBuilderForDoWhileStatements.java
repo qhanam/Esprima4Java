@@ -1,13 +1,10 @@
 package esprima4java.cfg.builders;
 
 import esprima4java.ast.DoWhileStatement;
-import esprima4java.ast.EmptyStatement;
-import esprima4java.ast.Literal;
-import esprima4java.ast.UnaryExpression;
-import esprima4java.ast.UnaryExpression.UnaryOperator;
 import esprima4java.cfg.Cfg;
-import esprima4java.cfg.CfgEdge;
-import esprima4java.cfg.CfgNode;
+import esprima4java.cfg.CfgBreakNode;
+import esprima4java.cfg.CfgContinueNode;
+import esprima4java.cfg.CfgEmptyNode;
 
 /**
  * A builder for creating control flow graphs from if statements.
@@ -15,8 +12,8 @@ import esprima4java.cfg.CfgNode;
 public class CfgBuilderForDoWhileStatements {
 
     public static Cfg build(DoWhileStatement statement) {
-	CfgNode entryNode = CfgNode.create(EmptyStatement.create());
-	CfgNode exitNode = CfgNode.create(EmptyStatement.create());
+	CfgEmptyNode entryNode = new CfgEmptyNode();
+	CfgEmptyNode exitNode = new CfgEmptyNode();
 
 	Cfg cfg = new Cfg(entryNode);
 	cfg.setExitNode(exitNode);
@@ -25,24 +22,27 @@ public class CfgBuilderForDoWhileStatements {
 	Cfg bodyCfg = statement.body().buildCfg();
 
 	// The block is always executed at least once.
-	CfgEdge.create(Literal.createBoolean(true, "true"), entryNode, bodyCfg.getEntryNode());
+	CfgBuilderUtils.addEdge(entryNode, bodyCfg.getEntryNode());
 
 	// Add all the exit points
 	cfg.addAllReturnNodes(bodyCfg.getReturnNodes());
 	cfg.addAllThrowNodes(bodyCfg.getThrowNodes());
 
-	// Set up loops and exits
-	for (CfgNode node : bodyCfg.getBreakNodes()) {
-	    CfgEdge.create(Literal.createBoolean(true, "true"), node, exitNode);
+	for (CfgBreakNode node : bodyCfg.getBreakNodes()) {
+	    // Break nodes have edges to the exit node.
+	    CfgBuilderUtils.addEdge(node, exitNode);
 	}
-	for (CfgNode node : bodyCfg.getContinueNodes()) {
-	    CfgEdge.create(Literal.createBoolean(true, "true"), node, entryNode);
+
+	for (CfgContinueNode node : bodyCfg.getContinueNodes()) {
+	    // Continue nodes have edges to the loop entry.
+	    CfgBuilderUtils.addEdge(node, entryNode);
 	}
+
 	if (bodyCfg.getExitNode() != null) {
-	    CfgEdge.create(statement.test(), bodyCfg.getExitNode(), entryNode);
-	    CfgEdge.create(
-		    UnaryExpression.create(UnaryOperator.NOT, true, statement.test().clone()),
-		    bodyCfg.getExitNode(), exitNode);
+	    // True branch has an edge to the entry node.
+	    CfgBuilderUtils.addTrueAssertion(statement.test(), bodyCfg.getExitNode(), entryNode);
+	    // False branch has an edge to the exit node.
+	    CfgBuilderUtils.addFalseAssertion(statement.test(), bodyCfg.getExitNode(), entryNode);
 	}
 
 	return cfg;

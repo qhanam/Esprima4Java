@@ -15,4 +15,10 @@ public interface NodeVisitor {
      */
     boolean visit(Node node);
 
+    /**
+     * Visits the given node after the children have been visited (ie. post-order
+     * traversal).
+     */
+    default void postVisit(Node node) {
+    }
 }

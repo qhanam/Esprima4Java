@@ -3,52 +3,116 @@ package esprima4java.cfg;
 import java.util.ArrayList;
 import java.util.List;
 
-import esprima4java.ast.Node;
+import org.eclipse.jdt.annotation.Nullable;
 
-public class CfgNode {
+import esprima4java.abstractstate.AnalysisState;
 
+public abstract class CfgNode {
+
+    /** The unique id for this node. */
     private int id;
 
-    private Node statement;
+    /** CfgNodes which precede this node. */
+    private List<CfgNode> incoming;
 
-    private List<CfgEdge> incoming;
+    /** CfgNodes which follow this node. */
+    private List<CfgNode> outgoing;
 
-    private List<CfgEdge> outgoing;
+    /**
+     * The state of the machine before transferring over the node.
+     */
+    @Nullable
+    private AnalysisState beforeState;
 
-    private CfgNode(Node statement) {
+    /**
+     * The state of the machine after transferring over the node.
+     */
+    @Nullable
+    private AnalysisState afterState;
+
+    protected CfgNode() {
 	this.id = CfgIdGenerator.getUniqueID();
-	this.statement = statement;
-	this.incoming = new ArrayList<CfgEdge>();
-	this.outgoing = new ArrayList<CfgEdge>();
-    }
-
-    public static CfgNode create(Node statement) {
-	return new CfgNode(statement);
+	this.incoming = new ArrayList<>();
+	this.outgoing = new ArrayList<>();
+	this.beforeState = null;
+	this.afterState = null;
     }
 
     public int id() {
 	return id;
     }
 
-    public Node statement() {
-	return statement;
+    public AnalysisState getBeforeState() {
+	return beforeState;
     }
 
-    public void addIncoming(CfgEdge edge) {
-	incoming.add(edge);
+    public AnalysisState getAfterState() {
+	return afterState;
     }
 
-    public void addOutgoing(CfgEdge edge) {
-	outgoing.add(edge);
+    public void addOutgoing(CfgNode outgoing) {
+	this.outgoing.add(outgoing);
     }
 
-    public List<CfgEdge> incoming() {
+    public void addIncoming(CfgNode incoming) {
+	this.incoming.add(incoming);
+    }
+
+    public List<CfgNode> outgoing() {
+	return outgoing;
+    }
+
+    public List<CfgNode> incoming() {
 	return incoming;
     }
 
-    public List<CfgEdge> outgoing() {
-	return outgoing;
+    /**
+     * Updates the before AnalysisState with the new state.
+     */
+    public void updateBeforeState(AnalysisState newState) {
+	if (beforeState == null) {
+	    beforeState = newState;
+	} else {
+	    beforeState = beforeState.join(newState);
+	}
     }
+
+    /**
+     * Updates the after AnalysisState with the new state.
+     */
+    public void updateAfterState(AnalysisState newState) {
+	if (afterState == null) {
+	    afterState = newState;
+	} else {
+	    afterState = afterState.join(newState);
+	}
+    }
+
+    /**
+     * Updates the before AnalysisState by merging the after state of this node's
+     * predecessors.
+     */
+    public void updateFromPredecessors() {
+	for (CfgNode predecessor : incoming) {
+	    if (beforeState == null) {
+		beforeState = predecessor.afterState;
+	    } else {
+		beforeState = beforeState.join(predecessor.afterState);
+	    }
+	}
+    }
+
+    /**
+     * Returns the named type of the CfgNode.
+     */
+    public String type() {
+	return this.getClass().getSimpleName();
+    }
+
+    /**
+     * Updates the after AnalysisState by evaluating the expression of this node.
+     */
+    public abstract void evaluate();
 
     @Override
     public int hashCode() {
@@ -65,11 +129,6 @@ public class CfgNode {
 	    return this.id == that.id;
 	}
 	return false;
-    }
-
-    @Override
-    public String toString() {
-	return id() + ":" + statement.toString();
     }
 
 }

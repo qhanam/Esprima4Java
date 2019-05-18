@@ -2,7 +2,7 @@ package esprima4java.cfg.builders;
 
 import esprima4java.ast.Node;
 import esprima4java.cfg.Cfg;
-import esprima4java.cfg.CfgNode;
+import esprima4java.cfg.CfgContinueNode;
 
 /**
  * A builder for creating control flow graphs from continue statements.
@@ -10,7 +10,7 @@ import esprima4java.cfg.CfgNode;
 public class CfgBuilderForContinueStatements {
 
     public static Cfg build(Node statement) {
-	CfgNode node = CfgNode.create(statement);
+	CfgContinueNode node = new CfgContinueNode(statement);
 	Cfg cfg = new Cfg(node);
 	cfg.addContinueNode(node);
 	return cfg;

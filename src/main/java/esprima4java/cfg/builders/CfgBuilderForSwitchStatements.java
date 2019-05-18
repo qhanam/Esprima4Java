@@ -1,7 +1,5 @@
 package esprima4java.cfg.builders;
 
-import esprima4java.ast.EmptyStatement;
-import esprima4java.ast.Literal;
 import esprima4java.ast.LogicalExpression;
 import esprima4java.ast.LogicalExpression.LogicalOperator;
 import esprima4java.ast.Node;
@@ -10,7 +8,8 @@ import esprima4java.ast.SwitchStatement;
 import esprima4java.ast.UnaryExpression;
 import esprima4java.ast.UnaryExpression.UnaryOperator;
 import esprima4java.cfg.Cfg;
-import esprima4java.cfg.CfgEdge;
+import esprima4java.cfg.CfgBreakNode;
+import esprima4java.cfg.CfgEmptyNode;
 import esprima4java.cfg.CfgNode;
 
 /**
@@ -19,8 +18,8 @@ import esprima4java.cfg.CfgNode;
 public class CfgBuilderForSwitchStatements {
 
     public static Cfg build(SwitchStatement statement) {
-	CfgNode entryNode = CfgNode.create(EmptyStatement.create());
-	CfgNode exitNode = CfgNode.create(EmptyStatement.create());
+	CfgEmptyNode entryNode = new CfgEmptyNode();
+	CfgEmptyNode exitNode = new CfgEmptyNode();
 	Cfg cfg = new Cfg(entryNode);
 
 	CfgNode currentNode = null;
@@ -37,12 +36,14 @@ public class CfgBuilderForSwitchStatements {
 		hasDefault = true;
 	    }
 	}
-	defaultCondition = defaultCondition == null ? Literal.createBoolean(true, "true")
-		: defaultCondition;
 
 	// If there is no default, then there is an edge from entry to exit.
 	if (!hasDefault) {
-	    CfgEdge.create(defaultCondition, entryNode, exitNode);
+	    if (defaultCondition == null) {
+		CfgBuilderUtils.addEdge(entryNode, exitNode);
+	    } else {
+		CfgBuilderUtils.addTrueAssertion(defaultCondition, entryNode, exitNode);
+	    }
 	}
 
 	// Build each case
@@ -50,32 +51,38 @@ public class CfgBuilderForSwitchStatements {
 	    Cfg childCfg = child.buildCfg();
 
 	    if (child.test() != null) {
-		CfgEdge.create(child.test(), entryNode, childCfg.getEntryNode());
-		defaultCondition = defaultCondition == null ? child.test().clone()
-			: LogicalExpression.create(LogicalOperator.AND, defaultCondition,
-				UnaryExpression.create(UnaryOperator.NOT, true, child.test()));
+		// Case condition
+		CfgBuilderUtils.addTrueAssertion(child.test(), entryNode, childCfg.getEntryNode());
 	    } else {
-		CfgEdge.create(defaultCondition, entryNode, childCfg.getEntryNode());
+		// Default condition
+		if (defaultCondition == null) {
+		    CfgBuilderUtils.addEdge(entryNode, childCfg.getEntryNode());
+		} else {
+		    CfgBuilderUtils.addTrueAssertion(defaultCondition, entryNode,
+			    childCfg.getEntryNode());
+		}
 	    }
 
 	    if (currentNode != null) {
-		CfgEdge.create(Literal.createBoolean(true, "true"), currentNode,
-			childCfg.getEntryNode());
+		// Add an edge from the previous node to the this node (fallthrough).
+		CfgBuilderUtils.addEdge(currentNode, childCfg.getEntryNode());
 	    }
 
 	    cfg.addAllContinueNodes(childCfg.getContinueNodes());
 	    cfg.addAllReturnNodes(childCfg.getReturnNodes());
 	    cfg.addAllThrowNodes(childCfg.getThrowNodes());
 
-	    for (CfgNode breakNode : childCfg.getBreakNodes()) {
-		CfgEdge.create(Literal.createBoolean(true, "true"), breakNode, exitNode);
+	    for (CfgBreakNode breakNode : childCfg.getBreakNodes()) {
+		// Add an edge from the break node to the exit node.
+		CfgBuilderUtils.addEdge(breakNode, exitNode);
 	    }
 
 	    currentNode = childCfg.getExitNode();
 	}
 
 	if (currentNode != null) {
-	    CfgEdge.create(Literal.createBoolean(true, "true"), currentNode, exitNode);
+	    // Add an edge from the last statement to the exit node.
+	    CfgBuilderUtils.addEdge(currentNode, exitNode);
 	}
 
 	if (!exitNode.incoming().isEmpty()) {
