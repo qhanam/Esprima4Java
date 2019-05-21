@@ -1,17 +1,17 @@
-package esprima4java.cfg;
-
-import java.util.ArrayList;
-import java.util.List;
+package esprima4java.cfg.builders;
 
 import esprima4java.ast.CallExpression;
 import esprima4java.ast.Node;
 import esprima4java.ast.NodeType;
+import esprima4java.cfg.Cfg;
+import esprima4java.cfg.CfgCallsiteNode;
 import esprima4java.utilities.NodeVisitor;
 
 /**
- * A utility for creating an ordered list of function calls within a statement.
+ * A builder for creating control flow graphs for call sites contained in
+ * expressions.
  */
-public class CallSiteTopologicalSort implements NodeVisitor {
+public class CfgBuilderForCallSites implements NodeVisitor {
 
     /**
      * Returns an ordered list of function calls within a statement. Function calls
@@ -19,16 +19,24 @@ public class CallSiteTopologicalSort implements NodeVisitor {
      * dependencies occur in the list before their dependencies, and can therefore
      * be evaluated first.
      */
-    public static CallExpression[] topSort(Node expression) {
-	CallSiteTopologicalSort visitor = new CallSiteTopologicalSort();
+    public static Cfg build(Node expression) {
+	CfgBuilderForCallSites visitor = new CfgBuilderForCallSites();
 	expression.accept(visitor);
-	return (CallExpression[]) visitor.callSites.toArray();
+	if (visitor.entry == null) {
+	    return null;
+	} else {
+	    Cfg cfg = new Cfg(visitor.entry);
+	    cfg.setExitNode(visitor.exit);
+	    return cfg;
+	}
     }
 
-    private List<CallExpression> callSites;
+    private CfgCallsiteNode entry;
+    private CfgCallsiteNode exit;
 
-    private CallSiteTopologicalSort() {
-	callSites = new ArrayList<>();
+    private CfgBuilderForCallSites() {
+	this.entry = null;
+	this.exit = null;
     }
 
     @Override
@@ -47,7 +55,14 @@ public class CallSiteTopologicalSort implements NodeVisitor {
     @Override
     public void postVisit(Node node) {
 	if (node.type() == NodeType.CALL_EXPRESSION) {
-	    callSites.add((CallExpression) node);
+	    CfgCallsiteNode tmp = new CfgCallsiteNode((CallExpression) node);
+	    if (entry == null) {
+		entry = tmp;
+		exit = tmp;
+	    } else {
+		CfgBuilderUtils.addEdge(exit, tmp);
+		exit = tmp;
+	    }
 	}
     }
 

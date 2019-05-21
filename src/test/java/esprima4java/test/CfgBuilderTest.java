@@ -3,31 +3,74 @@ package esprima4java.test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
 import esprima4java.ast.BreakStatement;
+import esprima4java.ast.CallExpression;
 import esprima4java.ast.EmptyStatement;
 import esprima4java.ast.ExpressionStatement;
 import esprima4java.ast.Identifier;
 import esprima4java.ast.Node;
+import esprima4java.ast.WhileStatement;
 import esprima4java.cfg.Cfg;
+import esprima4java.cfg.CfgAssertNode;
+import esprima4java.cfg.CfgBlockScopeEntryNode;
+import esprima4java.cfg.CfgBlockScopeExitNode;
+import esprima4java.cfg.CfgBreakNode;
+import esprima4java.cfg.CfgCallsiteNode;
+import esprima4java.cfg.CfgContinueNode;
+import esprima4java.cfg.CfgEmptyNode;
+import esprima4java.cfg.CfgEvaluateNode;
+import esprima4java.cfg.CfgFunctionEntryNode;
+import esprima4java.cfg.CfgFunctionExitNode;
+import esprima4java.cfg.CfgReturnNode;
+import esprima4java.cfg.CfgThrowNode;
 
 class CfgBuilderTest {
 
-    Cfg test(Node node, List<String> expected) {
+    enum T {
+	ASSERT(CfgAssertNode.class.getSimpleName()), //
+	BLOCK_ENTRY(CfgBlockScopeEntryNode.class.getSimpleName()), //
+	BLOCK_EXIT(CfgBlockScopeExitNode.class.getSimpleName()), //
+	BREAK(CfgBreakNode.class.getSimpleName()), //
+	CALL(CfgCallsiteNode.class.getSimpleName()), //
+	CONTINUE(CfgContinueNode.class.getSimpleName()), //
+	EMPTY(CfgEmptyNode.class.getSimpleName()), //
+	EVALUATE(CfgEvaluateNode.class.getSimpleName()), //
+	FUNCTION_ENTRY(CfgFunctionEntryNode.class.getSimpleName()), //
+	FUNCTION_EXIT(CfgFunctionExitNode.class.getSimpleName()), //
+	RETURN(CfgReturnNode.class.getSimpleName()), //
+	THROW(CfgThrowNode.class.getSimpleName());
+
+	String type;
+
+	T(String type) {
+	    this.type = type;
+	}
+
+	String type() {
+	    return type;
+	}
+    }
+
+    Cfg test(Node node, List<T> expected) {
 	Cfg cfg = node.buildCfg();
+	List<String> expectedAsString = new ArrayList<>();
+	expected.forEach(e -> expectedAsString.add(e.type));
 	List<String> actual = cfg.depthFirstTrace();
-	assertEquals(expected, actual);
+	assertEquals(expectedAsString, actual);
 	return cfg;
     }
 
     @Test
     void testEmptyStatement() {
 	Node node = EmptyStatement.create();
-	List<String> expected = Arrays.asList("CfgEvaluateNode");
+	List<T> expected = Arrays.asList(T.EVALUATE);
 	Cfg cfg = test(node, expected);
 	assertNotNull(cfg.getExitNode());
     }
@@ -35,7 +78,7 @@ class CfgBuilderTest {
     @Test
     void testExpressionStatement() {
 	Node node = ExpressionStatement.create(Identifier.create("a"), null);
-	List<String> expected = Arrays.asList("CfgEvaluateNode");
+	List<T> expected = Arrays.asList(T.EVALUATE);
 	Cfg cfg = test(node, expected);
 	assertNotNull(cfg.getExitNode());
     }
@@ -43,9 +86,28 @@ class CfgBuilderTest {
     @Test
     void testBreakStatement() {
 	Node node = BreakStatement.create(null);
-	List<String> expected = Arrays.asList("CfgBreakNode");
+	List<T> expected = Arrays.asList(T.BREAK);
 	Cfg cfg = test(node, expected);
 	assertEquals(1, cfg.getBreakNodes().size());
+    }
+
+    @Test
+    void testWhileStatement() {
+	Node node = WhileStatement.create(Identifier.create("x"), EmptyStatement.create());
+	List<T> expected = Arrays.asList(T.EMPTY, T.ASSERT, T.EMPTY, T.ASSERT, T.EVALUATE);
+	Cfg cfg = test(node, expected);
+	assertNotNull(cfg.getExitNode());
+    }
+
+    @Test
+    void testWhileStatementWithCallsites() {
+	Node node = WhileStatement.create(
+		CallExpression.create(Identifier.create("foo"), Collections.emptyList()),
+		EmptyStatement.create());
+	List<T> expected = Arrays.asList(T.EMPTY, T.CALL, T.ASSERT, T.EMPTY, T.CALL, T.ASSERT,
+		T.EVALUATE);
+	Cfg cfg = test(node, expected);
+	assertNotNull(cfg.getExitNode());
     }
 
     // @Test

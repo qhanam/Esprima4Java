@@ -9,7 +9,7 @@ public class CfgCallsiteNode extends CfgNode {
 
     private CallExpression expression;
 
-    protected CfgCallsiteNode(CallExpression expression) {
+    public CfgCallsiteNode(CallExpression expression) {
 	super();
 	this.expression = expression;
     }

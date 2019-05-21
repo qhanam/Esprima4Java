@@ -41,6 +41,7 @@ public abstract class Node {
 	if (visitChildren) {
 	    getChildren().forEach(child -> child.accept(visitor));
 	}
+	visitor.postVisit(this);
     }
 
     public List<Node> getChildren() {
