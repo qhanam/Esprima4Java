@@ -20,6 +20,7 @@ public class CfgBuilderForForStatements {
 	CfgNode updateNode = new CfgEvaluateNode(statement.update());
 
 	// Edges from init to loop and update to loop.
+	// TODO: We need to handle callsite extraction in init and update.
 	CfgBuilderUtils.addEdge(entryNode, loopNode);
 	CfgBuilderUtils.addEdge(updateNode, loopNode);
 
@@ -31,7 +32,7 @@ public class CfgBuilderForForStatements {
 
 	// Set up the true and false branch edges.
 	CfgBuilderUtils.addTrueAssertion(statement.test(), loopNode, bodyCfg.getEntryNode());
-	CfgBuilderUtils.addFalseAssertion(statement.test(), loopNode, bodyCfg.getEntryNode());
+	CfgBuilderUtils.addFalseAssertion(statement.test(), loopNode, exitNode);
 
 	// Add all the exit points
 	cfg.addAllReturnNodes(bodyCfg.getReturnNodes());

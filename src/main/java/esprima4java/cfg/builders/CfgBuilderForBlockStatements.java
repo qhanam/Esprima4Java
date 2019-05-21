@@ -4,6 +4,7 @@ import esprima4java.ast.BlockStatement;
 import esprima4java.ast.Node;
 import esprima4java.cfg.Cfg;
 import esprima4java.cfg.CfgBlockScopeEntryNode;
+import esprima4java.cfg.CfgBlockScopeExitNode;
 import esprima4java.cfg.CfgNode;
 
 /**
@@ -39,7 +40,9 @@ public class CfgBuilderForBlockStatements {
 	    currentNode = childCfg.getExitNode();
 	}
 
-	cfg.setExitNode(currentNode);
+	CfgBlockScopeExitNode exitNode = new CfgBlockScopeExitNode();
+	CfgBuilderUtils.addEdge(currentNode, exitNode);
+	cfg.setExitNode(exitNode);
 
 	return cfg;
     }

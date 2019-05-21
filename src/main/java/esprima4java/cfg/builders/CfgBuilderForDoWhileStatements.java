@@ -42,7 +42,7 @@ public class CfgBuilderForDoWhileStatements {
 	    // True branch has an edge to the entry node.
 	    CfgBuilderUtils.addTrueAssertion(statement.test(), bodyCfg.getExitNode(), entryNode);
 	    // False branch has an edge to the exit node.
-	    CfgBuilderUtils.addFalseAssertion(statement.test(), bodyCfg.getExitNode(), entryNode);
+	    CfgBuilderUtils.addFalseAssertion(statement.test(), bodyCfg.getExitNode(), exitNode);
 	}
 
 	return cfg;

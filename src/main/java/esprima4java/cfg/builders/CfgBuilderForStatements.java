@@ -11,18 +11,7 @@ import esprima4java.cfg.CfgEvaluateNode;
 public class CfgBuilderForStatements {
 
     public static Cfg build(Node statement) {
-	CfgEvaluateNode node = new CfgEvaluateNode(statement);
-	Cfg cfg = CfgBuilderForCallSites.build(statement);
-	if (cfg == null) {
-	    // There were no call sites in the expression.
-	    cfg = new Cfg(node);
-	    cfg.setExitNode(node);
-	} else {
-	    // Change the exit node to this expression.
-	    CfgBuilderUtils.addEdge(cfg.getExitNode(), node);
-	    cfg.setExitNode(node);
-	}
-	return cfg;
+	return CfgBuilderForCallSites.build(statement, new CfgEvaluateNode(statement));
     }
 
 }

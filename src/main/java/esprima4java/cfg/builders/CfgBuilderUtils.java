@@ -13,27 +13,15 @@ public class CfgBuilderUtils {
     }
 
     static void addTrueAssertion(Node condition, CfgNode from, CfgNode to) {
-	Cfg cfg = CfgBuilderForCallSites.build(condition);
-	if (cfg == null) {
-	    // Add an assert node between `from` and `to`.
-	    new CfgAssertNode(condition, from, to, true);
-	} else {
-	    // Add an assert node and its call sites between `from` and `to`.
-	    addEdge(from, cfg.getEntryNode());
-	    new CfgAssertNode(condition, cfg.getExitNode(), to, true);
-	}
+	Cfg cfg = CfgBuilderForCallSites.build(condition, new CfgAssertNode(condition, true));
+	addEdge(from, cfg.getEntryNode());
+	addEdge(cfg.getExitNode(), to);
     }
 
     static void addFalseAssertion(Node condition, CfgNode from, CfgNode to) {
-	Cfg cfg = CfgBuilderForCallSites.build(condition);
-	if (cfg == null) {
-	    // Add an assert node between `from` and `to`.
-	    new CfgAssertNode(condition, from, to, false);
-	} else {
-	    // Add an assert node and its call sites between `from` and `to`.
-	    addEdge(from, cfg.getEntryNode());
-	    new CfgAssertNode(condition, cfg.getExitNode(), to, false);
-	}
+	Cfg cfg = CfgBuilderForCallSites.build(condition, new CfgAssertNode(condition, false));
+	addEdge(from, cfg.getEntryNode());
+	addEdge(cfg.getExitNode(), to);
     }
 
 }

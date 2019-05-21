@@ -51,11 +51,15 @@ public abstract class CfgNode {
     }
 
     public void addOutgoing(CfgNode outgoing) {
-	this.outgoing.add(outgoing);
+	if (!this.outgoing.contains(outgoing)) {
+	    this.outgoing.add(outgoing);
+	}
     }
 
     public void addIncoming(CfgNode incoming) {
-	this.incoming.add(incoming);
+	if (!this.incoming.contains(incoming)) {
+	    this.incoming.add(incoming);
+	}
     }
 
     public List<CfgNode> outgoing() {

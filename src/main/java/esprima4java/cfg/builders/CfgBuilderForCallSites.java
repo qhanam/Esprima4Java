@@ -5,6 +5,7 @@ import esprima4java.ast.Node;
 import esprima4java.ast.NodeType;
 import esprima4java.cfg.Cfg;
 import esprima4java.cfg.CfgCallsiteNode;
+import esprima4java.cfg.CfgNode;
 import esprima4java.utilities.NodeVisitor;
 
 /**
@@ -17,18 +18,27 @@ public class CfgBuilderForCallSites implements NodeVisitor {
      * Returns an ordered list of function calls within a statement. Function calls
      * are sorted in topological order, so that the call sites that have
      * dependencies occur in the list before their dependencies, and can therefore
-     * be evaluated first.
+     * be evaluated first. The expression itself is always the exit node.
+     * 
+     * @param expression
+     *            The expression which may contain call sites.
+     * @param evaluator
+     *            The expression wrapped as a CfgNode.
      */
-    public static Cfg build(Node expression) {
+    public static Cfg build(Node expression, CfgNode evaluator) {
+	Cfg cfg;
 	CfgBuilderForCallSites visitor = new CfgBuilderForCallSites();
 	expression.accept(visitor);
 	if (visitor.entry == null) {
-	    return null;
+	    // There are no call sites in the expression.
+	    cfg = new Cfg(evaluator);
 	} else {
-	    Cfg cfg = new Cfg(visitor.entry);
-	    cfg.setExitNode(visitor.exit);
-	    return cfg;
+	    // Add the expression to the end of the call site graph.
+	    cfg = new Cfg(visitor.entry);
+	    CfgBuilderUtils.addEdge(visitor.exit, evaluator);
 	}
+	cfg.setExitNode(evaluator);
+	return cfg;
     }
 
     private CfgCallsiteNode entry;

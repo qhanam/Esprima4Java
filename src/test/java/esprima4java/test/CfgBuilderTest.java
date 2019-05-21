@@ -2,6 +2,7 @@ package esprima4java.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,13 +11,22 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import esprima4java.ast.BlockStatement;
 import esprima4java.ast.BreakStatement;
 import esprima4java.ast.CallExpression;
+import esprima4java.ast.ContinueStatement;
+import esprima4java.ast.DoWhileStatement;
 import esprima4java.ast.EmptyStatement;
 import esprima4java.ast.ExpressionStatement;
+import esprima4java.ast.ForStatement;
 import esprima4java.ast.Identifier;
+import esprima4java.ast.IfStatement;
 import esprima4java.ast.Node;
+import esprima4java.ast.ReturnStatement;
+import esprima4java.ast.SwitchCase;
+import esprima4java.ast.SwitchStatement;
 import esprima4java.ast.WhileStatement;
+import esprima4java.ast.WithStatement;
 import esprima4java.cfg.Cfg;
 import esprima4java.cfg.CfgAssertNode;
 import esprima4java.cfg.CfgBlockScopeEntryNode;
@@ -100,6 +110,15 @@ class CfgBuilderTest {
     }
 
     @Test
+    void testWhileStatementReturn() {
+	Node node = WhileStatement.create(Identifier.create("x"), ReturnStatement.create(null));
+	List<T> expected = Arrays.asList(T.EMPTY, T.ASSERT, T.EMPTY, T.ASSERT, T.RETURN);
+	Cfg cfg = test(node, expected);
+	assertNotNull(cfg.getExitNode());
+	assertNotNull(cfg.getReturnNodes());
+    }
+
+    @Test
     void testWhileStatementWithCallsites() {
 	Node node = WhileStatement.create(
 		CallExpression.create(Identifier.create("foo"), Collections.emptyList()),
@@ -110,166 +129,122 @@ class CfgBuilderTest {
 	assertNotNull(cfg.getExitNode());
     }
 
-    // @Test
-    // void testContinueStatement() {
-    // Node node = ContinueStatement.create(null);
-    // List<NodeType> expected = Arrays.asList(NodeType.CONTINUE_STATEMENT);
-    // Cfg cfg = test(node, expected);
-    // assertEquals(1, cfg.getContinueNodes().size());
-    // }
-    //
-    // @Test
-    // void testReturnStatement() {
-    // Node node = ReturnStatement.create(null);
-    // List<NodeType> expected = Arrays.asList(NodeType.RETURN_STATEMENT);
-    // Cfg cfg = test(node, expected);
-    // assertEquals(1, cfg.getReturnNodes().size());
-    // }
-    //
-    // @Test
-    // void testBlockStatement() {
-    // Node node = BlockStatement.create(Arrays.asList(EmptyStatement.create()));
-    // List<NodeType> expected = Arrays.asList(NodeType.EMPTY_STATEMENT,
-    // NodeType.LITERAL,
-    // NodeType.EMPTY_STATEMENT);
-    // Cfg cfg = test(node, expected);
-    // assertNotNull(cfg.getExitNode());
-    // }
-    //
-    // @Test
-    // void testWithStatement() {
-    // Node node = WithStatement.create(Identifier.create("a"),
-    // EmptyStatement.create());
-    // List<NodeType> expected = Arrays.asList(NodeType.WITH_STATEMENT,
-    // NodeType.LITERAL,
-    // NodeType.EMPTY_STATEMENT);
-    // Cfg cfg = test(node, expected);
-    // assertNotNull(cfg.getExitNode());
-    // }
-    //
-    // @Test
-    // void testIfStatement() {
-    // Node node = IfStatement.create(Identifier.create("a"),
-    // EmptyStatement.create(),
-    // EmptyStatement.create());
-    // List<NodeType> expected = Arrays.asList(NodeType.EMPTY_STATEMENT,
-    // NodeType.IDENTIFIER,
-    // NodeType.UNARY_EXPRESSION, NodeType.EMPTY_STATEMENT, NodeType.LITERAL,
-    // NodeType.EMPTY_STATEMENT, NodeType.EMPTY_STATEMENT, NodeType.LITERAL,
-    // NodeType.EMPTY_STATEMENT);
-    // Cfg cfg = test(node, expected);
-    // assertNotNull(cfg.getExitNode());
-    // }
-    //
-    // @Test
-    // void testSwitchCaseWithBreak() {
-    // Node node = SwitchCase.create(Identifier.create("a"),
-    // Collections.singletonList(BreakStatement.create(null)));
-    // List<NodeType> expected = Arrays.asList(NodeType.EMPTY_STATEMENT,
-    // NodeType.LITERAL,
-    // NodeType.BREAK_STATEMENT);
-    // Cfg cfg = test(node, expected);
-    // assertNull(cfg.getExitNode());
-    // }
-    //
-    // @Test
-    // void testSwitchCaseWithoutBreak() {
-    // Node node = SwitchCase.create(Identifier.create("a"),
-    // Collections.singletonList(EmptyStatement.create()));
-    // List<NodeType> expected = Arrays.asList(NodeType.EMPTY_STATEMENT,
-    // NodeType.LITERAL,
-    // NodeType.EMPTY_STATEMENT);
-    // Cfg cfg = test(node, expected);
-    // assertNotNull(cfg.getExitNode());
-    // }
-    //
-    // @Test
-    // void testSwitchStatementFallthrough() {
-    // Node node = SwitchStatement.create(Identifier.create("x"),
-    // Arrays.asList(SwitchCase.create(Identifier.create("a"),
-    // Collections.singletonList(EmptyStatement.create()))));
-    // List<NodeType> expected = Arrays.asList(NodeType.EMPTY_STATEMENT,
-    // NodeType.IDENTIFIER,
-    // NodeType.IDENTIFIER, NodeType.EMPTY_STATEMENT, NodeType.LITERAL,
-    // NodeType.EMPTY_STATEMENT, NodeType.LITERAL, NodeType.EMPTY_STATEMENT);
-    // Cfg cfg = test(node, expected);
-    // assertNotNull(cfg.getExitNode());
-    // }
-    //
-    // @Test
-    // void testSwitchStatementBreak() {
-    // Node node = SwitchStatement.create(Identifier.create("x"),
-    // Arrays.asList(SwitchCase.create(Identifier.create("a"),
-    // Collections.singletonList(BreakStatement.create(null)))));
-    // List<NodeType> expected = Arrays.asList(NodeType.EMPTY_STATEMENT,
-    // NodeType.IDENTIFIER,
-    // NodeType.IDENTIFIER, NodeType.EMPTY_STATEMENT, NodeType.LITERAL,
-    // NodeType.BREAK_STATEMENT, NodeType.LITERAL, NodeType.EMPTY_STATEMENT);
-    // Cfg cfg = test(node, expected);
-    // assertNotNull(cfg.getExitNode());
-    // }
-    //
-    // @Test
-    // void testSwitchStatementReturn() {
-    // Node node = SwitchStatement.create(Identifier.create("x"), Arrays.asList(
-    // SwitchCase.create(null,
-    // Collections.singletonList(ReturnStatement.create(null)))));
-    // List<NodeType> expected = Arrays.asList(NodeType.EMPTY_STATEMENT,
-    // NodeType.LITERAL,
-    // NodeType.EMPTY_STATEMENT, NodeType.LITERAL, NodeType.RETURN_STATEMENT);
-    // Cfg cfg = test(node, expected);
-    // assertNull(cfg.getExitNode());
-    // }
-    //
-    // @Test
-    // void testWhileStatement() {
-    // Node node = WhileStatement.create(Identifier.create("x"),
-    // EmptyStatement.create());
-    // List<NodeType> expected = Arrays.asList(NodeType.EMPTY_STATEMENT,
-    // NodeType.IDENTIFIER,
-    // NodeType.UNARY_EXPRESSION, NodeType.EMPTY_STATEMENT,
-    // NodeType.EMPTY_STATEMENT,
-    // NodeType.LITERAL);
-    // Cfg cfg = test(node, expected);
-    // assertNotNull(cfg.getExitNode());
-    // }
-    //
-    // @Test
-    // void testWhileStatementReturn() {
-    // Node node = WhileStatement.create(Identifier.create("x"),
-    // ReturnStatement.create(null));
-    // List<NodeType> expected = Arrays.asList(NodeType.EMPTY_STATEMENT,
-    // NodeType.IDENTIFIER,
-    // NodeType.UNARY_EXPRESSION, NodeType.EMPTY_STATEMENT,
-    // NodeType.RETURN_STATEMENT);
-    // Cfg cfg = test(node, expected);
-    // assertNotNull(cfg.getExitNode());
-    // assertNotNull(cfg.getReturnNodes());
-    // }
-    //
-    // @Test
-    // void testDoWhileStatement() {
-    // Node node = DoWhileStatement.create(Identifier.create("x"),
-    // EmptyStatement.create());
-    // List<NodeType> expected = Arrays.asList(NodeType.EMPTY_STATEMENT,
-    // NodeType.LITERAL,
-    // NodeType.EMPTY_STATEMENT, NodeType.IDENTIFIER, NodeType.UNARY_EXPRESSION,
-    // NodeType.EMPTY_STATEMENT);
-    // Cfg cfg = test(node, expected);
-    // assertNotNull(cfg.getExitNode());
-    // }
-    //
-    // @Test
-    // void testForStatement() {
-    // Node node = ForStatement.create(Identifier.create("x"),
-    // Identifier.create("x"),
-    // Identifier.create("x"), EmptyStatement.create());
-    // List<NodeType> expected = Arrays.asList(NodeType.EXPRESSION_STATEMENT,
-    // NodeType.LITERAL,
-    // NodeType.EMPTY_STATEMENT, NodeType.IDENTIFIER, NodeType.UNARY_EXPRESSION,
-    // NodeType.EMPTY_STATEMENT, NodeType.EMPTY_STATEMENT, NodeType.LITERAL,
-    // NodeType.EXPRESSION_STATEMENT, NodeType.LITERAL);
-    // Cfg cfg = test(node, expected);
-    // assertNotNull(cfg.getExitNode());
-    // }
+    @Test
+    void testContinueStatement() {
+	Node node = ContinueStatement.create(null);
+	List<T> expected = Arrays.asList(T.CONTINUE);
+	Cfg cfg = test(node, expected);
+	assertEquals(1, cfg.getContinueNodes().size());
+    }
+
+    @Test
+    void testReturnStatement() {
+	Node node = ReturnStatement.create(null);
+	List<T> expected = Arrays.asList(T.RETURN);
+	Cfg cfg = test(node, expected);
+	assertEquals(1, cfg.getReturnNodes().size());
+    }
+
+    @Test
+    void testReturnStatementWithCallsites() {
+	Node node = ReturnStatement
+		.create(CallExpression.create(Identifier.create("foo"), Collections.emptyList()));
+	List<T> expected = Arrays.asList(T.CALL, T.RETURN);
+	Cfg cfg = test(node, expected);
+	assertEquals(1, cfg.getReturnNodes().size());
+    }
+
+    @Test
+    void testBlockStatement() {
+	Node node = BlockStatement.create(Arrays.asList(EmptyStatement.create()));
+	List<T> expected = Arrays.asList(T.BLOCK_ENTRY, T.EVALUATE, T.BLOCK_EXIT);
+	Cfg cfg = test(node, expected);
+	assertNotNull(cfg.getExitNode());
+    }
+
+    @Test
+    void testWithStatement() {
+	// With statements are not currently supported.
+	Node node = WithStatement.create(Identifier.create("a"), EmptyStatement.create());
+	List<T> expected = Arrays.asList(T.EVALUATE);
+	Cfg cfg = test(node, expected);
+	assertNotNull(cfg.getExitNode());
+    }
+
+    @Test
+    void testIfStatement() {
+	Node node = IfStatement.create(Identifier.create("a"), EmptyStatement.create(),
+		EmptyStatement.create());
+	List<T> expected = Arrays.asList(T.EMPTY, T.ASSERT, T.EVALUATE, T.EMPTY, T.ASSERT,
+		T.EVALUATE);
+	Cfg cfg = test(node, expected);
+	assertNotNull(cfg.getExitNode());
+    }
+
+    @Test
+    void testSwitchCaseWithBreak() {
+	Node node = SwitchCase.create(Identifier.create("a"),
+		Collections.singletonList(BreakStatement.create(null)));
+	List<T> expected = Arrays.asList(T.EMPTY, T.BREAK);
+	Cfg cfg = test(node, expected);
+	assertNotNull(cfg.getBreakNodes());
+	assertNull(cfg.getExitNode());
+    }
+
+    @Test
+    void testSwitchCaseWithoutBreak() {
+	Node node = SwitchCase.create(Identifier.create("a"),
+		Collections.singletonList(EmptyStatement.create()));
+	List<T> expected = Arrays.asList(T.EMPTY, T.EVALUATE);
+	Cfg cfg = test(node, expected);
+	assertNotNull(cfg.getExitNode());
+    }
+
+    @Test
+    void testSwitchStatementFallthrough() {
+	Node node = SwitchStatement.create(Identifier.create("x"),
+		Arrays.asList(SwitchCase.create(Identifier.create("a"),
+			Collections.singletonList(EmptyStatement.create()))));
+	List<T> expected = Arrays.asList(T.EMPTY, T.ASSERT, T.EMPTY, T.EVALUATE, T.EMPTY, T.ASSERT);
+	Cfg cfg = test(node, expected);
+	assertNotNull(cfg.getExitNode());
+    }
+
+    @Test
+    void testSwitchStatementBreak() {
+	Node node = SwitchStatement.create(Identifier.create("x"),
+		Arrays.asList(SwitchCase.create(Identifier.create("a"),
+			Collections.singletonList(BreakStatement.create(null)))));
+	List<T> expected = Arrays.asList(T.EMPTY, T.ASSERT, T.EMPTY, T.BREAK, T.EMPTY, T.ASSERT);
+	Cfg cfg = test(node, expected);
+	assertNotNull(cfg.getExitNode());
+    }
+
+    @Test
+    void testSwitchStatementReturn() {
+	Node node = SwitchStatement.create(Identifier.create("x"), Arrays.asList(
+		SwitchCase.create(null, Collections.singletonList(ReturnStatement.create(null)))));
+	List<T> expected = Arrays.asList(T.EMPTY, T.EMPTY, T.RETURN);
+	Cfg cfg = test(node, expected);
+	assertNotNull(cfg.getReturnNodes());
+	assertNull(cfg.getExitNode());
+    }
+
+    @Test
+    void testDoWhileStatement() {
+	Node node = DoWhileStatement.create(Identifier.create("x"), EmptyStatement.create());
+	List<T> expected = Arrays.asList(T.EMPTY, T.EVALUATE, T.ASSERT, T.EMPTY, T.ASSERT);
+	Cfg cfg = test(node, expected);
+	assertNotNull(cfg.getExitNode());
+    }
+
+    @Test
+    void testForStatement() {
+	Node node = ForStatement.create(Identifier.create("x"), Identifier.create("x"),
+		Identifier.create("x"), EmptyStatement.create());
+	List<T> expected = Arrays.asList(T.EVALUATE, T.EMPTY, T.ASSERT, T.EMPTY, T.ASSERT,
+		T.EVALUATE, T.EVALUATE);
+	Cfg cfg = test(node, expected);
+	assertNotNull(cfg.getExitNode());
+    }
 }
