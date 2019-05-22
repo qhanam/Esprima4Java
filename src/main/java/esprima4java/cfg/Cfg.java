@@ -1,13 +1,17 @@
 package esprima4java.cfg;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
 
 import org.eclipse.jdt.annotation.Nullable;
+
+import esprima4java.abstractstate.AnalysisState;
 
 /**
  * An intra-procedural control flow graph or subgraph.
@@ -201,6 +205,41 @@ public class Cfg {
 	    }
 	}
 	return trace;
+    }
+
+    /**
+     * Initializes a new intra-procedural control flow queue for the CFG. The queue
+     * contains CfgNodes ordered such that the execution order is maintained. To run
+     * an analysis, transfer the initial state over each node in order.
+     */
+    public Queue<CfgNode> initializeControlState(AnalysisState initialState) {
+	// The ordered instructions.
+	Queue<CfgNode> instructions = new ArrayDeque<>();
+	this.getEntryNode().updateBeforeState(initialState);
+
+	// The set of nodes that have been visited.
+	Set<CfgNode> visited = new HashSet<>();
+
+	// Run a topological sort starting at each exit node to find a sound ordering.
+	List<CfgNode> exitNodes = new ArrayList<>();
+	exitNodes.add(this.getExitNode());
+	exitNodes.addAll(this.getReturnNodes());
+	exitNodes.addAll(this.getThrowNodes());
+	exitNodes.forEach(exitNode -> topsort(exitNode, visited, instructions));
+
+	return instructions;
+    }
+
+    private void topsort(CfgNode node, Set<CfgNode> visited, Queue<CfgNode> instructions) {
+	// Visit the children.
+	for (CfgNode child : node.incoming()) {
+	    if (!visited.contains(child)) {
+		topsort(child, visited, instructions);
+	    }
+	}
+	// Visit this node.
+	instructions.add(node);
+	visited.add(node);
     }
 
 }
