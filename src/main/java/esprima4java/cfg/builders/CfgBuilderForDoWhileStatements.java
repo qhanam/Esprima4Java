@@ -11,39 +11,65 @@ import esprima4java.cfg.CfgEmptyNode;
  */
 public class CfgBuilderForDoWhileStatements {
 
+    /** The number of times to iterate over the loop. */
+    private static final int LOOP_UNROLL_ITERATIONS = 1;
+
     public static Cfg build(DoWhileStatement statement) {
 	CfgEmptyNode entryNode = new CfgEmptyNode();
+	CfgEmptyNode loopNode = new CfgEmptyNode();
 	CfgEmptyNode exitNode = new CfgEmptyNode();
 
 	Cfg cfg = new Cfg(entryNode);
 	cfg.setExitNode(exitNode);
 
-	// Handle the consequent.
-	Cfg bodyCfg = statement.body().buildCfg();
+	// Unroll the loop the desired number of times.
+	Cfg bodyCfg;
+	int i = 0;
+	do {
+	    // Handle the consequent.
+	    bodyCfg = statement.body().buildCfg();
 
-	// The block is always executed at least once.
-	CfgBuilderUtils.addEdge(entryNode, bodyCfg.getEntryNode());
+	    // The block is always executed at least once.
+	    CfgBuilderUtils.addEdge(entryNode, bodyCfg.getEntryNode());
 
-	// Add all the exit points
-	cfg.addAllReturnNodes(bodyCfg.getReturnNodes());
-	cfg.addAllThrowNodes(bodyCfg.getThrowNodes());
+	    // Create a new entry point for the next iteration of the loop.
+	    entryNode = new CfgEmptyNode();
+	    loopNode = new CfgEmptyNode();
 
-	for (CfgBreakNode node : bodyCfg.getBreakNodes()) {
-	    // Break nodes have edges to the exit node.
-	    CfgBuilderUtils.addEdge(node, exitNode);
-	}
+	    // Add all the exit points
+	    cfg.addAllReturnNodes(bodyCfg.getReturnNodes());
+	    cfg.addAllThrowNodes(bodyCfg.getThrowNodes());
 
-	for (CfgContinueNode node : bodyCfg.getContinueNodes()) {
-	    // Continue nodes have edges to the loop entry.
-	    CfgBuilderUtils.addEdge(node, entryNode);
-	}
+	    for (CfgBreakNode node : bodyCfg.getBreakNodes()) {
+		// Break nodes have edges to the exit node.
+		CfgBuilderUtils.addEdge(node, exitNode);
+	    }
 
-	if (bodyCfg.getExitNode() != null) {
-	    // True branch has an edge to the entry node.
-	    CfgBuilderUtils.addTrueAssertion(statement.test(), bodyCfg.getExitNode(), entryNode);
+	    for (CfgContinueNode node : bodyCfg.getContinueNodes()) {
+		// Continue nodes have edges to the loop entry.
+		CfgBuilderUtils.addEdge(node, loopNode);
+	    }
+
+	    if (bodyCfg.getExitNode() != null) {
+		// Body exits to the loop node.
+		CfgBuilderUtils.addEdge(bodyCfg.getExitNode(), loopNode);
+	    }
+
 	    // False branch has an edge to the exit node.
-	    CfgBuilderUtils.addFalseAssertion(statement.test(), bodyCfg.getExitNode(), exitNode);
-	}
+	    CfgBuilderUtils.addFalseAssertion(statement.test(), loopNode, exitNode);
+
+	    i++;
+	    if (i < LOOP_UNROLL_ITERATIONS) {
+		// True branch has an edge to the entry node.
+		CfgBuilderUtils.addTrueAssertion(statement.test(), loopNode, entryNode);
+		// We haven't reached the desired number of iterations, so start another loop.
+		continue;
+	    } else {
+		// We have reached the desired number of iterations, so break.
+		break;
+	    }
+
+	} while (true);
 
 	return cfg;
     }

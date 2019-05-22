@@ -104,7 +104,8 @@ class CfgBuilderTest {
     @Test
     void testWhileStatement() {
 	Node node = WhileStatement.create(Identifier.create("x"), EmptyStatement.create());
-	List<T> expected = Arrays.asList(T.EMPTY, T.ASSERT, T.EMPTY, T.ASSERT, T.EVALUATE);
+	List<T> expected = Arrays.asList(T.EMPTY, T.ASSERT, T.EMPTY, T.ASSERT, T.EVALUATE, T.EMPTY,
+		T.ASSERT);
 	Cfg cfg = test(node, expected);
 	assertNotNull(cfg.getExitNode());
     }
@@ -124,7 +125,7 @@ class CfgBuilderTest {
 		CallExpression.create(Identifier.create("foo"), Collections.emptyList()),
 		EmptyStatement.create());
 	List<T> expected = Arrays.asList(T.EMPTY, T.CALL, T.ASSERT, T.EMPTY, T.CALL, T.ASSERT,
-		T.EVALUATE);
+		T.EVALUATE, T.EMPTY, T.CALL, T.ASSERT);
 	Cfg cfg = test(node, expected);
 	assertNotNull(cfg.getExitNode());
     }
@@ -233,7 +234,7 @@ class CfgBuilderTest {
     @Test
     void testDoWhileStatement() {
 	Node node = DoWhileStatement.create(Identifier.create("x"), EmptyStatement.create());
-	List<T> expected = Arrays.asList(T.EMPTY, T.EVALUATE, T.ASSERT, T.EMPTY, T.ASSERT);
+	List<T> expected = Arrays.asList(T.EMPTY, T.EVALUATE, T.EMPTY, T.ASSERT, T.EMPTY);
 	Cfg cfg = test(node, expected);
 	assertNotNull(cfg.getExitNode());
     }
@@ -243,7 +244,7 @@ class CfgBuilderTest {
 	Node node = ForStatement.create(Identifier.create("x"), Identifier.create("x"),
 		Identifier.create("x"), EmptyStatement.create());
 	List<T> expected = Arrays.asList(T.EVALUATE, T.EMPTY, T.ASSERT, T.EMPTY, T.ASSERT,
-		T.EVALUATE, T.EVALUATE);
+		T.EVALUATE, T.EVALUATE, T.EMPTY, T.ASSERT);
 	Cfg cfg = test(node, expected);
 	assertNotNull(cfg.getExitNode());
     }
